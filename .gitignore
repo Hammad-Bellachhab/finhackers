@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.log
+.env
+.claude/
+
+# Material de trabajo local, no forma parte del proyecto
+overnight.md
+overnight.log
+ESTRUCTURA_REPO.txt
+prompt-frontend-embat-claude-code.md

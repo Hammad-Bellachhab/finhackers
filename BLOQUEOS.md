@@ -1,3 +1,0 @@
-# Bloqueos
-
-Ninguno por ahora.

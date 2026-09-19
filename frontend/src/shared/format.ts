@@ -48,3 +48,18 @@ export function countryName(code: string): string {
 export function bandLabel(band: 'bajo' | 'medio' | 'alto'): string {
   return band === 'alto' ? 'Alto' : band === 'medio' ? 'Medio' : 'Bajo'
 }
+
+const MONTHS_LONG = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
+
+/** "2026-09" pasa a "septiembre de 2026". */
+export function formatMonthLong(month: string): string {
+  const [year, m] = month.split('-')
+  return `${MONTHS_LONG[Number(m) - 1] ?? m} de ${year}`
+}
+
+/** Importes de eje: 1.400.000 pasa a "1,4 M€"; 220.000 pasa a "220 k€". */
+export function formatEurosCompact(value: number): string {
+  if (Math.abs(value) >= 1_000_000) return `${formatDecimal(value / 1_000_000, 1)}${NBSP}M€`
+  if (Math.abs(value) >= 1_000) return `${formatInt(value / 1_000)}${NBSP}k€`
+  return `${formatInt(value)}${NBSP}€`
+}

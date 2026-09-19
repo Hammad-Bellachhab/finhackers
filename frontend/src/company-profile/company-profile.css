@@ -1,0 +1,184 @@
+.profile {
+  display: grid;
+  gap: var(--space-6);
+}
+
+/* Cabecera */
+.profile-head {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+}
+.back-link {
+  color: var(--ink-secondary);
+  text-underline-offset: 3px;
+}
+.back-link:hover {
+  color: var(--ink);
+}
+.profile-head__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  margin: 0;
+}
+.profile-head__meta dd,
+.score-summary__facts dd {
+  margin: 0;
+}
+.profile-head__meta dd:first-letter {
+  text-transform: capitalize;
+}
+
+/* Score y explicación: el único sitio con atrevimiento visual es la cifra grande */
+.score-summary {
+  display: grid;
+  grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
+  gap: var(--space-7);
+  align-items: start;
+}
+.score-summary__score {
+  display: grid;
+  gap: var(--space-4);
+}
+.score-summary__figure {
+  margin: 0;
+}
+.score-summary__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-6);
+  margin: 0;
+}
+.score-summary__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ref-badge {
+  padding: 0 var(--space-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-mono-sm);
+  line-height: var(--lh-mono-sm);
+  color: var(--ink-secondary);
+}
+.score-summary__why {
+  display: grid;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+  max-width: 62ch;
+}
+.score-summary__sentence {
+  margin: 0;
+}
+.score-summary__others {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+.score-summary__others ul {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.score-summary__others li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-1) 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.factor-increases {
+  color: var(--risk-high-text);
+}
+.factor-decreases {
+  color: var(--risk-low-text);
+}
+
+/* Gráficos: un panel, tres gráficos de forma y tamaño distintos separados por líneas finas */
+.charts {
+  display: grid;
+}
+.charts__main,
+.charts__cell {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  align-content: start;
+}
+.charts__pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--hairline);
+}
+.charts__cell + .charts__cell {
+  border-left: 1px solid var(--hairline);
+}
+.chart-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
+}
+.chart {
+  margin: 0;
+  min-width: 0;
+}
+.chart-tooltip {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+/* Skeleton con la forma de la ficha */
+.profile-skeleton__name {
+  width: 360px;
+  max-width: 100%;
+  height: var(--text-h1);
+}
+.profile-skeleton__meta {
+  width: 280px;
+  max-width: 100%;
+}
+.profile-skeleton__score {
+  width: 120px;
+  height: var(--text-display);
+}
+.profile-skeleton__line {
+  width: 100%;
+  height: var(--space-5);
+}
+.profile-skeleton__line--short {
+  width: 60%;
+}
+.profile-skeleton__chart-main {
+  width: 100%;
+  height: 280px;
+}
+.profile-skeleton__chart-small {
+  width: 100%;
+  height: 200px;
+}
+
+@media (max-width: 900px) {
+  .score-summary {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+  .charts__pair {
+    grid-template-columns: 1fr;
+  }
+  .charts__cell + .charts__cell {
+    border-left: 0;
+    border-top: 1px solid var(--hairline);
+  }
+}

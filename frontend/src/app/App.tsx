@@ -1,3 +1,4 @@
+import { CompanyProfileView } from '../company-profile/CompanyProfileView'
 import { PortfolioView } from '../portfolio/PortfolioView'
 import { ThemeToggle } from '../theme/ThemeToggle'
 import { useTheme } from '../theme/useTheme'
@@ -19,7 +20,7 @@ function RouteView({ route }: { route: Route }) {
     case 'cartera':
       return <PortfolioView />
     case 'empresa':
-      return <p className="muted">La ficha de la empresa {route.id} se está preparando.</p>
+      return <CompanyProfileView key={route.id} companyId={route.id} />
     default:
       return (
         <div className="stack">
