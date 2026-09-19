@@ -68,7 +68,7 @@ def run(skip_predict: bool = False) -> dict:
     out["anticipation"] = antic
     out = _clean(out)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    (C.REPORTS_DIR / "test_companies_eval.json").write_text(json.dumps(out, indent=2, ensure_ascii=False, default=str))
+    (C.REPORTS_DIR / "test_companies_eval.json").write_text(json.dumps(out, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
     ev.to_csv(OUT_DIR / "anticipation_events.csv", index=False)
     mb, ma, lift = out["model_B"], out["model_A"], out["lift_B_vs_A"]
     print(f"[test] {len(ids)} empresas nunca vistas · {len(df):,} filas etiquetadas · base rate {y.mean():.1%}")

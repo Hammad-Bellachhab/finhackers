@@ -104,3 +104,53 @@
   --shadow-lg: 0 8px 16px rgb(5 11 44 / 9%);
   --ease: cubic-bezier(0.2, 0, 0, 1);
 }
+
+/* ---- Modo oscuro (paleta "inverse" de Embat, docs/paleta-embat.md). Lo activa el botón de la cabecera. ---- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-trend-up-soft: #0b3a44;
+  --color-ai-wash: #0d1640;
+  --color-bg: #050b2c;
+  --color-bg-subtle: #050b2c;
+  --color-surface: #141a3a;
+  --color-surface-hover: #1c2552;
+  --color-surface-pressed: #232845;
+  --color-border: #262c4d;
+  --color-border-strong: #41465f;
+  --color-border-control: #696d80;
+  --color-text: #ffffff;
+  --color-text-subtle: #d2d2db;
+  --color-text-muted: #afafbb;
+  --color-text-disabled: #787d96;
+  --color-accent: #5c92fe;
+  --color-accent-text: #a5c4ff;
+  --color-accent-hover: #a5c4ff;
+  --color-accent-pressed: #c7daff;
+  --color-accent-soft: #14255e;
+  --color-accent-border: #2c3c7a;
+  --color-success: #80efa2;
+  --color-success-soft: #0c3b1f;
+  --color-success-strong: #c9f7d6;
+  --color-warning: #dfb631;
+  --color-warning-soft: #3a2f08;
+  --color-warning-strong: #ffe7a3;
+  --color-danger: #e5775b;
+  --color-danger-soft: #3d1409;
+  --color-danger-strong: #ffd2c4;
+  --color-trend-up: #5ed3e5;
+  --chart-1: #5c92fe;
+  --chart-2: #b083e8;
+  --chart-3: #5ed3e5;
+  --chart-4: #e59f5e;
+  --chart-5: #e05a8a;
+  --chart-6: #ffffff;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 30%);
+  --shadow: 0 2px 8px rgb(0 0 0 / 35%);
+  --shadow-lg: 0 8px 24px rgb(0 0 0 / 45%);
+}
+
+/* Cambio de tema suave: fundido de la View Transitions API (theme.ts). */
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 350ms; animation-timing-function: var(--ease); }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+}

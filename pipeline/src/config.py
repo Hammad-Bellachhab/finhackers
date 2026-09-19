@@ -42,7 +42,7 @@ N_TEST_COMPANIES = int(os.environ.get("N_TEST_COMPANIES", 80))
 def test_company_ids() -> set[str]:
     """IDs de las empresas reservadas para el test simulado (vacío si aún no se ha hecho el split)."""
     if TEST_IDS_FILE.exists():
-        return {line.strip() for line in TEST_IDS_FILE.read_text().splitlines() if line.strip()}
+        return {line.strip() for line in TEST_IDS_FILE.read_text(encoding="utf-8").splitlines() if line.strip()}
     return set()
 
 

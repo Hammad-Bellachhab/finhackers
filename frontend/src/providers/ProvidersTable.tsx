@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react'
-import type { Provider } from '../api/types'
+import type { Provider, ProviderKind } from '../api/types'
 import { formatMoney } from '../shared/format'
 import { Gauge } from '../shared/Gauge'
 import { Empty } from '../shared/States'
-import { BandBar, CompanyCard, tipos } from './parts'
+import { BandBar, CompanyCard, KIND_LABEL, KindBadge, tipos } from './parts'
 import '../portfolio/portfolio.css'
 import './providers.css'
 
@@ -39,7 +39,7 @@ function ProviderRow({ p, onSelect }: { p: Provider; onSelect: (id: string) => v
           >
             <span className="provider-caret" aria-hidden="true">{abierto ? '▾' : '▸'}</span>
             <span>
-              <strong>{p.name}</strong>
+              <strong>{p.name}</strong> <KindBadge kind={p.kind} />
               <span className="provider-services">{p.services.join(' · ')}</span>
             </span>
           </button>
@@ -83,22 +83,34 @@ export function ProvidersTable({
   const [q, setQ] = useState('')
   const [soloFinanciacion, setSoloFinanciacion] = useState(false)
   const [soloRelevantes, setSoloRelevantes] = useState(false)
+  const [tipo, setTipo] = useState<ProviderKind | ''>('')
+
+  const kinds = useMemo(() => {
+    const n = new Map<ProviderKind, number>()
+    for (const p of providers) n.set(p.kind, (n.get(p.kind) ?? 0) + 1)
+    return [...n].sort((a, b) => b[1] - a[1])
+  }, [providers])
 
   const filtrados = useMemo(() => {
     const t = q.trim().toLowerCase()
     return providers
+      .filter((p) => !tipo || p.kind === tipo)
       .filter((p) => !soloRelevantes || p.companies >= RELEVANTE)
       .filter((p) => !soloFinanciacion || p.outstanding > 0)
       .filter((p) => !t || p.name.toLowerCase().includes(t) || p.services.some((s) => s.toLowerCase().includes(t)))
       .slice()
       .sort(ORDEN[orden][1])
-  }, [providers, orden, q, soloFinanciacion, soloRelevantes])
+  }, [providers, orden, q, soloFinanciacion, soloRelevantes, tipo])
 
   return (
     <>
       <div className="filters filters-form">
         <select aria-label="Ordenar por" value={orden} onChange={(e) => setOrden(e.target.value as Orden)}>
           {Object.entries(ORDEN).map(([k, [label]]) => <option key={k} value={k}>{label}</option>)}
+        </select>
+        <select aria-label="Tipo de proveedor" value={tipo} onChange={(e) => setTipo(e.target.value as ProviderKind | '')}>
+          <option value="">Todos los tipos</option>
+          {kinds.map(([k, n]) => <option key={k} value={k}>{KIND_LABEL[k]} ({n})</option>)}
         </select>
         <button
           type="button" className={soloFinanciacion ? 'chip chip-on' : 'chip'}

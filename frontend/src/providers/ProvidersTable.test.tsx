@@ -12,7 +12,7 @@ const empresa = (n: number, score: number, extra: Partial<ProviderCompany> = {})
 })
 
 const santander: Provider = {
-  name: 'Banco Santander Empresas', services: ['santander_emp'], companies: 3, products: 5,
+  name: 'Banco Santander Empresas', services: ['santander_emp'], kind: 'banco', companies: 3, products: 5,
   types: [{ type: 'checking', n: 3 }, { type: 'loan', n: 2 }],
   bands: { 'sólida': 0, sana: 2, vigilar: 0, riesgo: 1 },
   meanHealth: 66.7, riskShare: 0.3333, slipping: 1, improving: 0,
@@ -21,7 +21,7 @@ const santander: Provider = {
 }
 
 const paypal: Provider = {
-  name: 'Paypal', services: ['paypal'], companies: 1, products: 1,
+  name: 'Paypal', services: ['paypal'], kind: 'pagos', companies: 1, products: 1,
   types: [{ type: 'wallet', n: 1 }],
   bands: { 'sólida': 1, sana: 0, vigilar: 0, riesgo: 0 },
   meanHealth: 92, riskShare: 0, slipping: 0, improving: 1, granted: 0, outstanding: 0,
@@ -30,7 +30,7 @@ const paypal: Provider = {
 
 /** Pequeño pero enfermo: es el que tiene que subir al ordenar por riesgo, salud o deuda. */
 const march: Provider = {
-  name: 'Banca March', services: ['bancamarch'], companies: 2, products: 4,
+  name: 'Banca March', services: ['bancamarch'], kind: 'banco', companies: 2, products: 4,
   types: [{ type: 'lineofcredit', n: 4 }],
   bands: { 'sólida': 0, sana: 0, vigilar: 1, riesgo: 1 },
   meanHealth: 40, riskShare: 0.5, slipping: 2, improving: 0,
@@ -101,6 +101,14 @@ describe('ProvidersTable', () => {
     await userEvent.click(screen.getByRole('button', { name: /Solo con financiación/ }))
     expect(screen.getByText('Banco Santander Empresas')).toBeInTheDocument()
     expect(screen.queryByText('Paypal')).not.toBeInTheDocument()
+  })
+
+  it('marca y filtra lo que no es un banco', async () => {
+    pintar()
+    expect(screen.getByText('pasarela de pago')).toBeInTheDocument()
+    await userEvent.selectOptions(screen.getByLabelText('Tipo de proveedor'), 'pagos')
+    expect(screen.getByText('Paypal')).toBeInTheDocument()
+    expect(screen.queryByText('Banco Santander Empresas')).not.toBeInTheDocument()
   })
 
   it('aparta la cola de bancos con una o dos empresas', async () => {

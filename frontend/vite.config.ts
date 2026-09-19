@@ -3,7 +3,8 @@ import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [react()],
-  server: { port: 5173 },
+  // En local, /api lo sirve `npx wrangler dev` (puerto 8787) con la key en .dev.vars.
+  server: { port: 5173, proxy: { '/api': 'http://localhost:8787' } },
   test: {
     environment: 'jsdom',
     globals: true,

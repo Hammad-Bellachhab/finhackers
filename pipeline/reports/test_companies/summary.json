@@ -1,25 +1,25 @@
-{
-  "model_version": "v20260919_154623",
-  "n_companies": 82,
-  "months": [
-    "2024-09",
-    "2026-08"
-  ],
-  "latest_month": "2026-08",
-  "n_rows": 1290,
-  "bands_latest": {
-    "sana": 40,
-    "sólida": 23,
-    "riesgo": 11,
-    "vigilar": 8
-  },
-  "trajectory_latest": {
-    "estable": 62,
-    "deteriorándose": 16,
-    "mejorando": 4
-  },
-  "n_exceptional": 20,
-  "n_structural": 4,
-  "n_blip": 0,
-  "seconds": 3.9
+{
+  "model_version": "v20260919_192058",
+  "n_companies": 82,
+  "months": [
+    "2024-09",
+    "2026-08"
+  ],
+  "latest_month": "2026-08",
+  "n_rows": 1290,
+  "bands_latest": {
+    "sana": 40,
+    "sólida": 22,
+    "riesgo": 11,
+    "vigilar": 9
+  },
+  "trajectory_latest": {
+    "estable": 63,
+    "deteriorándose": 16,
+    "mejorando": 3
+  },
+  "n_exceptional": 19,
+  "n_structural": 4,
+  "n_blip": 1,
+  "seconds": 32.4
 }

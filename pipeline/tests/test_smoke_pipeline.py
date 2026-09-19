@@ -41,16 +41,16 @@ def test_full_pipeline(env):
     for module in ("src.ingest", "src.schema", "src.split_test", "src.labels", "src.features", "src.train", "src.evaluate",
                    "src.serve_db", "src.evaluate_test"):
         run_step(module, env)
-    ids = (Path(env["DATA_DIR"]) / "test_companies" / "company_ids.txt").read_text().split()
+    ids = (Path(env["DATA_DIR"]) / "test_companies" / "company_ids.txt").read_text(encoding="utf-8").split()
     assert len(ids) >= 8
-    test_eval = json.loads((Path(env["REPORTS_DIR"]) / "test_companies_eval.json").read_text())
+    test_eval = json.loads((Path(env["REPORTS_DIR"]) / "test_companies_eval.json").read_text(encoding="utf-8"))
     assert test_eval["n_test_companies"] == len(ids) and 0 <= test_eval["model_B"]["auc_roc"] <= 1
-    quality = json.loads((Path(env["DATA_DIR"]) / "quality" / "quality_report_latest.json").read_text())
+    quality = json.loads((Path(env["DATA_DIR"]) / "quality" / "quality_report_latest.json").read_text(encoding="utf-8"))
     assert quality["tables"]["transactions"]["rows"] > 0
-    labels_meta = json.loads((Path(env["REPORTS_DIR"]) / "labels_meta.json").read_text())
+    labels_meta = json.loads((Path(env["REPORTS_DIR"]) / "labels_meta.json").read_text(encoding="utf-8"))
     assert 0.05 < labels_meta["positive_rate"] < 0.30
-    version = (Path(env["MODELS_DIR"]) / "registry" / "latest.txt").read_text().strip()
-    md = json.loads((Path(env["MODELS_DIR"]) / "registry" / version / "metadata.json").read_text())
+    version = (Path(env["MODELS_DIR"]) / "registry" / "latest.txt").read_text(encoding="utf-8").strip()
+    md = json.loads((Path(env["MODELS_DIR"]) / "registry" / version / "metadata.json").read_text(encoding="utf-8"))
     assert md["n_test_companies_excluded"] == len(ids)
     for key in ("dataset_hash", "seed", "hyperparameters", "input_schema", "metrics"):
         assert key in md

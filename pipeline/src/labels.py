@@ -144,7 +144,7 @@ def build_labels(outcome_months: int = C.OUTCOME_MONTHS, gap_months: int = C.GAP
     }
     if save:
         lab.to_parquet(LABELS_PATH, index=False)
-        (C.REPORTS_DIR / "labels_meta.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False))
+        (C.REPORTS_DIR / "labels_meta.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
     return lab, meta
 
 

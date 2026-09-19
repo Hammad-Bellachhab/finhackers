@@ -139,11 +139,16 @@ export type ProviderCompany = {
   outstanding: number  // saldo vivo, en positivo
 }
 
+/** Qué es el proveedor. No todo lo conectado es un banco: hay pasarelas de pago,
+ *  plataformas de gastos, emisores de tarjeta y la tesorería interna del grupo. */
+export type ProviderKind = 'banco' | 'fintech' | 'pagos' | 'gastos' | 'tarjetas' | 'inversión' | 'interno'
+
 /** Banco o conector por el que entran los datos de un grupo de empresas.
  *  Es la cartera vista del lado del prestamista: quién le respira bien y quién no. */
 export type Provider = {
   name: string
   services: string[]
+  kind: ProviderKind
   companies: number
   products: number
   types: ProductCount[]
@@ -177,6 +182,10 @@ export type Alert = {
   severity?: number
   delta1m?: number
   why?: string
+  // Para filtrar el monitor por empresa/cartera, como en la vista Cartera. Opcionales: el mock no los trae.
+  group?: string
+  sizeCohort?: string
+  country?: string
 }
 
 export type Evidence = {
@@ -279,5 +288,16 @@ export type TellMe = {
   insights: Insight[]
   glossary: { term: string; plain: string }[]
   generatedAt: string
+  model: string
+}
+
+// ---------- Chat con TellMe (POST /api/ask, worker/index.js) ----------
+
+export type ChatTurn = { role: 'user' | 'model'; text: string }
+
+export type AskResponse = {
+  answer: string
+  bullets: string[]
+  followUps: string[]
   model: string
 }

@@ -154,7 +154,7 @@
 }
 .tellme summary::-webkit-details-marker { display: none; }
 .tellme summary::before { content: "▸"; display: inline-block; margin-right: var(--space-1); transition: transform 150ms var(--ease); }
-.tellme details[open] summary::before { transform: rotate(90deg); }
+.tellme details[open] > summary::before { transform: rotate(90deg); }
 .tellme-glossary { display: grid; grid-template-columns: max-content 1fr; gap: var(--space-1) var(--space-4); margin: var(--space-2) 0 0; }
 .tellme-glossary dt { font-weight: 500; }
 .tellme-glossary dd { margin: 0; color: var(--color-text-muted); }
@@ -173,3 +173,12 @@
 .gauge-md { width: 92px; }
 .gauge-value { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
 .gauge-sm .gauge-value { font-size: 22px; }
+
+/* El análisis de TellMe se despliega solo si el usuario quiere. */
+.tellme-more > summary {
+  display: inline-flex; align-items: center; gap: var(--space-1); cursor: pointer; list-style: none;
+  font-size: var(--text-sm); font-weight: 500; color: var(--color-accent-text);
+  padding: var(--space-1) 0; border-radius: var(--radius-sm);
+}
+.tellme-more[open] > summary { margin-bottom: var(--space-3); }
+.tellme-more > summary:focus-visible { outline: none; box-shadow: var(--focus-ring); }

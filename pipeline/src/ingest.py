@@ -164,8 +164,8 @@ def run() -> dict:
         "referential_integrity": referential_integrity(con),
     }
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    (C.QUALITY_DIR / f"quality_report_{ts}.json").write_text(json.dumps(report, indent=2, ensure_ascii=False))
-    (C.QUALITY_DIR / "quality_report_latest.json").write_text(json.dumps(report, indent=2, ensure_ascii=False))
+    (C.QUALITY_DIR / f"quality_report_{ts}.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    (C.QUALITY_DIR / "quality_report_latest.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"[ingest] dataset_hash={report['dataset_hash']}")
     print("[ingest] integridad referencial:", json.dumps(report["referential_integrity"], indent=None))
     return report

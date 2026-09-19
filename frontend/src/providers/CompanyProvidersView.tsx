@@ -5,7 +5,7 @@ import { formatMoney } from '../shared/format'
 import { Gauge } from '../shared/Gauge'
 import { ErrorNotice, Skeleton } from '../shared/States'
 import { useAsync } from '../shared/useAsync'
-import { BandBar, CompanyCard, tipos } from './parts'
+import { BandBar, CompanyCard, KindBadge, tipos } from './parts'
 import './providers.css'
 
 /** Cuántas empresas del banco se enseñan antes de pedir el resto. */
@@ -41,7 +41,7 @@ function ProviderCard({
     <section className="panel provider-card">
       <header className="provider-card-head">
         <div>
-          <h3>{p.name}</h3>
+          <h3>{p.name} <KindBadge kind={p.kind} /></h3>
           <p className="provider-services">{p.services.join(' · ')}</p>
         </div>
         <Gauge score={yo.score} band={yo.healthBand} size="md" label={`banda ${yo.healthBand}`} />
@@ -52,7 +52,7 @@ function ProviderCard({
         <div><dt>Saldo vivo</dt><dd>{yo.outstanding > 0 ? formatMoney(yo.outstanding, true) : '—'}</dd></div>
         <div><dt>Concedido</dt><dd>{yo.granted > 0 ? formatMoney(yo.granted, true) : '—'}</dd></div>
         <div>
-          <dt>Su sitio en este banco</dt>
+          <dt>Su sitio aquí</dt>
           <dd>
             {otras.length === 0
               ? 'única empresa conectada'
@@ -66,11 +66,10 @@ function ProviderCard({
           <p className="provider-card-bands">
             <BandBar bands={p.bands} total={p.companies} />
             <span className="muted">
-              Cartera del banco: {p.bands.riesgo} en riesgo · {p.bands.vigilar} a vigilar ·
-              {' '}{p.bands.sana + p.bands['sólida']} sanas o sólidas · salud media {p.meanHealth}
+              Cartera del proveedor: {p.bands.riesgo} en riesgo · {p.bands.vigilar} a vigilar ·
+              {' '}{p.bands.sana + p.bands['sólida']} sanas o sólidas · salud media {p.meanHealth.toLocaleString('es-ES')}
             </span>
           </p>
-          <p className="muted">Otras empresas conectadas por este banco, de menos a más salud:</p>
           <div className="provider-companies">
             {visibles.map((r) => <CompanyCard key={r.companyId} row={r} onSelect={onSelect} />)}
           </div>
@@ -124,8 +123,8 @@ export function CompanyProvidersView({
             {yo && <div className="count"><strong>{yo.score}</strong><span>Su salud</span></div>}
           </div>
           <p className="muted legend-line">
-            Con quién trabaja y qué tiene con cada uno. Debajo de cada banco, las demás empresas que ese
-            mismo banco tiene conectadas: el retrato de la cartera en la que la pyme está metida.
+            Con quién trabaja y qué tiene con cada uno: bancos, pero también pasarelas de pago, plataformas
+            de gastos o tarjetas. Debajo de cada uno, las demás empresas que ese proveedor tiene conectadas.
           </p>
           {mios.map((p) => (
             <ProviderCard key={p.name} p={p} companyId={companyId} onSelect={onSelect} />

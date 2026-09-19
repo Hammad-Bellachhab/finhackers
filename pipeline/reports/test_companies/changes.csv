@@ -1,411 +1,411 @@
 company_id,T,T_prev,feature,delta_shap,direction,before,after
-COMP_0019,2026-08,2026-07,cash_balance_T_log,0.2601,empeora,"Saldo de caja reconstruido a fin de mes: 44,136 €","Saldo de caja reconstruido a fin de mes: 17,853 €"
-COMP_0019,2026-08,2026-07,cash_min_w6_norm,0.2091,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.19 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.10 x
-COMP_0019,2026-08,2026-07,cash_vol6,0.0709,empeora,Volatilidad del saldo de caja (6 m): 0.47 x,Volatilidad del saldo de caja (6 m): 0.50 x
-COMP_0019,2026-08,2026-07,n_tx_w3_vs_w12,-0.0544,mejora,Actividad transaccional 3 m frente a 12 m: 0.69 x,Actividad transaccional 3 m frente a 12 m: 0.63 x
-COMP_0019,2026-08,2026-07,pay_bad_share_w12,-0.0242,mejora,% facturas a pagar con más de 30 días de retraso (12 m): nan%,% facturas a pagar con más de 30 días de retraso (12 m): nan%
-COMP_0055,2026-08,2026-07,reconciled_delta_w3_w12,-0.4824,mejora,Cambio en la tasa de conciliación (3 m vs 12 m): -24 pp,Cambio en la tasa de conciliación (3 m vs 12 m): +nan pp
-COMP_0055,2026-08,2026-07,pay_dpd_mean_w3,0.2980,empeora,Retraso medio de pago a proveedores (3 m): -20 días,Retraso medio de pago a proveedores (3 m): 17 días
-COMP_0055,2026-08,2026-07,inflow_vol6,0.1848,empeora,Volatilidad de cobros (6 m): 1.47 x,Volatilidad de cobros (6 m): 2.26 x
-COMP_0055,2026-08,2026-07,no_counterparty_share_w3,-0.1795,mejora,Movimientos sin contrapartida resuelta (3 m): 92%,Movimientos sin contrapartida resuelta (3 m): nan%
-COMP_0055,2026-08,2026-07,pay_dpd_p90_w6,-0.1696,mejora,Retraso p90 de pago a proveedores (6 m): 106 días,Retraso p90 de pago a proveedores (6 m): 138 días
+COMP_0019,2026-08,2026-07,cash_balance_T_log,0.2779,empeora,"Saldo de caja reconstruido a fin de mes: 44,136 €","Saldo de caja reconstruido a fin de mes: 17,853 €"
+COMP_0019,2026-08,2026-07,cash_min_w6_norm,0.2079,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.19 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.10 x
+COMP_0019,2026-08,2026-07,cash_vol6,0.0620,empeora,Volatilidad del saldo de caja (6 m): 0.47 x,Volatilidad del saldo de caja (6 m): 0.50 x
+COMP_0019,2026-08,2026-07,n_tx_w3_vs_w12,-0.0521,mejora,Actividad transaccional 3 m frente a 12 m: 0.69 x,Actividad transaccional 3 m frente a 12 m: 0.63 x
+COMP_0019,2026-08,2026-07,n_tx_w1,0.0471,empeora,Transacciones en el último mes: 187 n,Transacciones en el último mes: 116 n
+COMP_0055,2026-08,2026-07,reconciled_delta_w3_w12,-0.5018,mejora,Cambio en la tasa de conciliación (3 m vs 12 m): -24 pp,Cambio en la tasa de conciliación (3 m vs 12 m): +nan pp
+COMP_0055,2026-08,2026-07,pay_dpd_mean_w3,0.3051,empeora,Retraso medio de pago a proveedores (3 m): -20 días,Retraso medio de pago a proveedores (3 m): 17 días
+COMP_0055,2026-08,2026-07,no_counterparty_share_w3,-0.1702,mejora,Movimientos sin contrapartida resuelta (3 m): 92%,Movimientos sin contrapartida resuelta (3 m): nan%
+COMP_0055,2026-08,2026-07,inflow_vol6,0.1697,empeora,Volatilidad de cobros (6 m): 1.47 x,Volatilidad de cobros (6 m): 2.26 x
+COMP_0055,2026-08,2026-07,pay_dpd_mean_w6,0.1645,empeora,Retraso medio de pago a proveedores (6 m): 8 días,Retraso medio de pago a proveedores (6 m): 15 días
 COMP_0069,2026-08,2026-07,pay_open_overdue_share_w3,-0.1166,mejora,% facturas a pagar vencidas y abiertas (3 m): 12%,% facturas a pagar vencidas y abiertas (3 m): 6%
-COMP_0069,2026-08,2026-07,io_ratio_w1,-0.1142,mejora,Ratio cobros/pagos (último mes): 3.43 x,Ratio cobros/pagos (último mes): 2.33 x
-COMP_0069,2026-08,2026-07,pay_dpd_mean_w3,0.0850,empeora,Retraso medio de pago a proveedores (3 m): 4 días,Retraso medio de pago a proveedores (3 m): 7 días
-COMP_0069,2026-08,2026-07,cash_vol6,0.0770,empeora,Volatilidad del saldo de caja (6 m): 0.43 x,Volatilidad del saldo de caja (6 m): 0.56 x
-COMP_0069,2026-08,2026-07,pay_dpd_trend6,0.0717,empeora,Tendencia del retraso de pago (6 m): -0.65 días/mes,Tendencia del retraso de pago (6 m): -0.06 días/mes
-COMP_0078,2026-08,2026-07,io_ratio_trend6,0.0889,empeora,Tendencia del ratio cobros/pagos (6 m): -0.11 x/mes,Tendencia del ratio cobros/pagos (6 m): -0.69 x/mes
-COMP_0078,2026-08,2026-07,inv_issued_ratio_w3_w12,0.0618,empeora,Facturas emitidas 3 m frente a media 12 m: 2.57 x,Facturas emitidas 3 m frente a media 12 m: 1.92 x
-COMP_0078,2026-08,2026-07,pay_open_overdue_cv12,-0.0514,mejora,Estacionalidad del impago (12 m): 0.40 x,Estacionalidad del impago (12 m): 0.47 x
-COMP_0078,2026-08,2026-07,tax_amt_ratio_w3_w12,-0.0451,mejora,Impuestos pagados 3 m frente a media 12 m: 2.55 x,Impuestos pagados 3 m frente a media 12 m: 2.13 x
-COMP_0078,2026-08,2026-07,pay_dpd_mean_w3,-0.0342,mejora,Retraso medio de pago a proveedores (3 m): 12 días,Retraso medio de pago a proveedores (3 m): 8 días
-COMP_0083,2026-08,2026-07,n_tx_w1,-0.3569,mejora,Transacciones en el último mes: 2 n,Transacciones en el último mes: 6 n
-COMP_0083,2026-08,2026-07,pay_bad_share_w6,-0.2299,mejora,% facturas a pagar con más de 30 días de retraso (6 m): 100%,% facturas a pagar con más de 30 días de retraso (6 m): 33%
-COMP_0083,2026-08,2026-07,pay_dpd_p90_w6,0.1648,empeora,Retraso p90 de pago a proveedores (6 m): 122 días,Retraso p90 de pago a proveedores (6 m): 32 días
-COMP_0083,2026-08,2026-07,pay_dpd_trend6,-0.1260,mejora,Tendencia del retraso de pago (6 m): 5.38 días/mes,Tendencia del retraso de pago (6 m): -1.80 días/mes
-COMP_0083,2026-08,2026-07,cash_vol6,-0.1160,mejora,Volatilidad del saldo de caja (6 m): 0.26 x,Volatilidad del saldo de caja (6 m): 0.01 x
-COMP_0124,2026-08,2026-07,inv_n_counterparties_w3,0.3012,empeora,Contrapartidas distintas en facturas (3 m): 17 n,Contrapartidas distintas en facturas (3 m): 7 n
-COMP_0124,2026-08,2026-07,tax_amt_ratio_w3_w12,0.0753,empeora,Impuestos pagados 3 m frente a media 12 m: 4.00 x,Impuestos pagados 3 m frente a media 12 m: 3.22 x
-COMP_0124,2026-08,2026-07,inv_issued_ratio_w3_w12,0.0623,empeora,Facturas emitidas 3 m frente a media 12 m: 1.83 x,Facturas emitidas 3 m frente a media 12 m: 0.65 x
-COMP_0124,2026-08,2026-07,inflow_w3_vs_w12,0.0563,empeora,Cobros últimos 3 m frente a media 12 m: 3.90 x,Cobros últimos 3 m frente a media 12 m: 2.89 x
-COMP_0124,2026-08,2026-07,refund_share_w6,-0.0549,mejora,Devoluciones sobre movimientos (6 m): 0%,Devoluciones sobre movimientos (6 m): 0%
-COMP_0156,2026-08,2026-07,n_tx_trend6,0.1313,empeora,Tendencia de actividad transaccional (6 m): 0.07 log/mes,Tendencia de actividad transaccional (6 m): -0.21 log/mes
-COMP_0156,2026-08,2026-07,inflow_w3_vs_w12,0.0899,empeora,Cobros últimos 3 m frente a media 12 m: 0.76 x,Cobros últimos 3 m frente a media 12 m: 1.03 x
-COMP_0156,2026-08,2026-07,io_ratio_w1,0.0661,empeora,Ratio cobros/pagos (último mes): 0.53 x,Ratio cobros/pagos (último mes): 2.04 x
-COMP_0156,2026-08,2026-07,outflow_trend6,0.0631,empeora,Tendencia de pagos (6 m): 0.05 log/mes,Tendencia de pagos (6 m): -0.29 log/mes
-COMP_0156,2026-08,2026-07,n_tx_w3_vs_w12,0.0468,empeora,Actividad transaccional 3 m frente a 12 m: 1.51 x,Actividad transaccional 3 m frente a 12 m: 0.89 x
-COMP_0170,2026-08,2026-07,cash_trend6,0.1379,empeora,Tendencia del saldo de caja (6 m): -4.36 x gasto/mes,Tendencia del saldo de caja (6 m): 0.39 x gasto/mes
-COMP_0170,2026-08,2026-07,io_ratio_trend6,-0.0887,mejora,Tendencia del ratio cobros/pagos (6 m): 0.38 x/mes,Tendencia del ratio cobros/pagos (6 m): nan x/mes
-COMP_0170,2026-08,2026-07,erp_any,0.0702,empeora,ERP: Netsuite,ERP: Netsuite
-COMP_0170,2026-08,2026-07,tenure_months,0.0617,empeora,Antigüedad en la plataforma: 4 meses,Antigüedad en la plataforma: 5 meses
+COMP_0069,2026-08,2026-07,io_ratio_w1,-0.1036,mejora,Ratio cobros/pagos (último mes): 3.43 x,Ratio cobros/pagos (último mes): 2.33 x
+COMP_0069,2026-08,2026-07,pay_dpd_mean_w3,0.0844,empeora,Retraso medio de pago a proveedores (3 m): 4 días,Retraso medio de pago a proveedores (3 m): 7 días
+COMP_0069,2026-08,2026-07,cash_vol6,0.0609,empeora,Volatilidad del saldo de caja (6 m): 0.43 x,Volatilidad del saldo de caja (6 m): 0.56 x
+COMP_0069,2026-08,2026-07,pay_dpd_trend6,0.0600,empeora,Tendencia del retraso de pago (6 m): -0.65 días/mes,Tendencia del retraso de pago (6 m): -0.06 días/mes
+COMP_0078,2026-08,2026-07,io_ratio_trend6,0.0897,empeora,Tendencia del ratio cobros/pagos (6 m): -0.11 x/mes,Tendencia del ratio cobros/pagos (6 m): -0.69 x/mes
+COMP_0078,2026-08,2026-07,inv_issued_ratio_w3_w12,0.0634,empeora,Facturas emitidas 3 m frente a media 12 m: 2.57 x,Facturas emitidas 3 m frente a media 12 m: 1.92 x
+COMP_0078,2026-08,2026-07,tax_amt_ratio_w3_w12,-0.0405,mejora,Impuestos pagados 3 m frente a media 12 m: 2.55 x,Impuestos pagados 3 m frente a media 12 m: 2.13 x
+COMP_0078,2026-08,2026-07,pay_open_overdue_cv12,-0.0397,mejora,Estacionalidad del impago (12 m): 0.40 x,Estacionalidad del impago (12 m): 0.47 x
+COMP_0078,2026-08,2026-07,pay_dpd_mean_w3,-0.0316,mejora,Retraso medio de pago a proveedores (3 m): 12 días,Retraso medio de pago a proveedores (3 m): 8 días
+COMP_0083,2026-08,2026-07,n_tx_w1,-0.3549,mejora,Transacciones en el último mes: 2 n,Transacciones en el último mes: 6 n
+COMP_0083,2026-08,2026-07,pay_bad_share_w6,-0.2396,mejora,% facturas a pagar con más de 30 días de retraso (6 m): 100%,% facturas a pagar con más de 30 días de retraso (6 m): 33%
+COMP_0083,2026-08,2026-07,pay_dpd_p90_w6,0.1484,empeora,Retraso p90 de pago a proveedores (6 m): 122 días,Retraso p90 de pago a proveedores (6 m): 32 días
+COMP_0083,2026-08,2026-07,pay_dpd_trend6,-0.1298,mejora,Tendencia del retraso de pago (6 m): 5.38 días/mes,Tendencia del retraso de pago (6 m): -1.80 días/mes
+COMP_0083,2026-08,2026-07,cash_vol6,-0.1009,mejora,Volatilidad del saldo de caja (6 m): 0.26 x,Volatilidad del saldo de caja (6 m): 0.01 x
+COMP_0124,2026-08,2026-07,inv_n_counterparties_w3,0.3474,empeora,Contrapartidas distintas en facturas (3 m): 17 n,Contrapartidas distintas en facturas (3 m): 7 n
+COMP_0124,2026-08,2026-07,tax_amt_ratio_w3_w12,0.0659,empeora,Impuestos pagados 3 m frente a media 12 m: 4.00 x,Impuestos pagados 3 m frente a media 12 m: 3.22 x
+COMP_0124,2026-08,2026-07,inflow_w3_vs_w12,0.0585,empeora,Cobros últimos 3 m frente a media 12 m: 3.90 x,Cobros últimos 3 m frente a media 12 m: 2.89 x
+COMP_0124,2026-08,2026-07,inv_issued_ratio_w3_w12,0.0557,empeora,Facturas emitidas 3 m frente a media 12 m: 1.83 x,Facturas emitidas 3 m frente a media 12 m: 0.65 x
+COMP_0124,2026-08,2026-07,refund_share_w6,-0.0452,mejora,Devoluciones sobre movimientos (6 m): 0%,Devoluciones sobre movimientos (6 m): 0%
+COMP_0156,2026-08,2026-07,n_tx_trend6,0.1304,empeora,Tendencia de actividad transaccional (6 m): 0.07 log/mes,Tendencia de actividad transaccional (6 m): -0.21 log/mes
+COMP_0156,2026-08,2026-07,inflow_w3_vs_w12,0.0851,empeora,Cobros últimos 3 m frente a media 12 m: 0.76 x,Cobros últimos 3 m frente a media 12 m: 1.03 x
+COMP_0156,2026-08,2026-07,outflow_trend6,0.0649,empeora,Tendencia de pagos (6 m): 0.05 log/mes,Tendencia de pagos (6 m): -0.29 log/mes
+COMP_0156,2026-08,2026-07,io_ratio_w1,0.0578,empeora,Ratio cobros/pagos (último mes): 0.53 x,Ratio cobros/pagos (último mes): 2.04 x
+COMP_0156,2026-08,2026-07,n_tx_w3_vs_w12,0.0527,empeora,Actividad transaccional 3 m frente a 12 m: 1.51 x,Actividad transaccional 3 m frente a 12 m: 0.89 x
+COMP_0170,2026-08,2026-07,cash_trend6,0.1521,empeora,Tendencia del saldo de caja (6 m): -4.36 x gasto/mes,Tendencia del saldo de caja (6 m): 0.39 x gasto/mes
+COMP_0170,2026-08,2026-07,io_ratio_trend6,-0.0727,mejora,Tendencia del ratio cobros/pagos (6 m): 0.38 x/mes,Tendencia del ratio cobros/pagos (6 m): nan x/mes
+COMP_0170,2026-08,2026-07,tenure_months,0.0636,empeora,Antigüedad en la plataforma: 4 meses,Antigüedad en la plataforma: 5 meses
+COMP_0170,2026-08,2026-07,erp_any,0.0580,empeora,ERP: Netsuite,ERP: Netsuite
 COMP_0170,2026-08,2026-07,inactive_months_w6,-0.0348,mejora,Meses sin transacciones (6 m): 3 meses,Meses sin transacciones (6 m): 4 meses
-COMP_0172,2026-08,2026-07,inflow_w3_vs_w12,-0.0703,mejora,Cobros últimos 3 m frente a media 12 m: 0.89 x,Cobros últimos 3 m frente a media 12 m: 0.60 x
-COMP_0172,2026-08,2026-07,io_ratio_w1,-0.0538,mejora,Ratio cobros/pagos (último mes): 2.23 x,Ratio cobros/pagos (último mes): 1.19 x
-COMP_0172,2026-08,2026-07,outflow_trend6,0.0328,empeora,Tendencia de pagos (6 m): 0.21 log/mes,Tendencia de pagos (6 m): -0.32 log/mes
-COMP_0172,2026-08,2026-07,io_ratio_w3,0.0290,empeora,Ratio cobros/pagos (3 m): 0.88 x,Ratio cobros/pagos (3 m): 1.38 x
-COMP_0172,2026-08,2026-07,inflow_w3_log,-0.0268,mejora,"Cobros (3 m): 3,046,451 €","Cobros (3 m): 2,049,334 €"
-COMP_0180,2026-08,2026-07,n_counterparties_w3_mean,0.3220,empeora,Contrapartidas bancarias distintas por mes (3 m): 35 n,Contrapartidas bancarias distintas por mes (3 m): 37 n
+COMP_0172,2026-08,2026-07,inflow_w3_vs_w12,-0.0588,mejora,Cobros últimos 3 m frente a media 12 m: 0.89 x,Cobros últimos 3 m frente a media 12 m: 0.60 x
+COMP_0172,2026-08,2026-07,io_ratio_w1,-0.0478,mejora,Ratio cobros/pagos (último mes): 2.23 x,Ratio cobros/pagos (último mes): 1.19 x
+COMP_0172,2026-08,2026-07,outflow_trend6,0.0300,empeora,Tendencia de pagos (6 m): 0.21 log/mes,Tendencia de pagos (6 m): -0.32 log/mes
+COMP_0172,2026-08,2026-07,net_flow_norm_w3,0.0269,empeora,Flujo neto sobre pagos (3 m): -0.12 x,Flujo neto sobre pagos (3 m): 0.38 x
+COMP_0172,2026-08,2026-07,inflow_w3_log,-0.0265,mejora,"Cobros (3 m): 3,046,451 €","Cobros (3 m): 2,049,334 €"
+COMP_0180,2026-08,2026-07,n_counterparties_w3_mean,0.3323,empeora,Contrapartidas bancarias distintas por mes (3 m): 35 n,Contrapartidas bancarias distintas por mes (3 m): 37 n
 COMP_0180,2026-08,2026-07,pay_amt_open_overdue_ratio_w6,-0.1747,mejora,Importe vencido abierto sobre facturado a pagar (6 m): 73%,Importe vencido abierto sobre facturado a pagar (6 m): 60%
-COMP_0180,2026-08,2026-07,salary_day_delta,0.1570,empeora,Cambio en el día de pago de nóminas (3 m vs 12 m): -7 días,Cambio en el día de pago de nóminas (3 m vs 12 m): 3 días
-COMP_0180,2026-08,2026-07,salary_amt_ratio_w3_w12,-0.0771,mejora,Nóminas 3 m frente a media 12 m: 0.41 x,Nóminas 3 m frente a media 12 m: 1.82 x
-COMP_0180,2026-08,2026-07,no_accounting_delta_w3_w12,-0.0631,mejora,Cambio en movimientos sin estado contable: +1 pp,Cambio en movimientos sin estado contable: +0 pp
-COMP_0205,2026-08,2026-07,n_tx_w3_vs_w12,0.1767,empeora,Actividad transaccional 3 m frente a 12 m: 0.89 x,Actividad transaccional 3 m frente a 12 m: 0.82 x
-COMP_0205,2026-08,2026-07,pay_open_overdue_share_w3,-0.1534,mejora,% facturas a pagar vencidas y abiertas (3 m): 28%,% facturas a pagar vencidas y abiertas (3 m): 9%
-COMP_0205,2026-08,2026-07,io_ratio_w1,0.1451,empeora,Ratio cobros/pagos (último mes): 0.19 x,Ratio cobros/pagos (último mes): 3.06 x
-COMP_0205,2026-08,2026-07,pay_dpd_trend6,0.1293,empeora,Tendencia del retraso de pago (6 m): -0.52 días/mes,Tendencia del retraso de pago (6 m): 0.51 días/mes
-COMP_0205,2026-08,2026-07,reconciled_delta_w3_w12,-0.0781,mejora,Cambio en la tasa de conciliación (3 m vs 12 m): +37 pp,Cambio en la tasa de conciliación (3 m vs 12 m): +29 pp
-COMP_0244,2026-08,2026-07,cash_balance_T_log,-0.2313,mejora,"Saldo de caja reconstruido a fin de mes: 15,690 €","Saldo de caja reconstruido a fin de mes: 39,080 €"
-COMP_0244,2026-08,2026-07,inflow_w3_vs_w12,-0.2260,mejora,Cobros últimos 3 m frente a media 12 m: 1.12 x,Cobros últimos 3 m frente a media 12 m: 1.03 x
-COMP_0244,2026-08,2026-07,io_ratio_w6,0.0456,empeora,Ratio cobros/pagos (6 m): 0.98 x,Ratio cobros/pagos (6 m): 1.00 x
-COMP_0244,2026-08,2026-07,tenure_months,-0.0401,mejora,Antigüedad en la plataforma: 25 meses,Antigüedad en la plataforma: 26 meses
-COMP_0244,2026-08,2026-07,erp_any,-0.0390,mejora,ERP: NONE,ERP: NONE
-COMP_0253,2026-08,2026-07,reconciled_delta_w3_w12,0.2033,empeora,Cambio en la tasa de conciliación (3 m vs 12 m): +0 pp,Cambio en la tasa de conciliación (3 m vs 12 m): -2 pp
-COMP_0253,2026-08,2026-07,inflow_w3_vs_w12,-0.1625,mejora,Cobros últimos 3 m frente a media 12 m: 1.10 x,Cobros últimos 3 m frente a media 12 m: 0.88 x
-COMP_0253,2026-08,2026-07,pay_bad_share_w12,-0.1404,mejora,% facturas a pagar con más de 30 días de retraso (12 m): 45%,% facturas a pagar con más de 30 días de retraso (12 m): 43%
-COMP_0253,2026-08,2026-07,no_counterparty_share_w3,-0.1253,mejora,Movimientos sin contrapartida resuelta (3 m): 74%,Movimientos sin contrapartida resuelta (3 m): 68%
-COMP_0253,2026-08,2026-07,pay_dpd_trend6,0.1079,empeora,Tendencia del retraso de pago (6 m): -4.55 días/mes,Tendencia del retraso de pago (6 m): -2.97 días/mes
-COMP_0282,2026-08,2026-07,n_tx_w3_vs_w12,0.1189,empeora,Actividad transaccional 3 m frente a 12 m: 0.94 x,Actividad transaccional 3 m frente a 12 m: 0.89 x
-COMP_0282,2026-08,2026-07,inflow_w3_vs_w12,-0.0825,mejora,Cobros últimos 3 m frente a media 12 m: 0.96 x,Cobros últimos 3 m frente a media 12 m: 0.79 x
-COMP_0282,2026-08,2026-07,io_ratio_w6,-0.0573,mejora,Ratio cobros/pagos (6 m): 1.04 x,Ratio cobros/pagos (6 m): 0.95 x
-COMP_0282,2026-08,2026-07,ss_day_mean_w3,-0.0294,mejora,Día del mes de pago de Seg. Social (3 m): 30 día,Día del mes de pago de Seg. Social (3 m): 30 día
-COMP_0282,2026-08,2026-07,tax_months_share_w6,-0.0267,mejora,Meses con pago de impuestos (6 m): 100%,Meses con pago de impuestos (6 m): 100%
-COMP_0285,2026-08,2026-07,inflow_w3_vs_w12,0.2376,empeora,Cobros últimos 3 m frente a media 12 m: 0.31 x,Cobros últimos 3 m frente a media 12 m: 1.21 x
-COMP_0285,2026-08,2026-07,outflow_trend6,-0.2013,mejora,Tendencia de pagos (6 m): -1.10 log/mes,Tendencia de pagos (6 m): -0.15 log/mes
-COMP_0285,2026-08,2026-07,n_tx_w1,-0.2003,mejora,Transacciones en el último mes: 3 n,Transacciones en el último mes: 5 n
-COMP_0285,2026-08,2026-07,n_tx_w3_vs_w12,-0.1539,mejora,Actividad transaccional 3 m frente a 12 m: 0.61 x,Actividad transaccional 3 m frente a 12 m: 0.89 x
-COMP_0285,2026-08,2026-07,tenure_months,0.0608,empeora,Antigüedad en la plataforma: 33 meses,Antigüedad en la plataforma: 34 meses
-COMP_0295,2026-08,2026-07,reconciled_delta_w3_w12,0.3175,empeora,Cambio en la tasa de conciliación (3 m vs 12 m): +8 pp,Cambio en la tasa de conciliación (3 m vs 12 m): -6 pp
-COMP_0295,2026-08,2026-07,salary_day_mean_w3,0.2419,empeora,Día del mes en que se pagan las nóminas (3 m): 25 día,Día del mes en que se pagan las nóminas (3 m): 29 día
-COMP_0295,2026-08,2026-07,n_tx_w3_vs_w12,0.2302,empeora,Actividad transaccional 3 m frente a 12 m: 3.60 x,Actividad transaccional 3 m frente a 12 m: 2.65 x
-COMP_0295,2026-08,2026-07,pay_open_overdue_share_w3,-0.1273,mejora,% facturas a pagar vencidas y abiertas (3 m): 32%,% facturas a pagar vencidas y abiertas (3 m): 6%
-COMP_0295,2026-08,2026-07,cash_vol6,0.1066,empeora,Volatilidad del saldo de caja (6 m): 0.16 x,Volatilidad del saldo de caja (6 m): 0.27 x
-COMP_0311,2026-08,2026-07,tax_amt_ratio_w3_w12,0.1146,empeora,Impuestos pagados 3 m frente a media 12 m: nan x,Impuestos pagados 3 m frente a media 12 m: 4.00 x
-COMP_0311,2026-08,2026-07,cash_trend6,0.0907,empeora,Tendencia del saldo de caja (6 m): -0.05 x gasto/mes,Tendencia del saldo de caja (6 m): 0.05 x gasto/mes
-COMP_0311,2026-08,2026-07,n_tx_w3_vs_w12,-0.0882,mejora,Actividad transaccional 3 m frente a 12 m: 0.92 x,Actividad transaccional 3 m frente a 12 m: 1.03 x
-COMP_0311,2026-08,2026-07,io_ratio_trend6,0.0371,empeora,Tendencia del ratio cobros/pagos (6 m): 0.13 x/mes,Tendencia del ratio cobros/pagos (6 m): 0.46 x/mes
-COMP_0311,2026-08,2026-07,resolved_inflow_share_w6,-0.0331,mejora,Cobros con contrapartida identificada (6 m): 91%,Cobros con contrapartida identificada (6 m): 92%
-COMP_0318,2026-08,2026-07,pay_dpd_mean_w3,0.2439,empeora,Retraso medio de pago a proveedores (3 m): 0 días,Retraso medio de pago a proveedores (3 m): 7 días
-COMP_0318,2026-08,2026-07,io_ratio_w1,0.1757,empeora,Ratio cobros/pagos (último mes): 0.88 x,Ratio cobros/pagos (último mes): 2.56 x
-COMP_0318,2026-08,2026-07,no_counterparty_share_w3,-0.0808,mejora,Movimientos sin contrapartida resuelta (3 m): 74%,Movimientos sin contrapartida resuelta (3 m): 71%
+COMP_0180,2026-08,2026-07,salary_day_delta,0.1629,empeora,Cambio en el día de pago de nóminas (3 m vs 12 m): -7 días,Cambio en el día de pago de nóminas (3 m vs 12 m): 3 días
+COMP_0180,2026-08,2026-07,salary_amt_ratio_w3_w12,-0.0640,mejora,Nóminas 3 m frente a media 12 m: 0.41 x,Nóminas 3 m frente a media 12 m: 1.82 x
+COMP_0180,2026-08,2026-07,no_accounting_delta_w3_w12,-0.0577,mejora,Cambio en movimientos sin estado contable: +1 pp,Cambio en movimientos sin estado contable: +0 pp
+COMP_0205,2026-08,2026-07,n_tx_w3_vs_w12,0.1596,empeora,Actividad transaccional 3 m frente a 12 m: 0.89 x,Actividad transaccional 3 m frente a 12 m: 0.82 x
+COMP_0205,2026-08,2026-07,pay_open_overdue_share_w3,-0.1526,mejora,% facturas a pagar vencidas y abiertas (3 m): 28%,% facturas a pagar vencidas y abiertas (3 m): 9%
+COMP_0205,2026-08,2026-07,io_ratio_w1,0.1418,empeora,Ratio cobros/pagos (último mes): 0.19 x,Ratio cobros/pagos (último mes): 3.06 x
+COMP_0205,2026-08,2026-07,pay_dpd_trend6,0.1167,empeora,Tendencia del retraso de pago (6 m): -0.52 días/mes,Tendencia del retraso de pago (6 m): 0.51 días/mes
+COMP_0205,2026-08,2026-07,reconciled_delta_w3_w12,-0.0778,mejora,Cambio en la tasa de conciliación (3 m vs 12 m): +37 pp,Cambio en la tasa de conciliación (3 m vs 12 m): +29 pp
+COMP_0244,2026-08,2026-07,cash_balance_T_log,-0.2517,mejora,"Saldo de caja reconstruido a fin de mes: 15,690 €","Saldo de caja reconstruido a fin de mes: 39,080 €"
+COMP_0244,2026-08,2026-07,inflow_w3_vs_w12,-0.2314,mejora,Cobros últimos 3 m frente a media 12 m: 1.12 x,Cobros últimos 3 m frente a media 12 m: 1.03 x
+COMP_0244,2026-08,2026-07,io_ratio_w6,0.0416,empeora,Ratio cobros/pagos (6 m): 0.98 x,Ratio cobros/pagos (6 m): 1.00 x
+COMP_0244,2026-08,2026-07,erp_any,-0.0388,mejora,ERP: NONE,ERP: NONE
+COMP_0244,2026-08,2026-07,salary_day_mean_w3,-0.0369,mejora,Día del mes en que se pagan las nóminas (3 m): 27 día,Día del mes en que se pagan las nóminas (3 m): 27 día
+COMP_0253,2026-08,2026-07,reconciled_delta_w3_w12,0.2438,empeora,Cambio en la tasa de conciliación (3 m vs 12 m): +0 pp,Cambio en la tasa de conciliación (3 m vs 12 m): -2 pp
+COMP_0253,2026-08,2026-07,inflow_w3_vs_w12,-0.1567,mejora,Cobros últimos 3 m frente a media 12 m: 1.10 x,Cobros últimos 3 m frente a media 12 m: 0.88 x
+COMP_0253,2026-08,2026-07,pay_bad_share_w12,-0.1396,mejora,% facturas a pagar con más de 30 días de retraso (12 m): 45%,% facturas a pagar con más de 30 días de retraso (12 m): 43%
+COMP_0253,2026-08,2026-07,no_counterparty_share_w3,-0.1130,mejora,Movimientos sin contrapartida resuelta (3 m): 74%,Movimientos sin contrapartida resuelta (3 m): 68%
+COMP_0253,2026-08,2026-07,pay_dpd_trend6,0.1086,empeora,Tendencia del retraso de pago (6 m): -4.55 días/mes,Tendencia del retraso de pago (6 m): -2.97 días/mes
+COMP_0282,2026-08,2026-07,n_tx_w3_vs_w12,0.1265,empeora,Actividad transaccional 3 m frente a 12 m: 0.94 x,Actividad transaccional 3 m frente a 12 m: 0.89 x
+COMP_0282,2026-08,2026-07,inflow_w3_vs_w12,-0.0661,mejora,Cobros últimos 3 m frente a media 12 m: 0.96 x,Cobros últimos 3 m frente a media 12 m: 0.79 x
+COMP_0282,2026-08,2026-07,io_ratio_w6,-0.0553,mejora,Ratio cobros/pagos (6 m): 1.04 x,Ratio cobros/pagos (6 m): 0.95 x
+COMP_0282,2026-08,2026-07,ss_day_mean_w3,-0.0287,mejora,Día del mes de pago de Seg. Social (3 m): 30 día,Día del mes de pago de Seg. Social (3 m): 30 día
+COMP_0282,2026-08,2026-07,stress_terms_rate_w6,0.0281,empeora,"Movimientos con términos de estrés (devolución, impagado…) (6 m): 3%","Movimientos con términos de estrés (devolución, impagado…) (6 m): 3%"
+COMP_0285,2026-08,2026-07,inflow_w3_vs_w12,0.2264,empeora,Cobros últimos 3 m frente a media 12 m: 0.31 x,Cobros últimos 3 m frente a media 12 m: 1.21 x
+COMP_0285,2026-08,2026-07,n_tx_w1,-0.2010,mejora,Transacciones en el último mes: 3 n,Transacciones en el último mes: 5 n
+COMP_0285,2026-08,2026-07,outflow_trend6,-0.1970,mejora,Tendencia de pagos (6 m): -1.10 log/mes,Tendencia de pagos (6 m): -0.15 log/mes
+COMP_0285,2026-08,2026-07,n_tx_w3_vs_w12,-0.1620,mejora,Actividad transaccional 3 m frente a 12 m: 0.61 x,Actividad transaccional 3 m frente a 12 m: 0.89 x
+COMP_0285,2026-08,2026-07,tenure_months,0.0609,empeora,Antigüedad en la plataforma: 33 meses,Antigüedad en la plataforma: 34 meses
+COMP_0295,2026-08,2026-07,reconciled_delta_w3_w12,0.3449,empeora,Cambio en la tasa de conciliación (3 m vs 12 m): +8 pp,Cambio en la tasa de conciliación (3 m vs 12 m): -6 pp
+COMP_0295,2026-08,2026-07,salary_day_mean_w3,0.2511,empeora,Día del mes en que se pagan las nóminas (3 m): 25 día,Día del mes en que se pagan las nóminas (3 m): 29 día
+COMP_0295,2026-08,2026-07,n_tx_w3_vs_w12,0.2292,empeora,Actividad transaccional 3 m frente a 12 m: 3.60 x,Actividad transaccional 3 m frente a 12 m: 2.65 x
+COMP_0295,2026-08,2026-07,pay_open_overdue_share_w3,-0.1266,mejora,% facturas a pagar vencidas y abiertas (3 m): 32%,% facturas a pagar vencidas y abiertas (3 m): 6%
+COMP_0295,2026-08,2026-07,cash_vol6,0.0993,empeora,Volatilidad del saldo de caja (6 m): 0.16 x,Volatilidad del saldo de caja (6 m): 0.27 x
+COMP_0311,2026-08,2026-07,tax_amt_ratio_w3_w12,0.1453,empeora,Impuestos pagados 3 m frente a media 12 m: nan x,Impuestos pagados 3 m frente a media 12 m: 4.00 x
+COMP_0311,2026-08,2026-07,cash_trend6,0.0808,empeora,Tendencia del saldo de caja (6 m): -0.05 x gasto/mes,Tendencia del saldo de caja (6 m): 0.05 x gasto/mes
+COMP_0311,2026-08,2026-07,n_tx_w3_vs_w12,-0.0746,mejora,Actividad transaccional 3 m frente a 12 m: 0.92 x,Actividad transaccional 3 m frente a 12 m: 1.03 x
+COMP_0311,2026-08,2026-07,pay_max_open_dpd_w12,0.0413,empeora,Factura a pagar más antigua sin pagar: 337 días,Factura a pagar más antigua sin pagar: 312 días
+COMP_0311,2026-08,2026-07,io_ratio_trend6,0.0341,empeora,Tendencia del ratio cobros/pagos (6 m): 0.13 x/mes,Tendencia del ratio cobros/pagos (6 m): 0.46 x/mes
+COMP_0318,2026-08,2026-07,pay_dpd_mean_w3,0.2666,empeora,Retraso medio de pago a proveedores (3 m): 0 días,Retraso medio de pago a proveedores (3 m): 7 días
+COMP_0318,2026-08,2026-07,io_ratio_w1,0.1738,empeora,Ratio cobros/pagos (último mes): 0.88 x,Ratio cobros/pagos (último mes): 2.56 x
 COMP_0318,2026-08,2026-07,pay_dpd_mean_w6,0.0783,empeora,Retraso medio de pago a proveedores (6 m): 8 días,Retraso medio de pago a proveedores (6 m): 13 días
-COMP_0318,2026-08,2026-07,pay_dpd_trend6,0.0694,empeora,Tendencia del retraso de pago (6 m): -0.44 días/mes,Tendencia del retraso de pago (6 m): -0.26 días/mes
-COMP_0320,2026-08,2026-07,pay_dpd_mean_w3,0.1785,empeora,Retraso medio de pago a proveedores (3 m): 3 días,Retraso medio de pago a proveedores (3 m): 7 días
-COMP_0320,2026-08,2026-07,io_ratio_trend6,-0.1532,mejora,Tendencia del ratio cobros/pagos (6 m): -0.51 x/mes,Tendencia del ratio cobros/pagos (6 m): -0.22 x/mes
-COMP_0320,2026-08,2026-07,hhi_in_delta3,0.1244,empeora,Cambio en concentración de clientes (3 m): nan idx,Cambio en concentración de clientes (3 m): -0.25 idx
-COMP_0320,2026-08,2026-07,salary_day_mean_w3,0.1175,empeora,Día del mes en que se pagan las nóminas (3 m): 28 día,Día del mes en que se pagan las nóminas (3 m): nan día
-COMP_0320,2026-08,2026-07,rec_open_overdue_trend6,0.0818,empeora,Tendencia del % de facturas a cobrar vencidas (6 m): 0.08 pp/mes,Tendencia del % de facturas a cobrar vencidas (6 m): 0.05 pp/mes
-COMP_0328,2026-08,2026-07,pay_dpd_trend6,0.1853,empeora,Tendencia del retraso de pago (6 m): -1.13 días/mes,Tendencia del retraso de pago (6 m): 3.23 días/mes
-COMP_0328,2026-08,2026-07,reconciled_delta_w3_w12,0.1618,empeora,Cambio en la tasa de conciliación (3 m vs 12 m): +18 pp,Cambio en la tasa de conciliación (3 m vs 12 m): +37 pp
-COMP_0328,2026-08,2026-07,io_ratio_w1,-0.1577,mejora,Ratio cobros/pagos (último mes): 2.86 x,Ratio cobros/pagos (último mes): 1.42 x
-COMP_0328,2026-08,2026-07,pay_open_overdue_share_w3,0.0843,empeora,% facturas a pagar vencidas y abiertas (3 m): 32%,% facturas a pagar vencidas y abiertas (3 m): 55%
-COMP_0328,2026-08,2026-07,group_size,0.0769,empeora,Tamaño del grupo empresarial: 2 empresas,Tamaño del grupo empresarial: 2 empresas
-COMP_0367,2026-08,2026-07,inflow_w3_vs_w12,0.1454,empeora,Cobros últimos 3 m frente a media 12 m: 1.03 x,Cobros últimos 3 m frente a media 12 m: 1.49 x
-COMP_0367,2026-08,2026-07,inflow_w6_log,0.1235,empeora,"Cobros (6 m): 4,293,793 €","Cobros (6 m): 5,857,579 €"
+COMP_0318,2026-08,2026-07,inflow_w3_vs_w12,-0.0719,mejora,Cobros últimos 3 m frente a media 12 m: 1.22 x,Cobros últimos 3 m frente a media 12 m: 1.33 x
+COMP_0318,2026-08,2026-07,no_counterparty_share_w3,-0.0685,mejora,Movimientos sin contrapartida resuelta (3 m): 74%,Movimientos sin contrapartida resuelta (3 m): 71%
+COMP_0320,2026-08,2026-07,pay_dpd_mean_w3,0.1959,empeora,Retraso medio de pago a proveedores (3 m): 3 días,Retraso medio de pago a proveedores (3 m): 7 días
+COMP_0320,2026-08,2026-07,io_ratio_trend6,-0.1560,mejora,Tendencia del ratio cobros/pagos (6 m): -0.51 x/mes,Tendencia del ratio cobros/pagos (6 m): -0.22 x/mes
+COMP_0320,2026-08,2026-07,salary_day_mean_w3,0.1444,empeora,Día del mes en que se pagan las nóminas (3 m): 28 día,Día del mes en que se pagan las nóminas (3 m): nan día
+COMP_0320,2026-08,2026-07,hhi_in_delta3,0.1219,empeora,Cambio en concentración de clientes (3 m): nan idx,Cambio en concentración de clientes (3 m): -0.25 idx
+COMP_0320,2026-08,2026-07,io_ratio_w12,-0.0569,mejora,Ratio cobros/pagos (12 m): 2.23 x,Ratio cobros/pagos (12 m): 2.00 x
+COMP_0328,2026-08,2026-07,pay_dpd_trend6,0.1799,empeora,Tendencia del retraso de pago (6 m): -1.13 días/mes,Tendencia del retraso de pago (6 m): 3.23 días/mes
+COMP_0328,2026-08,2026-07,reconciled_delta_w3_w12,0.1567,empeora,Cambio en la tasa de conciliación (3 m vs 12 m): +18 pp,Cambio en la tasa de conciliación (3 m vs 12 m): +37 pp
+COMP_0328,2026-08,2026-07,io_ratio_w1,-0.1499,mejora,Ratio cobros/pagos (último mes): 2.86 x,Ratio cobros/pagos (último mes): 1.42 x
+COMP_0328,2026-08,2026-07,pay_open_overdue_share_w3,0.0846,empeora,% facturas a pagar vencidas y abiertas (3 m): 32%,% facturas a pagar vencidas y abiertas (3 m): 55%
+COMP_0328,2026-08,2026-07,group_size,0.0746,empeora,Tamaño del grupo empresarial: 2 empresas,Tamaño del grupo empresarial: 2 empresas
+COMP_0367,2026-08,2026-07,inflow_w3_vs_w12,0.1614,empeora,Cobros últimos 3 m frente a media 12 m: 1.03 x,Cobros últimos 3 m frente a media 12 m: 1.49 x
+COMP_0367,2026-08,2026-07,inflow_w6_log,0.1171,empeora,"Cobros (6 m): 4,293,793 €","Cobros (6 m): 5,857,579 €"
 COMP_0367,2026-08,2026-07,tenure_months,0.0452,empeora,Antigüedad en la plataforma: 30 meses,Antigüedad en la plataforma: 31 meses
-COMP_0367,2026-08,2026-07,cash_trend6,-0.0303,mejora,Tendencia del saldo de caja (6 m): 0.53 x gasto/mes,Tendencia del saldo de caja (6 m): -0.21 x gasto/mes
-COMP_0367,2026-08,2026-07,io_ratio_w1,0.0244,empeora,Ratio cobros/pagos (último mes): 0.81 x,Ratio cobros/pagos (último mes): 1.07 x
-COMP_0369,2026-08,2026-07,days_of_cash,0.8499,empeora,Días de caja: 6 días,Días de caja: -1 días
-COMP_0369,2026-08,2026-07,cash_balance_T_log,0.7262,empeora,"Saldo de caja reconstruido a fin de mes: 568,664 €","Saldo de caja reconstruido a fin de mes: -145,473 €"
-COMP_0369,2026-08,2026-07,cash_min_w6_norm,0.7036,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.07 x,Saldo mínimo de caja (6 m) sobre gasto mensual: -0.06 x
-COMP_0369,2026-08,2026-07,cash_months_of_outflow,0.2703,empeora,Meses de gasto operativo cubiertos por la caja: 0 meses,Meses de gasto operativo cubiertos por la caja: -0 meses
-COMP_0369,2026-08,2026-07,pay_open_overdue_share_w3,-0.1354,mejora,% facturas a pagar vencidas y abiertas (3 m): 12%,% facturas a pagar vencidas y abiertas (3 m): 12%
-COMP_0388,2026-08,2026-07,n_tx_w3_vs_w12,0.3243,empeora,Actividad transaccional 3 m frente a 12 m: 0.96 x,Actividad transaccional 3 m frente a 12 m: 0.78 x
-COMP_0388,2026-08,2026-07,inflow_w3_vs_w12,0.2788,empeora,Cobros últimos 3 m frente a media 12 m: 0.65 x,Cobros últimos 3 m frente a media 12 m: 1.51 x
-COMP_0388,2026-08,2026-07,inflow_w6_log,0.1001,empeora,"Cobros (6 m): 2,963,334 €","Cobros (6 m): 4,778,510 €"
-COMP_0388,2026-08,2026-07,cash_min_w6_norm,0.0892,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.77 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.63 x
-COMP_0388,2026-08,2026-07,io_ratio_w6,0.0879,empeora,Ratio cobros/pagos (6 m): 0.98 x,Ratio cobros/pagos (6 m): 1.29 x
-COMP_0402,2026-08,2026-07,interest_trend6,-0.0658,mejora,Tendencia de liquidaciones de intereses (6 m): 0.37 n/mes,Tendencia de liquidaciones de intereses (6 m): -0.03 n/mes
-COMP_0402,2026-08,2026-07,tax_share_of_outflow_w6,0.0354,empeora,Impuestos sobre pagos (6 m): 1%,Impuestos sobre pagos (6 m): 1%
-COMP_0402,2026-08,2026-07,n_tx_w3_vs_w12,0.0296,empeora,Actividad transaccional 3 m frente a 12 m: 1.01 x,Actividad transaccional 3 m frente a 12 m: 0.93 x
-COMP_0402,2026-08,2026-07,n_tx_trend6,0.0252,empeora,Tendencia de actividad transaccional (6 m): 0.00 log/mes,Tendencia de actividad transaccional (6 m): -0.05 log/mes
+COMP_0367,2026-08,2026-07,cash_trend6,-0.0336,mejora,Tendencia del saldo de caja (6 m): 0.53 x gasto/mes,Tendencia del saldo de caja (6 m): -0.21 x gasto/mes
+COMP_0367,2026-08,2026-07,tax_amt_ratio_w3_w12,-0.0311,mejora,Impuestos pagados 3 m frente a media 12 m: 1.30 x,Impuestos pagados 3 m frente a media 12 m: 2.21 x
+COMP_0369,2026-08,2026-07,days_of_cash,0.8470,empeora,Días de caja: 6 días,Días de caja: -1 días
+COMP_0369,2026-08,2026-07,cash_balance_T_log,0.7179,empeora,"Saldo de caja reconstruido a fin de mes: 568,664 €","Saldo de caja reconstruido a fin de mes: -145,473 €"
+COMP_0369,2026-08,2026-07,cash_min_w6_norm,0.6718,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.07 x,Saldo mínimo de caja (6 m) sobre gasto mensual: -0.06 x
+COMP_0369,2026-08,2026-07,cash_months_of_outflow,0.2797,empeora,Meses de gasto operativo cubiertos por la caja: 0 meses,Meses de gasto operativo cubiertos por la caja: -0 meses
+COMP_0369,2026-08,2026-07,pay_open_overdue_share_w3,-0.1358,mejora,% facturas a pagar vencidas y abiertas (3 m): 12%,% facturas a pagar vencidas y abiertas (3 m): 12%
+COMP_0388,2026-08,2026-07,n_tx_w3_vs_w12,0.3148,empeora,Actividad transaccional 3 m frente a 12 m: 0.96 x,Actividad transaccional 3 m frente a 12 m: 0.78 x
+COMP_0388,2026-08,2026-07,inflow_w3_vs_w12,0.2770,empeora,Cobros últimos 3 m frente a media 12 m: 0.65 x,Cobros últimos 3 m frente a media 12 m: 1.51 x
+COMP_0388,2026-08,2026-07,inflow_w6_log,0.1012,empeora,"Cobros (6 m): 2,963,334 €","Cobros (6 m): 4,778,510 €"
+COMP_0388,2026-08,2026-07,cash_min_w6_norm,0.0940,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.77 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.63 x
+COMP_0388,2026-08,2026-07,io_ratio_w6,0.0933,empeora,Ratio cobros/pagos (6 m): 0.98 x,Ratio cobros/pagos (6 m): 1.29 x
+COMP_0402,2026-08,2026-07,interest_trend6,-0.0603,mejora,Tendencia de liquidaciones de intereses (6 m): 0.37 n/mes,Tendencia de liquidaciones de intereses (6 m): -0.03 n/mes
+COMP_0402,2026-08,2026-07,tax_share_of_outflow_w6,0.0378,empeora,Impuestos sobre pagos (6 m): 1%,Impuestos sobre pagos (6 m): 1%
+COMP_0402,2026-08,2026-07,n_tx_trend6,0.0254,empeora,Tendencia de actividad transaccional (6 m): 0.00 log/mes,Tendencia de actividad transaccional (6 m): -0.05 log/mes
 COMP_0402,2026-08,2026-07,salary_amt_ratio_w3_w12,0.0247,empeora,Nóminas 3 m frente a media 12 m: 1.21 x,Nóminas 3 m frente a media 12 m: 1.06 x
-COMP_0456,2026-08,2026-07,n_tx_w3_vs_w12,0.1228,empeora,Actividad transaccional 3 m frente a 12 m: 0.93 x,Actividad transaccional 3 m frente a 12 m: 0.85 x
-COMP_0456,2026-08,2026-07,tax_months_share_w6,-0.1020,mejora,Meses con pago de impuestos (6 m): 83%,Meses con pago de impuestos (6 m): 67%
-COMP_0456,2026-08,2026-07,inflow_w3_vs_w12,-0.0913,mejora,Cobros últimos 3 m frente a media 12 m: 1.04 x,Cobros últimos 3 m frente a media 12 m: 0.56 x
-COMP_0456,2026-08,2026-07,stress_terms_rate_w6,-0.0432,mejora,"Movimientos con términos de estrés (devolución, impagado…) (6 m): 1%","Movimientos con términos de estrés (devolución, impagado…) (6 m): 0%"
+COMP_0402,2026-08,2026-07,n_tx_w3_vs_w12,0.0202,empeora,Actividad transaccional 3 m frente a 12 m: 1.01 x,Actividad transaccional 3 m frente a 12 m: 0.93 x
+COMP_0456,2026-08,2026-07,n_tx_w3_vs_w12,0.1207,empeora,Actividad transaccional 3 m frente a 12 m: 0.93 x,Actividad transaccional 3 m frente a 12 m: 0.85 x
+COMP_0456,2026-08,2026-07,tax_months_share_w6,-0.0944,mejora,Meses con pago de impuestos (6 m): 83%,Meses con pago de impuestos (6 m): 67%
+COMP_0456,2026-08,2026-07,inflow_w3_vs_w12,-0.0838,mejora,Cobros últimos 3 m frente a media 12 m: 1.04 x,Cobros últimos 3 m frente a media 12 m: 0.56 x
+COMP_0456,2026-08,2026-07,stress_terms_rate_w6,-0.0444,mejora,"Movimientos con términos de estrés (devolución, impagado…) (6 m): 1%","Movimientos con términos de estrés (devolución, impagado…) (6 m): 0%"
 COMP_0456,2026-08,2026-07,salary_amt_ratio_w3_w12,0.0355,empeora,Nóminas 3 m frente a media 12 m: 1.35 x,Nóminas 3 m frente a media 12 m: 1.09 x
 COMP_0458,2026-08,2026-07,n_tx_w1,0.6724,empeora,Transacciones en el último mes: 4 n,Transacciones en el último mes: 2 n
-COMP_0458,2026-08,2026-07,inflow_vol6,-0.3681,mejora,Volatilidad de cobros (6 m): 2.45 x,Volatilidad de cobros (6 m): 0.00 x
+COMP_0458,2026-08,2026-07,inflow_vol6,-0.3738,mejora,Volatilidad de cobros (6 m): 2.45 x,Volatilidad de cobros (6 m): 0.00 x
 COMP_0458,2026-08,2026-07,cash_min_w6_norm,-0.2355,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.14 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.16 x
-COMP_0458,2026-08,2026-07,debt_service_ratio_w6,0.2043,empeora,Servicio de la deuda sobre cobros (6 m): 0%,Servicio de la deuda sobre cobros (6 m): nan%
-COMP_0458,2026-08,2026-07,main_bank_share,-0.0714,mejora,Peso del banco principal: 100%,Peso del banco principal: 100%
-COMP_0459,2026-08,2026-07,n_tx_w3_vs_w12,0.1847,empeora,Actividad transaccional 3 m frente a 12 m: 1.07 x,Actividad transaccional 3 m frente a 12 m: 0.84 x
-COMP_0459,2026-08,2026-07,inflow_w3_vs_w12,-0.0871,mejora,Cobros últimos 3 m frente a media 12 m: 1.16 x,Cobros últimos 3 m frente a media 12 m: 1.06 x
-COMP_0459,2026-08,2026-07,n_tx_trend6,0.0831,empeora,Tendencia de actividad transaccional (6 m): -0.13 log/mes,Tendencia de actividad transaccional (6 m): -0.18 log/mes
-COMP_0459,2026-08,2026-07,cash_min_w6_norm,-0.0592,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.11 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.12 x
-COMP_0459,2026-08,2026-07,cash_withdrawal_share_w6,0.0405,empeora,Retiradas de efectivo sobre movimientos (6 m): 0%,Retiradas de efectivo sobre movimientos (6 m): 0%
-COMP_0465,2026-08,2026-07,pay_dpd_trend6,0.2536,empeora,Tendencia del retraso de pago (6 m): -3.75 días/mes,Tendencia del retraso de pago (6 m): -0.67 días/mes
-COMP_0465,2026-08,2026-07,salary_day_mean_w3,0.2148,empeora,Día del mes en que se pagan las nóminas (3 m): 22 día,Día del mes en que se pagan las nóminas (3 m): nan día
-COMP_0465,2026-08,2026-07,pay_dpd_mean_w3,0.1623,empeora,Retraso medio de pago a proveedores (3 m): 3 días,Retraso medio de pago a proveedores (3 m): 7 días
-COMP_0465,2026-08,2026-07,rec_open_overdue_trend6,-0.1136,mejora,Tendencia del % de facturas a cobrar vencidas (6 m): 0.00 pp/mes,Tendencia del % de facturas a cobrar vencidas (6 m): 0.06 pp/mes
-COMP_0465,2026-08,2026-07,hhi_in_delta3,0.1118,empeora,Cambio en concentración de clientes (3 m): nan idx,Cambio en concentración de clientes (3 m): -0.16 idx
-COMP_0478,2026-08,2026-07,inflow_w3_vs_w12,-0.0471,mejora,Cobros últimos 3 m frente a media 12 m: 1.22 x,Cobros últimos 3 m frente a media 12 m: 1.38 x
-COMP_0478,2026-08,2026-07,net_flow_norm_w3,-0.0270,mejora,Flujo neto sobre pagos (3 m): -0.67 x,Flujo neto sobre pagos (3 m): -0.54 x
-COMP_0478,2026-08,2026-07,io_ratio_w3,-0.0191,mejora,Ratio cobros/pagos (3 m): 0.33 x,Ratio cobros/pagos (3 m): 0.46 x
-COMP_0478,2026-08,2026-07,outflow_w1_log,0.0188,empeora,"Pagos del último mes: 356,788 €","Pagos del último mes: 181,583 €"
-COMP_0478,2026-08,2026-07,io_ratio_w1,-0.0126,mejora,Ratio cobros/pagos (último mes): 0.30 x,Ratio cobros/pagos (último mes): 0.72 x
-COMP_0489,2026-08,2026-07,cash_min_w6_norm,-0.4767,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.00 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.00 x
-COMP_0489,2026-08,2026-07,outflow_trend6,0.2155,empeora,Tendencia de pagos (6 m): -0.24 log/mes,Tendencia de pagos (6 m): -0.86 log/mes
+COMP_0458,2026-08,2026-07,debt_service_ratio_w6,0.1438,empeora,Servicio de la deuda sobre cobros (6 m): 0%,Servicio de la deuda sobre cobros (6 m): nan%
+COMP_0458,2026-08,2026-07,main_bank_share,-0.0694,mejora,Peso del banco principal: 100%,Peso del banco principal: 100%
+COMP_0459,2026-08,2026-07,n_tx_w3_vs_w12,0.1714,empeora,Actividad transaccional 3 m frente a 12 m: 1.07 x,Actividad transaccional 3 m frente a 12 m: 0.84 x
+COMP_0459,2026-08,2026-07,inflow_w3_vs_w12,-0.1005,mejora,Cobros últimos 3 m frente a media 12 m: 1.16 x,Cobros últimos 3 m frente a media 12 m: 1.06 x
+COMP_0459,2026-08,2026-07,n_tx_trend6,0.0829,empeora,Tendencia de actividad transaccional (6 m): -0.13 log/mes,Tendencia de actividad transaccional (6 m): -0.18 log/mes
+COMP_0459,2026-08,2026-07,cash_min_w6_norm,-0.0611,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.11 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.12 x
+COMP_0459,2026-08,2026-07,cash_withdrawal_share_w6,0.0396,empeora,Retiradas de efectivo sobre movimientos (6 m): 0%,Retiradas de efectivo sobre movimientos (6 m): 0%
+COMP_0465,2026-08,2026-07,pay_dpd_trend6,0.2401,empeora,Tendencia del retraso de pago (6 m): -3.75 días/mes,Tendencia del retraso de pago (6 m): -0.67 días/mes
+COMP_0465,2026-08,2026-07,salary_day_mean_w3,0.2380,empeora,Día del mes en que se pagan las nóminas (3 m): 22 día,Día del mes en que se pagan las nóminas (3 m): nan día
+COMP_0465,2026-08,2026-07,pay_dpd_mean_w3,0.1779,empeora,Retraso medio de pago a proveedores (3 m): 3 días,Retraso medio de pago a proveedores (3 m): 7 días
+COMP_0465,2026-08,2026-07,hhi_in_delta3,0.1167,empeora,Cambio en concentración de clientes (3 m): nan idx,Cambio en concentración de clientes (3 m): -0.16 idx
+COMP_0465,2026-08,2026-07,rec_open_overdue_trend6,-0.1078,mejora,Tendencia del % de facturas a cobrar vencidas (6 m): 0.00 pp/mes,Tendencia del % de facturas a cobrar vencidas (6 m): 0.06 pp/mes
+COMP_0478,2026-08,2026-07,inflow_w3_vs_w12,-0.0467,mejora,Cobros últimos 3 m frente a media 12 m: 1.22 x,Cobros últimos 3 m frente a media 12 m: 1.38 x
+COMP_0478,2026-08,2026-07,net_flow_norm_w3,-0.0343,mejora,Flujo neto sobre pagos (3 m): -0.67 x,Flujo neto sobre pagos (3 m): -0.54 x
+COMP_0478,2026-08,2026-07,io_ratio_w3,-0.0204,mejora,Ratio cobros/pagos (3 m): 0.33 x,Ratio cobros/pagos (3 m): 0.46 x
+COMP_0478,2026-08,2026-07,ss_amt_ratio_w3_w12,-0.0187,mejora,Seg. Social 3 m frente a media 12 m: 0.92 x,Seg. Social 3 m frente a media 12 m: 0.99 x
+COMP_0478,2026-08,2026-07,outflow_w1_log,0.0184,empeora,"Pagos del último mes: 356,788 €","Pagos del último mes: 181,583 €"
+COMP_0489,2026-08,2026-07,cash_min_w6_norm,-0.4742,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.00 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.00 x
+COMP_0489,2026-08,2026-07,outflow_trend6,0.2124,empeora,Tendencia de pagos (6 m): -0.24 log/mes,Tendencia de pagos (6 m): -0.86 log/mes
 COMP_0489,2026-08,2026-07,n_tx_w1,0.1485,empeora,Transacciones en el último mes: 1 n,Transacciones en el último mes: 1 n
-COMP_0489,2026-08,2026-07,n_tx_trend6,0.0765,empeora,Tendencia de actividad transaccional (6 m): -0.14 log/mes,Tendencia de actividad transaccional (6 m): -0.27 log/mes
-COMP_0489,2026-08,2026-07,inflow_vol6,-0.0529,mejora,Volatilidad de cobros (6 m): 2.45 x,Volatilidad de cobros (6 m): 2.45 x
-COMP_0509,2026-08,2026-07,n_tx_w3_vs_w12,0.3167,empeora,Actividad transaccional 3 m frente a 12 m: 1.18 x,Actividad transaccional 3 m frente a 12 m: 0.70 x
-COMP_0509,2026-08,2026-07,pay_dpd_trend6,0.1900,empeora,Tendencia del retraso de pago (6 m): -5.06 días/mes,Tendencia del retraso de pago (6 m): -1.32 días/mes
-COMP_0509,2026-08,2026-07,pay_bad_share_w12,0.0639,empeora,% facturas a pagar con más de 30 días de retraso (12 m): 45%,% facturas a pagar con más de 30 días de retraso (12 m): 46%
-COMP_0509,2026-08,2026-07,cash_min_w6_norm,0.0587,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 1.27 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 1.21 x
-COMP_0509,2026-08,2026-07,inflow_w3_vs_w12,-0.0562,mejora,Cobros últimos 3 m frente a media 12 m: 0.91 x,Cobros últimos 3 m frente a media 12 m: 0.00 x
-COMP_0536,2026-08,2026-07,resolved_inflow_share_w6,-0.2617,mejora,Cobros con contrapartida identificada (6 m): 88%,Cobros con contrapartida identificada (6 m): 94%
-COMP_0536,2026-08,2026-07,salary_day_mean_w3,0.2481,empeora,Día del mes en que se pagan las nóminas (3 m): 25 día,Día del mes en que se pagan las nóminas (3 m): 29 día
-COMP_0536,2026-08,2026-07,inv_n_counterparties_w3,0.1141,empeora,Contrapartidas distintas en facturas (3 m): 11 n,Contrapartidas distintas en facturas (3 m): 7 n
-COMP_0536,2026-08,2026-07,rec_open_overdue_trend6,0.1117,empeora,Tendencia del % de facturas a cobrar vencidas (6 m): 0.09 pp/mes,Tendencia del % de facturas a cobrar vencidas (6 m): 0.05 pp/mes
-COMP_0536,2026-08,2026-07,salary_amt_ratio_w3_w12,-0.0863,mejora,Nóminas 3 m frente a media 12 m: 4.00 x,Nóminas 3 m frente a media 12 m: 2.37 x
-COMP_0539,2026-08,2026-07,io_ratio_trend6,-0.0691,mejora,Tendencia del ratio cobros/pagos (6 m): 0.27 x/mes,Tendencia del ratio cobros/pagos (6 m): 0.14 x/mes
-COMP_0539,2026-08,2026-07,inflow_w1_log,0.0478,empeora,"Cobros del último mes: 760,528 €",Cobros del último mes: 0 €
-COMP_0539,2026-08,2026-07,n_tx_trend6,0.0443,empeora,Tendencia de actividad transaccional (6 m): 0.08 log/mes,Tendencia de actividad transaccional (6 m): -0.08 log/mes
-COMP_0539,2026-08,2026-07,net_flow_norm_w3,-0.0418,mejora,Flujo neto sobre pagos (3 m): 0.33 x,Flujo neto sobre pagos (3 m): 0.03 x
-COMP_0539,2026-08,2026-07,cash_trend6,0.0348,empeora,Tendencia del saldo de caja (6 m): -0.06 x gasto/mes,Tendencia del saldo de caja (6 m): 0.04 x gasto/mes
-COMP_0550,2026-08,2026-07,io_ratio_trend6,0.1185,empeora,Tendencia del ratio cobros/pagos (6 m): 0.18 x/mes,Tendencia del ratio cobros/pagos (6 m): -0.41 x/mes
-COMP_0550,2026-08,2026-07,pay_dpd_mean_w3,0.1104,empeora,Retraso medio de pago a proveedores (3 m): 4 días,Retraso medio de pago a proveedores (3 m): 9 días
-COMP_0550,2026-08,2026-07,hhi_in_delta3,0.0762,empeora,Cambio en concentración de clientes (3 m): nan idx,Cambio en concentración de clientes (3 m): -0.15 idx
-COMP_0550,2026-08,2026-07,pay_open_overdue_share_w3,0.0689,empeora,% facturas a pagar vencidas y abiertas (3 m): 13%,% facturas a pagar vencidas y abiertas (3 m): 20%
-COMP_0550,2026-08,2026-07,cash_balance_T_log,0.0688,empeora,"Saldo de caja reconstruido a fin de mes: 21,779 €","Saldo de caja reconstruido a fin de mes: 8,395 €"
-COMP_0564,2026-08,2026-07,erp_any,-0.0416,mejora,ERP: NONE,ERP: NONE
-COMP_0564,2026-08,2026-07,n_tx_w3_vs_w12,0.0406,empeora,Actividad transaccional 3 m frente a 12 m: 1.01 x,Actividad transaccional 3 m frente a 12 m: 0.92 x
-COMP_0564,2026-08,2026-07,tax_months_share_w6,-0.0314,mejora,Meses con pago de impuestos (6 m): 67%,Meses con pago de impuestos (6 m): 50%
-COMP_0564,2026-08,2026-07,n_tx_trend6,0.0275,empeora,Tendencia de actividad transaccional (6 m): 0.00 log/mes,Tendencia de actividad transaccional (6 m): -0.07 log/mes
-COMP_0564,2026-08,2026-07,cash_trend6,-0.0226,mejora,Tendencia del saldo de caja (6 m): 0.04 x gasto/mes,Tendencia del saldo de caja (6 m): -0.03 x gasto/mes
-COMP_0585,2026-08,2026-07,pay_dpd_p90_w6,0.1919,empeora,Retraso p90 de pago a proveedores (6 m): 180 días,Retraso p90 de pago a proveedores (6 m): nan días
-COMP_0585,2026-08,2026-07,pay_bad_share_w6,-0.1838,mejora,% facturas a pagar con más de 30 días de retraso (6 m): 96%,% facturas a pagar con más de 30 días de retraso (6 m): nan%
-COMP_0585,2026-08,2026-07,n_tx_w3_vs_w12,-0.1663,mejora,Actividad transaccional 3 m frente a 12 m: 0.27 x,Actividad transaccional 3 m frente a 12 m: 0.57 x
-COMP_0585,2026-08,2026-07,io_ratio_w1,-0.1423,mejora,Ratio cobros/pagos (último mes): nan x,Ratio cobros/pagos (último mes): 0.00 x
-COMP_0585,2026-08,2026-07,outflow_trend6,-0.0991,mejora,Tendencia de pagos (6 m): -0.75 log/mes,Tendencia de pagos (6 m): -0.36 log/mes
-COMP_0586,2026-08,2026-07,salary_amt_ratio_w3_w12,-0.0889,mejora,Nóminas 3 m frente a media 12 m: 2.67 x,Nóminas 3 m frente a media 12 m: 2.20 x
-COMP_0586,2026-08,2026-07,tax_amt_ratio_w3_w12,-0.0646,mejora,Impuestos pagados 3 m frente a media 12 m: 2.93 x,Impuestos pagados 3 m frente a media 12 m: 2.61 x
+COMP_0489,2026-08,2026-07,n_tx_trend6,0.0803,empeora,Tendencia de actividad transaccional (6 m): -0.14 log/mes,Tendencia de actividad transaccional (6 m): -0.27 log/mes
+COMP_0489,2026-08,2026-07,inflow_vol6,-0.0584,mejora,Volatilidad de cobros (6 m): 2.45 x,Volatilidad de cobros (6 m): 2.45 x
+COMP_0509,2026-08,2026-07,n_tx_w3_vs_w12,0.3163,empeora,Actividad transaccional 3 m frente a 12 m: 1.18 x,Actividad transaccional 3 m frente a 12 m: 0.70 x
+COMP_0509,2026-08,2026-07,pay_dpd_trend6,0.1842,empeora,Tendencia del retraso de pago (6 m): -5.06 días/mes,Tendencia del retraso de pago (6 m): -1.32 días/mes
+COMP_0509,2026-08,2026-07,inflow_w3_vs_w12,-0.0651,mejora,Cobros últimos 3 m frente a media 12 m: 0.91 x,Cobros últimos 3 m frente a media 12 m: 0.00 x
+COMP_0509,2026-08,2026-07,pay_bad_share_w12,0.0629,empeora,% facturas a pagar con más de 30 días de retraso (12 m): 45%,% facturas a pagar con más de 30 días de retraso (12 m): 46%
+COMP_0509,2026-08,2026-07,cash_min_w6_norm,0.0551,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 1.27 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 1.21 x
+COMP_0536,2026-08,2026-07,resolved_inflow_share_w6,-0.2602,mejora,Cobros con contrapartida identificada (6 m): 88%,Cobros con contrapartida identificada (6 m): 94%
+COMP_0536,2026-08,2026-07,salary_day_mean_w3,0.2542,empeora,Día del mes en que se pagan las nóminas (3 m): 25 día,Día del mes en que se pagan las nóminas (3 m): 29 día
+COMP_0536,2026-08,2026-07,inv_n_counterparties_w3,0.1268,empeora,Contrapartidas distintas en facturas (3 m): 11 n,Contrapartidas distintas en facturas (3 m): 7 n
+COMP_0536,2026-08,2026-07,rec_open_overdue_trend6,0.0866,empeora,Tendencia del % de facturas a cobrar vencidas (6 m): 0.09 pp/mes,Tendencia del % de facturas a cobrar vencidas (6 m): 0.05 pp/mes
+COMP_0536,2026-08,2026-07,cash_balance_T_log,-0.0769,mejora,"Saldo de caja reconstruido a fin de mes: 18,881 €","Saldo de caja reconstruido a fin de mes: 24,399 €"
+COMP_0539,2026-08,2026-07,io_ratio_trend6,-0.0687,mejora,Tendencia del ratio cobros/pagos (6 m): 0.27 x/mes,Tendencia del ratio cobros/pagos (6 m): 0.14 x/mes
+COMP_0539,2026-08,2026-07,net_flow_norm_w3,-0.0505,mejora,Flujo neto sobre pagos (3 m): 0.33 x,Flujo neto sobre pagos (3 m): 0.03 x
+COMP_0539,2026-08,2026-07,inflow_w1_log,0.0479,empeora,"Cobros del último mes: 760,528 €",Cobros del último mes: 0 €
+COMP_0539,2026-08,2026-07,n_tx_trend6,0.0440,empeora,Tendencia de actividad transaccional (6 m): 0.08 log/mes,Tendencia de actividad transaccional (6 m): -0.08 log/mes
+COMP_0539,2026-08,2026-07,cash_min_w6_norm,-0.0285,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.46 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.64 x
+COMP_0550,2026-08,2026-07,io_ratio_trend6,0.1226,empeora,Tendencia del ratio cobros/pagos (6 m): 0.18 x/mes,Tendencia del ratio cobros/pagos (6 m): -0.41 x/mes
+COMP_0550,2026-08,2026-07,pay_dpd_mean_w3,0.1140,empeora,Retraso medio de pago a proveedores (3 m): 4 días,Retraso medio de pago a proveedores (3 m): 9 días
+COMP_0550,2026-08,2026-07,hhi_in_delta3,0.0802,empeora,Cambio en concentración de clientes (3 m): nan idx,Cambio en concentración de clientes (3 m): -0.15 idx
+COMP_0550,2026-08,2026-07,pay_open_overdue_share_w3,0.0685,empeora,% facturas a pagar vencidas y abiertas (3 m): 13%,% facturas a pagar vencidas y abiertas (3 m): 20%
+COMP_0550,2026-08,2026-07,cash_balance_T_log,0.0537,empeora,"Saldo de caja reconstruido a fin de mes: 21,779 €","Saldo de caja reconstruido a fin de mes: 8,395 €"
+COMP_0564,2026-08,2026-07,erp_any,-0.0354,mejora,ERP: NONE,ERP: NONE
+COMP_0564,2026-08,2026-07,n_tx_trend6,0.0313,empeora,Tendencia de actividad transaccional (6 m): 0.00 log/mes,Tendencia de actividad transaccional (6 m): -0.07 log/mes
+COMP_0564,2026-08,2026-07,tax_months_share_w6,-0.0311,mejora,Meses con pago de impuestos (6 m): 67%,Meses con pago de impuestos (6 m): 50%
+COMP_0564,2026-08,2026-07,n_tx_w3_vs_w12,0.0301,empeora,Actividad transaccional 3 m frente a 12 m: 1.01 x,Actividad transaccional 3 m frente a 12 m: 0.92 x
+COMP_0564,2026-08,2026-07,tenure_months,0.0250,empeora,Antigüedad en la plataforma: 25 meses,Antigüedad en la plataforma: 26 meses
+COMP_0585,2026-08,2026-07,pay_bad_share_w6,-0.1849,mejora,% facturas a pagar con más de 30 días de retraso (6 m): 96%,% facturas a pagar con más de 30 días de retraso (6 m): nan%
+COMP_0585,2026-08,2026-07,pay_dpd_p90_w6,0.1848,empeora,Retraso p90 de pago a proveedores (6 m): 180 días,Retraso p90 de pago a proveedores (6 m): nan días
+COMP_0585,2026-08,2026-07,n_tx_w3_vs_w12,-0.1758,mejora,Actividad transaccional 3 m frente a 12 m: 0.27 x,Actividad transaccional 3 m frente a 12 m: 0.57 x
+COMP_0585,2026-08,2026-07,io_ratio_w1,-0.1483,mejora,Ratio cobros/pagos (último mes): nan x,Ratio cobros/pagos (último mes): 0.00 x
+COMP_0585,2026-08,2026-07,cash_min_w6_norm,0.0956,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 1.37 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.54 x
+COMP_0586,2026-08,2026-07,salary_amt_ratio_w3_w12,-0.0865,mejora,Nóminas 3 m frente a media 12 m: 2.67 x,Nóminas 3 m frente a media 12 m: 2.20 x
 COMP_0586,2026-08,2026-07,cash_neg_months_w3,0.0645,empeora,Meses en descubierto (3 m): 2 meses,Meses en descubierto (3 m): 3 meses
+COMP_0586,2026-08,2026-07,tax_amt_ratio_w3_w12,-0.0603,mejora,Impuestos pagados 3 m frente a media 12 m: 2.93 x,Impuestos pagados 3 m frente a media 12 m: 2.61 x
 COMP_0586,2026-08,2026-07,no_counterparty_share_w3,-0.0500,mejora,Movimientos sin contrapartida resuelta (3 m): 70%,Movimientos sin contrapartida resuelta (3 m): 62%
 COMP_0586,2026-08,2026-07,refund_share_w6,0.0355,empeora,Devoluciones sobre movimientos (6 m): 1%,Devoluciones sobre movimientos (6 m): 1%
-COMP_0596,2026-08,2026-07,n_tx_w3_vs_w12,0.3508,empeora,Actividad transaccional 3 m frente a 12 m: 1.01 x,Actividad transaccional 3 m frente a 12 m: 0.56 x
-COMP_0596,2026-08,2026-07,inflow_w3_vs_w12,-0.1893,mejora,Cobros últimos 3 m frente a media 12 m: 1.98 x,Cobros últimos 3 m frente a media 12 m: 0.01 x
-COMP_0596,2026-08,2026-07,n_tx_w1,0.1394,empeora,Transacciones en el último mes: 8 n,Transacciones en el último mes: 4 n
-COMP_0596,2026-08,2026-07,io_ratio_trend6,0.0846,empeora,Tendencia del ratio cobros/pagos (6 m): -0.18 x/mes,Tendencia del ratio cobros/pagos (6 m): -0.64 x/mes
-COMP_0596,2026-08,2026-07,tenure_months,-0.0619,mejora,Antigüedad en la plataforma: 23 meses,Antigüedad en la plataforma: 24 meses
-COMP_0605,2026-08,2026-07,inflow_w3_vs_w12,0.0768,empeora,Cobros últimos 3 m frente a media 12 m: 0.85 x,Cobros últimos 3 m frente a media 12 m: 1.06 x
-COMP_0605,2026-08,2026-07,cash_min_w6_norm,0.0698,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.89 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.64 x
-COMP_0605,2026-08,2026-07,net_flow_norm_w3,-0.0574,mejora,Flujo neto sobre pagos (3 m): 0.38 x,Flujo neto sobre pagos (3 m): 0.05 x
-COMP_0605,2026-08,2026-07,inflow_vol6,0.0450,empeora,Volatilidad de cobros (6 m): 0.25 x,Volatilidad de cobros (6 m): 0.49 x
-COMP_0605,2026-08,2026-07,io_ratio_w3,-0.0340,mejora,Ratio cobros/pagos (3 m): 1.38 x,Ratio cobros/pagos (3 m): 1.05 x
-COMP_0617,2026-08,2026-07,cash_neg_months_w3,-0.2374,mejora,Meses en descubierto (3 m): 2 meses,Meses en descubierto (3 m): 1 meses
-COMP_0617,2026-08,2026-07,cash_vol6,0.0987,empeora,Volatilidad del saldo de caja (6 m): 0.47 x,Volatilidad del saldo de caja (6 m): 0.65 x
-COMP_0617,2026-08,2026-07,inflow_w3_vs_w12,0.0769,empeora,Cobros últimos 3 m frente a media 12 m: 1.51 x,Cobros últimos 3 m frente a media 12 m: 1.19 x
-COMP_0617,2026-08,2026-07,io_ratio_w1,-0.0604,mejora,Ratio cobros/pagos (último mes): 2.03 x,Ratio cobros/pagos (último mes): 0.94 x
-COMP_0617,2026-08,2026-07,salary_amt_ratio_w3_w12,-0.0336,mejora,Nóminas 3 m frente a media 12 m: 0.71 x,Nóminas 3 m frente a media 12 m: 1.20 x
-COMP_0619,2026-08,2026-07,salary_day_mean_w3,0.2614,empeora,Día del mes en que se pagan las nóminas (3 m): 25 día,Día del mes en que se pagan las nóminas (3 m): 29 día
-COMP_0619,2026-08,2026-07,cash_balance_T_log,-0.2374,mejora,"Saldo de caja reconstruido a fin de mes: 14,643 €","Saldo de caja reconstruido a fin de mes: 83,574 €"
-COMP_0619,2026-08,2026-07,io_ratio_w1,0.2122,empeora,Ratio cobros/pagos (último mes): 0.65 x,Ratio cobros/pagos (último mes): 4.92 x
-COMP_0619,2026-08,2026-07,pay_open_overdue_share_w3,-0.1809,mejora,% facturas a pagar vencidas y abiertas (3 m): 20%,% facturas a pagar vencidas y abiertas (3 m): 4%
-COMP_0619,2026-08,2026-07,hhi_in_delta3,0.1133,empeora,Cambio en concentración de clientes (3 m): nan idx,Cambio en concentración de clientes (3 m): 0.76 idx
-COMP_0653,2026-08,2026-07,tenure_months,0.0824,empeora,Antigüedad en la plataforma: 14 meses,Antigüedad en la plataforma: 15 meses
-COMP_0653,2026-08,2026-07,salary_amt_ratio_w3_w12,0.0652,empeora,Nóminas 3 m frente a media 12 m: nan x,Nóminas 3 m frente a media 12 m: 4.00 x
-COMP_0653,2026-08,2026-07,salary_day_delta,-0.0427,mejora,Cambio en el día de pago de nóminas (3 m vs 12 m): nan días,Cambio en el día de pago de nóminas (3 m vs 12 m): 0 días
-COMP_0653,2026-08,2026-07,salary_day_mean_w3,0.0426,empeora,Día del mes en que se pagan las nóminas (3 m): nan día,Día del mes en que se pagan las nóminas (3 m): 31 día
-COMP_0653,2026-08,2026-07,cash_balance_T_log,-0.0394,mejora,"Saldo de caja reconstruido a fin de mes: 3,107,743 €","Saldo de caja reconstruido a fin de mes: 2,815,065 €"
-COMP_0660,2026-08,2026-07,cash_balance_T_log,-0.1900,mejora,"Saldo de caja reconstruido a fin de mes: 8,274 €","Saldo de caja reconstruido a fin de mes: 629,098 €"
-COMP_0660,2026-08,2026-07,io_ratio_w1,0.1780,empeora,Ratio cobros/pagos (último mes): 0.00 x,Ratio cobros/pagos (último mes): 5.00 x
-COMP_0660,2026-08,2026-07,inflow_w1_log,-0.0934,mejora,Cobros del último mes: 0 €,"Cobros del último mes: 750,000 €"
-COMP_0660,2026-08,2026-07,inflow_w3_vs_w12,-0.0613,mejora,Cobros últimos 3 m frente a media 12 m: 0.02 x,Cobros últimos 3 m frente a media 12 m: 0.26 x
-COMP_0660,2026-08,2026-07,resolved_inflow_share_w6,-0.0562,mejora,Cobros con contrapartida identificada (6 m): nan%,Cobros con contrapartida identificada (6 m): 7%
-COMP_0687,2026-08,2026-07,stress_terms_n_w3,-0.0514,mejora,Movimientos con términos de estrés (3 m): 2 n,Movimientos con términos de estrés (3 m): 5 n
-COMP_0687,2026-08,2026-07,outflow_trend6,0.0505,empeora,Tendencia de pagos (6 m): -0.07 log/mes,Tendencia de pagos (6 m): -0.29 log/mes
-COMP_0687,2026-08,2026-07,io_ratio_trend6,-0.0495,mejora,Tendencia del ratio cobros/pagos (6 m): 0.18 x/mes,Tendencia del ratio cobros/pagos (6 m): 0.11 x/mes
-COMP_0687,2026-08,2026-07,cash_vol6,-0.0471,mejora,Volatilidad del saldo de caja (6 m): 0.40 x,Volatilidad del saldo de caja (6 m): 0.34 x
-COMP_0687,2026-08,2026-07,inflow_w3_vs_w12,-0.0304,mejora,Cobros últimos 3 m frente a media 12 m: 1.20 x,Cobros últimos 3 m frente a media 12 m: 1.11 x
-COMP_0704,2026-08,2026-07,n_tx_w3_vs_w12,0.3529,empeora,Actividad transaccional 3 m frente a 12 m: 1.14 x,Actividad transaccional 3 m frente a 12 m: 0.80 x
-COMP_0704,2026-08,2026-07,io_ratio_w1,0.2433,empeora,Ratio cobros/pagos (último mes): 0.00 x,Ratio cobros/pagos (último mes): nan x
-COMP_0704,2026-08,2026-07,cash_min_w6_norm,0.0799,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 24.00 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 24.00 x
-COMP_0704,2026-08,2026-07,outflow_w1_log,0.0754,empeora,Pagos del último mes: 449 €,Pagos del último mes: 0 €
-COMP_0704,2026-08,2026-07,n_tx_trend6,0.0546,empeora,Tendencia de actividad transaccional (6 m): 0.00 log/mes,Tendencia de actividad transaccional (6 m): -0.05 log/mes
-COMP_0706,2026-08,2026-07,salary_amt_ratio_w3_w12,-0.0341,mejora,Nóminas 3 m frente a media 12 m: 1.08 x,Nóminas 3 m frente a media 12 m: 1.52 x
-COMP_0706,2026-08,2026-07,inflow_vol6,0.0224,empeora,Volatilidad de cobros (6 m): 0.36 x,Volatilidad de cobros (6 m): 0.37 x
-COMP_0706,2026-08,2026-07,io_ratio_w12,-0.0217,mejora,Ratio cobros/pagos (12 m): 0.83 x,Ratio cobros/pagos (12 m): 0.82 x
-COMP_0706,2026-08,2026-07,n_tx_trend6,0.0172,empeora,Tendencia de actividad transaccional (6 m): 0.00 log/mes,Tendencia de actividad transaccional (6 m): -0.03 log/mes
-COMP_0706,2026-08,2026-07,n_tx_w3_vs_w12,0.0154,empeora,Actividad transaccional 3 m frente a 12 m: 1.00 x,Actividad transaccional 3 m frente a 12 m: 0.96 x
-COMP_0726,2026-08,2026-07,pay_bad_share_w12,-0.1773,mejora,% facturas a pagar con más de 30 días de retraso (12 m): 48%,% facturas a pagar con más de 30 días de retraso (12 m): 41%
-COMP_0726,2026-08,2026-07,inflow_w3_vs_w12,0.0707,empeora,Cobros últimos 3 m frente a media 12 m: 4.00 x,Cobros últimos 3 m frente a media 12 m: 3.05 x
-COMP_0726,2026-08,2026-07,cash_balance_T_log,-0.0465,mejora,"Saldo de caja reconstruido a fin de mes: 35,438 €","Saldo de caja reconstruido a fin de mes: 42,730 €"
-COMP_0726,2026-08,2026-07,pay_dpd_trend6,0.0368,empeora,Tendencia del retraso de pago (6 m): -5.12 días/mes,Tendencia del retraso de pago (6 m): -7.08 días/mes
-COMP_0726,2026-08,2026-07,pay_open_overdue_cv12,-0.0352,mejora,Estacionalidad del impago (12 m): 0.41 x,Estacionalidad del impago (12 m): 0.48 x
-COMP_0737,2026-08,2026-07,io_ratio_w1,0.1794,empeora,Ratio cobros/pagos (último mes): 0.39 x,Ratio cobros/pagos (último mes): 5.00 x
+COMP_0596,2026-08,2026-07,n_tx_w3_vs_w12,0.3522,empeora,Actividad transaccional 3 m frente a 12 m: 1.01 x,Actividad transaccional 3 m frente a 12 m: 0.56 x
+COMP_0596,2026-08,2026-07,inflow_w3_vs_w12,-0.2185,mejora,Cobros últimos 3 m frente a media 12 m: 1.98 x,Cobros últimos 3 m frente a media 12 m: 0.01 x
+COMP_0596,2026-08,2026-07,n_tx_w1,0.1401,empeora,Transacciones en el último mes: 8 n,Transacciones en el último mes: 4 n
+COMP_0596,2026-08,2026-07,io_ratio_trend6,0.0966,empeora,Tendencia del ratio cobros/pagos (6 m): -0.18 x/mes,Tendencia del ratio cobros/pagos (6 m): -0.64 x/mes
+COMP_0596,2026-08,2026-07,tenure_months,-0.0629,mejora,Antigüedad en la plataforma: 23 meses,Antigüedad en la plataforma: 24 meses
+COMP_0605,2026-08,2026-07,inflow_w3_vs_w12,0.0643,empeora,Cobros últimos 3 m frente a media 12 m: 0.85 x,Cobros últimos 3 m frente a media 12 m: 1.06 x
+COMP_0605,2026-08,2026-07,net_flow_norm_w3,-0.0619,mejora,Flujo neto sobre pagos (3 m): 0.38 x,Flujo neto sobre pagos (3 m): 0.05 x
+COMP_0605,2026-08,2026-07,cash_min_w6_norm,0.0503,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.89 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.64 x
+COMP_0605,2026-08,2026-07,inflow_vol6,0.0466,empeora,Volatilidad de cobros (6 m): 0.25 x,Volatilidad de cobros (6 m): 0.49 x
+COMP_0605,2026-08,2026-07,io_ratio_w3,-0.0339,mejora,Ratio cobros/pagos (3 m): 1.38 x,Ratio cobros/pagos (3 m): 1.05 x
+COMP_0617,2026-08,2026-07,cash_neg_months_w3,-0.2376,mejora,Meses en descubierto (3 m): 2 meses,Meses en descubierto (3 m): 1 meses
+COMP_0617,2026-08,2026-07,cash_vol6,0.0877,empeora,Volatilidad del saldo de caja (6 m): 0.47 x,Volatilidad del saldo de caja (6 m): 0.65 x
+COMP_0617,2026-08,2026-07,inflow_w3_vs_w12,0.0771,empeora,Cobros últimos 3 m frente a media 12 m: 1.51 x,Cobros últimos 3 m frente a media 12 m: 1.19 x
+COMP_0617,2026-08,2026-07,io_ratio_w1,-0.0602,mejora,Ratio cobros/pagos (último mes): 2.03 x,Ratio cobros/pagos (último mes): 0.94 x
+COMP_0617,2026-08,2026-07,salary_amt_ratio_w3_w12,-0.0317,mejora,Nóminas 3 m frente a media 12 m: 0.71 x,Nóminas 3 m frente a media 12 m: 1.20 x
+COMP_0619,2026-08,2026-07,salary_day_mean_w3,0.2675,empeora,Día del mes en que se pagan las nóminas (3 m): 25 día,Día del mes en que se pagan las nóminas (3 m): 29 día
+COMP_0619,2026-08,2026-07,cash_balance_T_log,-0.2393,mejora,"Saldo de caja reconstruido a fin de mes: 14,643 €","Saldo de caja reconstruido a fin de mes: 83,574 €"
+COMP_0619,2026-08,2026-07,io_ratio_w1,0.1925,empeora,Ratio cobros/pagos (último mes): 0.65 x,Ratio cobros/pagos (último mes): 4.92 x
+COMP_0619,2026-08,2026-07,pay_open_overdue_share_w3,-0.1796,mejora,% facturas a pagar vencidas y abiertas (3 m): 20%,% facturas a pagar vencidas y abiertas (3 m): 4%
+COMP_0619,2026-08,2026-07,hhi_in_delta3,0.1259,empeora,Cambio en concentración de clientes (3 m): nan idx,Cambio en concentración de clientes (3 m): 0.76 idx
+COMP_0653,2026-08,2026-07,tenure_months,0.0819,empeora,Antigüedad en la plataforma: 14 meses,Antigüedad en la plataforma: 15 meses
+COMP_0653,2026-08,2026-07,salary_amt_ratio_w3_w12,0.0709,empeora,Nóminas 3 m frente a media 12 m: nan x,Nóminas 3 m frente a media 12 m: 4.00 x
+COMP_0653,2026-08,2026-07,cash_balance_T_log,-0.0376,mejora,"Saldo de caja reconstruido a fin de mes: 3,107,743 €","Saldo de caja reconstruido a fin de mes: 2,815,065 €"
+COMP_0653,2026-08,2026-07,salary_day_delta,-0.0325,mejora,Cambio en el día de pago de nóminas (3 m vs 12 m): nan días,Cambio en el día de pago de nóminas (3 m vs 12 m): 0 días
+COMP_0653,2026-08,2026-07,salary_day_mean_w3,0.0321,empeora,Día del mes en que se pagan las nóminas (3 m): nan día,Día del mes en que se pagan las nóminas (3 m): 31 día
+COMP_0660,2026-08,2026-07,cash_balance_T_log,-0.2034,mejora,"Saldo de caja reconstruido a fin de mes: 8,274 €","Saldo de caja reconstruido a fin de mes: 629,098 €"
+COMP_0660,2026-08,2026-07,io_ratio_w1,0.1738,empeora,Ratio cobros/pagos (último mes): 0.00 x,Ratio cobros/pagos (último mes): 5.00 x
+COMP_0660,2026-08,2026-07,inflow_w1_log,-0.0993,mejora,Cobros del último mes: 0 €,"Cobros del último mes: 750,000 €"
+COMP_0660,2026-08,2026-07,resolved_inflow_share_w6,-0.0586,mejora,Cobros con contrapartida identificada (6 m): nan%,Cobros con contrapartida identificada (6 m): 7%
+COMP_0660,2026-08,2026-07,net_flow_norm_w3,0.0498,empeora,Flujo neto sobre pagos (3 m): -0.87 x,Flujo neto sobre pagos (3 m): 0.92 x
+COMP_0687,2026-08,2026-07,io_ratio_trend6,-0.0470,mejora,Tendencia del ratio cobros/pagos (6 m): 0.18 x/mes,Tendencia del ratio cobros/pagos (6 m): 0.11 x/mes
+COMP_0687,2026-08,2026-07,stress_terms_n_w3,-0.0470,mejora,Movimientos con términos de estrés (3 m): 2 n,Movimientos con términos de estrés (3 m): 5 n
+COMP_0687,2026-08,2026-07,outflow_trend6,0.0460,empeora,Tendencia de pagos (6 m): -0.07 log/mes,Tendencia de pagos (6 m): -0.29 log/mes
+COMP_0687,2026-08,2026-07,cash_vol6,-0.0459,mejora,Volatilidad del saldo de caja (6 m): 0.40 x,Volatilidad del saldo de caja (6 m): 0.34 x
+COMP_0687,2026-08,2026-07,inflow_w3_vs_w12,-0.0322,mejora,Cobros últimos 3 m frente a media 12 m: 1.20 x,Cobros últimos 3 m frente a media 12 m: 1.11 x
+COMP_0704,2026-08,2026-07,n_tx_w3_vs_w12,0.3483,empeora,Actividad transaccional 3 m frente a 12 m: 1.14 x,Actividad transaccional 3 m frente a 12 m: 0.80 x
+COMP_0704,2026-08,2026-07,io_ratio_w1,0.2441,empeora,Ratio cobros/pagos (último mes): 0.00 x,Ratio cobros/pagos (último mes): nan x
+COMP_0704,2026-08,2026-07,outflow_w1_log,0.0870,empeora,Pagos del último mes: 449 €,Pagos del último mes: 0 €
+COMP_0704,2026-08,2026-07,cash_min_w6_norm,0.0809,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 24.00 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 24.00 x
+COMP_0704,2026-08,2026-07,n_tx_trend6,0.0457,empeora,Tendencia de actividad transaccional (6 m): 0.00 log/mes,Tendencia de actividad transaccional (6 m): -0.05 log/mes
+COMP_0706,2026-08,2026-07,n_tx_trend6,0.0360,empeora,Tendencia de actividad transaccional (6 m): 0.00 log/mes,Tendencia de actividad transaccional (6 m): -0.03 log/mes
+COMP_0706,2026-08,2026-07,salary_amt_ratio_w3_w12,-0.0351,mejora,Nóminas 3 m frente a media 12 m: 1.08 x,Nóminas 3 m frente a media 12 m: 1.52 x
+COMP_0706,2026-08,2026-07,tenure_months,0.0275,empeora,Antigüedad en la plataforma: 25 meses,Antigüedad en la plataforma: 26 meses
+COMP_0706,2026-08,2026-07,inflow_vol6,0.0248,empeora,Volatilidad de cobros (6 m): 0.36 x,Volatilidad de cobros (6 m): 0.37 x
+COMP_0706,2026-08,2026-07,n_tx_w1,0.0216,empeora,Transacciones en el último mes: 123 n,Transacciones en el último mes: 84 n
+COMP_0726,2026-08,2026-07,pay_bad_share_w12,-0.1635,mejora,% facturas a pagar con más de 30 días de retraso (12 m): 48%,% facturas a pagar con más de 30 días de retraso (12 m): 41%
+COMP_0726,2026-08,2026-07,inflow_w3_vs_w12,0.0832,empeora,Cobros últimos 3 m frente a media 12 m: 4.00 x,Cobros últimos 3 m frente a media 12 m: 3.05 x
+COMP_0726,2026-08,2026-07,cash_balance_T_log,-0.0509,mejora,"Saldo de caja reconstruido a fin de mes: 35,438 €","Saldo de caja reconstruido a fin de mes: 42,730 €"
+COMP_0726,2026-08,2026-07,reconciled_delta_w3_w12,-0.0399,mejora,Cambio en la tasa de conciliación (3 m vs 12 m): -2 pp,Cambio en la tasa de conciliación (3 m vs 12 m): -1 pp
+COMP_0726,2026-08,2026-07,pay_dpd_trend6,0.0369,empeora,Tendencia del retraso de pago (6 m): -5.12 días/mes,Tendencia del retraso de pago (6 m): -7.08 días/mes
+COMP_0737,2026-08,2026-07,io_ratio_w1,0.1828,empeora,Ratio cobros/pagos (último mes): 0.39 x,Ratio cobros/pagos (último mes): 5.00 x
 COMP_0737,2026-08,2026-07,io_ratio_w12,0.1177,empeora,Ratio cobros/pagos (12 m): 0.79 x,Ratio cobros/pagos (12 m): 1.05 x
-COMP_0737,2026-08,2026-07,pay_dpd_mean_w3,-0.0690,mejora,Retraso medio de pago a proveedores (3 m): 7 días,Retraso medio de pago a proveedores (3 m): 5 días
-COMP_0737,2026-08,2026-07,io_ratio_w6,0.0682,empeora,Ratio cobros/pagos (6 m): 0.65 x,Ratio cobros/pagos (6 m): 1.09 x
-COMP_0737,2026-08,2026-07,net_flow_norm_w3,0.0669,empeora,Flujo neto sobre pagos (3 m): -0.40 x,Flujo neto sobre pagos (3 m): 0.20 x
-COMP_0739,2026-08,2026-07,ss_day_mean_w3,-0.0325,mejora,Día del mes de pago de Seg. Social (3 m): 30 día,Día del mes de pago de Seg. Social (3 m): 30 día
-COMP_0739,2026-08,2026-07,cash_trend6,0.0184,empeora,Tendencia del saldo de caja (6 m): -0.34 x gasto/mes,Tendencia del saldo de caja (6 m): -0.78 x gasto/mes
-COMP_0739,2026-08,2026-07,erp_any,0.0160,empeora,ERP: NONE,ERP: NONE
-COMP_0739,2026-08,2026-07,n_tx_w3_vs_w12,-0.0128,mejora,Actividad transaccional 3 m frente a 12 m: 0.84 x,Actividad transaccional 3 m frente a 12 m: 0.86 x
-COMP_0739,2026-08,2026-07,cash_vol6,0.0114,empeora,Volatilidad del saldo de caja (6 m): 0.28 x,Volatilidad del saldo de caja (6 m): 0.33 x
+COMP_0737,2026-08,2026-07,io_ratio_w6,0.0711,empeora,Ratio cobros/pagos (6 m): 0.65 x,Ratio cobros/pagos (6 m): 1.09 x
+COMP_0737,2026-08,2026-07,tax_share_of_outflow_w6,0.0704,empeora,Impuestos sobre pagos (6 m): 12%,Impuestos sobre pagos (6 m): 10%
+COMP_0737,2026-08,2026-07,pay_dpd_mean_w3,-0.0694,mejora,Retraso medio de pago a proveedores (3 m): 7 días,Retraso medio de pago a proveedores (3 m): 5 días
+COMP_0739,2026-08,2026-07,ss_day_mean_w3,-0.0317,mejora,Día del mes de pago de Seg. Social (3 m): 30 día,Día del mes de pago de Seg. Social (3 m): 30 día
+COMP_0739,2026-08,2026-07,n_tx_w3_vs_w12,-0.0185,mejora,Actividad transaccional 3 m frente a 12 m: 0.84 x,Actividad transaccional 3 m frente a 12 m: 0.86 x
+COMP_0739,2026-08,2026-07,inflow_w3_log,-0.0170,mejora,"Cobros (3 m): 336,159 €","Cobros (3 m): 291,159 €"
+COMP_0739,2026-08,2026-07,salary_day_mean_w3,-0.0162,mejora,Día del mes en que se pagan las nóminas (3 m): 28 día,Día del mes en que se pagan las nóminas (3 m): 28 día
+COMP_0739,2026-08,2026-07,erp_any,0.0153,empeora,ERP: NONE,ERP: NONE
 COMP_0742,2026-08,2026-07,cash_neg_months_w3,0.1609,empeora,Meses en descubierto (3 m): 1 meses,Meses en descubierto (3 m): 2 meses
-COMP_0742,2026-08,2026-07,inv_n_counterparties_w3,0.0382,empeora,Contrapartidas distintas en facturas (3 m): 45 n,Contrapartidas distintas en facturas (3 m): 30 n
-COMP_0742,2026-08,2026-07,inv_issued_ratio_w3_w12,0.0338,empeora,Facturas emitidas 3 m frente a media 12 m: 2.70 x,Facturas emitidas 3 m frente a media 12 m: 1.77 x
-COMP_0742,2026-08,2026-07,top1_out_share,0.0318,empeora,Peso del mayor proveedor en los pagos: 77%,Peso del mayor proveedor en los pagos: 63%
-COMP_0742,2026-08,2026-07,hhi_in,-0.0270,mejora,Concentración de cobros por cliente (HHI): 0.76 idx,Concentración de cobros por cliente (HHI): 0.61 idx
-COMP_0757,2026-08,2026-07,inv_n_counterparties_w3,0.1665,empeora,Contrapartidas distintas en facturas (3 m): 14 n,Contrapartidas distintas en facturas (3 m): 11 n
-COMP_0757,2026-08,2026-07,hhi_in_delta3,0.1193,empeora,Cambio en concentración de clientes (3 m): nan idx,Cambio en concentración de clientes (3 m): 0.00 idx
-COMP_0757,2026-08,2026-07,pay_open_overdue_share_w3,0.0838,empeora,% facturas a pagar vencidas y abiertas (3 m): 42%,% facturas a pagar vencidas y abiertas (3 m): 74%
-COMP_0757,2026-08,2026-07,inflow_w1_log,0.0736,empeora,"Cobros del último mes: 14,208,064 €","Cobros del último mes: 1,954 €"
-COMP_0757,2026-08,2026-07,cash_balance_T_log,-0.0678,mejora,"Saldo de caja reconstruido a fin de mes: 2,924,983 €","Saldo de caja reconstruido a fin de mes: 321,543 €"
-COMP_0762,2026-08,2026-07,inflow_vol6,-0.0555,mejora,Volatilidad de cobros (6 m): 0.38 x,Volatilidad de cobros (6 m): 0.29 x
-COMP_0762,2026-08,2026-07,io_ratio_w6,0.0484,empeora,Ratio cobros/pagos (6 m): 0.98 x,Ratio cobros/pagos (6 m): 1.04 x
-COMP_0762,2026-08,2026-07,cash_balance_T_log,-0.0459,mejora,"Saldo de caja reconstruido a fin de mes: 24,877 €","Saldo de caja reconstruido a fin de mes: 41,675 €"
-COMP_0762,2026-08,2026-07,outflow_w1_log,0.0145,empeora,"Pagos del último mes: 123,024 €","Pagos del último mes: 52,521 €"
-COMP_0762,2026-08,2026-07,n_tx_w3_vs_w12,-0.0128,mejora,Actividad transaccional 3 m frente a 12 m: 1.73 x,Actividad transaccional 3 m frente a 12 m: 1.58 x
-COMP_0766,2026-08,2026-07,n_tx_w3_vs_w12,0.2143,empeora,Actividad transaccional 3 m frente a 12 m: 0.64 x,Actividad transaccional 3 m frente a 12 m: 0.50 x
-COMP_0766,2026-08,2026-07,n_tx_trend6,0.0626,empeora,Tendencia de actividad transaccional (6 m): -0.03 log/mes,Tendencia de actividad transaccional (6 m): -0.16 log/mes
-COMP_0766,2026-08,2026-07,inflow_w1_log,0.0571,empeora,"Cobros del último mes: 9,728 €",Cobros del último mes: 0 €
-COMP_0766,2026-08,2026-07,tax_share_of_outflow_w6,-0.0462,mejora,Impuestos sobre pagos (6 m): 9%,Impuestos sobre pagos (6 m): 12%
-COMP_0766,2026-08,2026-07,n_tx_w1,0.0380,empeora,Transacciones en el último mes: 26 n,Transacciones en el último mes: 7 n
-COMP_0771,2026-08,2026-07,reconciled_delta_w3_w12,0.4383,empeora,Cambio en la tasa de conciliación (3 m vs 12 m): +5 pp,Cambio en la tasa de conciliación (3 m vs 12 m): -4 pp
-COMP_0771,2026-08,2026-07,n_tx_w3_vs_w12,0.2193,empeora,Actividad transaccional 3 m frente a 12 m: 0.57 x,Actividad transaccional 3 m frente a 12 m: 0.11 x
-COMP_0771,2026-08,2026-07,active_days_w3,0.1535,empeora,Días con actividad bancaria (3 m): 11 días,Días con actividad bancaria (3 m): 2 días
-COMP_0771,2026-08,2026-07,n_tx_w3_log,0.0743,empeora,Transacciones en 3 meses: 21,Transacciones en 3 meses: 4
-COMP_0771,2026-08,2026-07,inflow_vol6,-0.0679,mejora,Volatilidad de cobros (6 m): 2.45 x,Volatilidad de cobros (6 m): 2.45 x
-COMP_0795,2026-08,2026-07,salary_day_mean_w3,0.2460,empeora,Día del mes en que se pagan las nóminas (3 m): 25 día,Día del mes en que se pagan las nóminas (3 m): 29 día
-COMP_0795,2026-08,2026-07,pay_open_overdue_share_w3,-0.1464,mejora,% facturas a pagar vencidas y abiertas (3 m): 20%,% facturas a pagar vencidas y abiertas (3 m): 11%
-COMP_0795,2026-08,2026-07,hhi_in_delta3,0.1443,empeora,Cambio en concentración de clientes (3 m): nan idx,Cambio en concentración de clientes (3 m): 0.15 idx
-COMP_0795,2026-08,2026-07,outflow_w1_log,0.0497,empeora,"Pagos del último mes: 348,565 €","Pagos del último mes: 53,839 €"
-COMP_0795,2026-08,2026-07,inflow_vol6,-0.0440,mejora,Volatilidad de cobros (6 m): 1.45 x,Volatilidad de cobros (6 m): 1.13 x
-COMP_0849,2026-08,2026-07,cash_balance_T_log,1.3091,empeora,"Saldo de caja reconstruido a fin de mes: 1,117,989 €","Saldo de caja reconstruido a fin de mes: -656,173 €"
-COMP_0849,2026-08,2026-07,days_of_cash,0.8005,empeora,Días de caja: 10 días,Días de caja: -5 días
-COMP_0849,2026-08,2026-07,cash_months_of_outflow,0.3562,empeora,Meses de gasto operativo cubiertos por la caja: 0 meses,Meses de gasto operativo cubiertos por la caja: -0 meses
-COMP_0849,2026-08,2026-07,n_tx_w3_vs_w12,0.3130,empeora,Actividad transaccional 3 m frente a 12 m: 1.44 x,Actividad transaccional 3 m frente a 12 m: 0.50 x
-COMP_0849,2026-08,2026-07,reconciled_delta_w3_w12,0.1707,empeora,Cambio en la tasa de conciliación (3 m vs 12 m): +7 pp,Cambio en la tasa de conciliación (3 m vs 12 m): +38 pp
-COMP_0854,2026-08,2026-07,hhi_in_delta3,-0.0986,mejora,Cambio en concentración de clientes (3 m): 0.24 idx,Cambio en concentración de clientes (3 m): -0.07 idx
-COMP_0854,2026-08,2026-07,n_tx_w3_vs_w12,0.0642,empeora,Actividad transaccional 3 m frente a 12 m: 0.88 x,Actividad transaccional 3 m frente a 12 m: 0.80 x
-COMP_0854,2026-08,2026-07,salary_amt_ratio_w3_w12,0.0534,empeora,Nóminas 3 m frente a media 12 m: 1.24 x,Nóminas 3 m frente a media 12 m: 0.98 x
-COMP_0854,2026-08,2026-07,top1_in_delta3,-0.0521,mejora,Cambio en peso del mayor cliente (3 m): +27 pp,Cambio en peso del mayor cliente (3 m): -7 pp
-COMP_0854,2026-08,2026-07,inflow_w3_vs_w12,-0.0468,mejora,Cobros últimos 3 m frente a media 12 m: 1.17 x,Cobros últimos 3 m frente a media 12 m: 1.02 x
-COMP_0861,2026-08,2026-07,io_ratio_w1,0.2222,empeora,Ratio cobros/pagos (último mes): 1.13 x,Ratio cobros/pagos (último mes): 5.00 x
-COMP_0861,2026-08,2026-07,pay_dpd_trend6,0.1481,empeora,Tendencia del retraso de pago (6 m): -0.51 días/mes,Tendencia del retraso de pago (6 m): 2.05 días/mes
-COMP_0861,2026-08,2026-07,hhi_in_delta3,0.0752,empeora,Cambio en concentración de clientes (3 m): -0.03 idx,Cambio en concentración de clientes (3 m): 0.02 idx
-COMP_0861,2026-08,2026-07,inflow_w3_vs_w12,-0.0701,mejora,Cobros últimos 3 m frente a media 12 m: 1.39 x,Cobros últimos 3 m frente a media 12 m: 1.01 x
-COMP_0861,2026-08,2026-07,top1_in_delta3,0.0625,empeora,Cambio en peso del mayor cliente (3 m): -4 pp,Cambio en peso del mayor cliente (3 m): +5 pp
-COMP_0881,2026-08,2026-07,inflow_w3_vs_w12,0.0595,empeora,Cobros últimos 3 m frente a media 12 m: 1.06 x,Cobros últimos 3 m frente a media 12 m: 1.15 x
-COMP_0881,2026-08,2026-07,ss_day_mean_w3,-0.0539,mejora,Día del mes de pago de Seg. Social (3 m): 28 día,Día del mes de pago de Seg. Social (3 m): 31 día
-COMP_0881,2026-08,2026-07,n_tx_w1,0.0504,empeora,Transacciones en el último mes: 197 n,Transacciones en el último mes: 174 n
-COMP_0881,2026-08,2026-07,inflow_vol6,0.0334,empeora,Volatilidad de cobros (6 m): 1.12 x,Volatilidad de cobros (6 m): 1.16 x
-COMP_0881,2026-08,2026-07,salary_day_delta,0.0295,empeora,Cambio en el día de pago de nóminas (3 m vs 12 m): -1 días,Cambio en el día de pago de nóminas (3 m vs 12 m): 10 días
-COMP_0914,2026-08,2026-07,days_of_cash,0.8845,empeora,Días de caja: 3 días,Días de caja: -0 días
-COMP_0914,2026-08,2026-07,cash_min_w6_norm,0.8063,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.08 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.00 x
-COMP_0914,2026-08,2026-07,cash_balance_T_log,0.5744,empeora,"Saldo de caja reconstruido a fin de mes: 12,587 €",Saldo de caja reconstruido a fin de mes: -632 €
-COMP_0914,2026-08,2026-07,inv_n_counterparties_w3,0.3085,empeora,Contrapartidas distintas en facturas (3 m): 16 n,Contrapartidas distintas en facturas (3 m): 9 n
-COMP_0914,2026-08,2026-07,cash_months_of_outflow,0.2290,empeora,Meses de gasto operativo cubiertos por la caja: 0 meses,Meses de gasto operativo cubiertos por la caja: 0 meses
-COMP_0928,2026-08,2026-07,cash_balance_T_log,-0.1963,mejora,"Saldo de caja reconstruido a fin de mes: 16,140 €","Saldo de caja reconstruido a fin de mes: 27,852 €"
-COMP_0928,2026-08,2026-07,n_cash_accounts_neg_T,-0.0501,mejora,Cuentas en negativo a fin de mes: 1 n,Cuentas en negativo a fin de mes: 0 n
-COMP_0928,2026-08,2026-07,stress_trend6,0.0347,empeora,Tendencia de términos de estrés (6 m): 0.00 pp/mes,Tendencia de términos de estrés (6 m): 0.00 pp/mes
-COMP_0928,2026-08,2026-07,ss_day_mean_w3,0.0325,empeora,Día del mes de pago de Seg. Social (3 m): 30 día,Día del mes de pago de Seg. Social (3 m): 30 día
-COMP_0928,2026-08,2026-07,cash_neg_months_w3,-0.0226,mejora,Meses en descubierto (3 m): 1 meses,Meses en descubierto (3 m): 0 meses
-COMP_0930,2026-08,2026-07,io_ratio_trend6,-0.1585,mejora,Tendencia del ratio cobros/pagos (6 m): -0.32 x/mes,Tendencia del ratio cobros/pagos (6 m): -0.08 x/mes
-COMP_0930,2026-08,2026-07,inv_n_counterparties_w3,0.0542,empeora,Contrapartidas distintas en facturas (3 m): 10 n,Contrapartidas distintas en facturas (3 m): 9 n
-COMP_0930,2026-08,2026-07,pay_dpd_mean_w3,-0.0499,mejora,Retraso medio de pago a proveedores (3 m): 3 días,Retraso medio de pago a proveedores (3 m): 4 días
-COMP_0930,2026-08,2026-07,ss_amt_ratio_w3_w12,0.0450,empeora,Seg. Social 3 m frente a media 12 m: 1.58 x,Seg. Social 3 m frente a media 12 m: 1.05 x
-COMP_0930,2026-08,2026-07,io_ratio_w12,0.0447,empeora,Ratio cobros/pagos (12 m): 0.77 x,Ratio cobros/pagos (12 m): 0.92 x
-COMP_0964,2026-08,2026-07,salary_day_mean_w3,0.2516,empeora,Día del mes en que se pagan las nóminas (3 m): 25 día,Día del mes en que se pagan las nóminas (3 m): 29 día
-COMP_0964,2026-08,2026-07,hhi_in_delta3,0.1390,empeora,Cambio en concentración de clientes (3 m): nan idx,Cambio en concentración de clientes (3 m): 0.86 idx
-COMP_0964,2026-08,2026-07,n_tx_w3_vs_w12,0.0735,empeora,Actividad transaccional 3 m frente a 12 m: 3.28 x,Actividad transaccional 3 m frente a 12 m: 2.49 x
-COMP_0964,2026-08,2026-07,io_ratio_w1,0.0664,empeora,Ratio cobros/pagos (último mes): 0.65 x,Ratio cobros/pagos (último mes): 2.34 x
-COMP_0964,2026-08,2026-07,inflow_vol6,-0.0489,mejora,Volatilidad de cobros (6 m): 1.17 x,Volatilidad de cobros (6 m): 0.87 x
-COMP_0977,2026-08,2026-07,io_ratio_w1,0.1314,empeora,Ratio cobros/pagos (último mes): 0.69 x,Ratio cobros/pagos (último mes): 2.71 x
-COMP_0977,2026-08,2026-07,inflow_vol6,-0.0435,mejora,Volatilidad de cobros (6 m): 0.43 x,Volatilidad de cobros (6 m): 0.35 x
-COMP_0977,2026-08,2026-07,cash_balance_T_log,0.0432,empeora,"Saldo de caja reconstruido a fin de mes: 1,887,899 €","Saldo de caja reconstruido a fin de mes: 3,119,799 €"
-COMP_0977,2026-08,2026-07,stress_terms_n_w3,0.0386,empeora,Movimientos con términos de estrés (3 m): 4 n,Movimientos con términos de estrés (3 m): 1 n
-COMP_0977,2026-08,2026-07,net_flow_norm_w3,0.0360,empeora,Flujo neto sobre pagos (3 m): 0.02 x,Flujo neto sobre pagos (3 m): 0.30 x
-COMP_0993,2026-08,2026-07,n_counterparties_w3_mean,-0.3664,mejora,Contrapartidas bancarias distintas por mes (3 m): 37 n,Contrapartidas bancarias distintas por mes (3 m): 35 n
-COMP_0993,2026-08,2026-07,cash_min_w6_norm,-0.1174,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.19 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.21 x
-COMP_0993,2026-08,2026-07,pay_dpd_trend6,0.0786,empeora,Tendencia del retraso de pago (6 m): -0.32 días/mes,Tendencia del retraso de pago (6 m): -0.28 días/mes
-COMP_0993,2026-08,2026-07,hhi_in_delta3,-0.0622,mejora,Cambio en concentración de clientes (3 m): 0.08 idx,Cambio en concentración de clientes (3 m): -0.09 idx
-COMP_0993,2026-08,2026-07,resolved_inflow_share_w6,0.0540,empeora,Cobros con contrapartida identificada (6 m): 29%,Cobros con contrapartida identificada (6 m): 22%
-COMP_1024,2026-08,2026-07,no_counterparty_delta_w3_w12,0.1301,empeora,Cambio en movimientos sin contrapartida (3 m vs 12 m): -1 pp,Cambio en movimientos sin contrapartida (3 m vs 12 m): +0 pp
-COMP_1024,2026-08,2026-07,io_ratio_trend6,-0.1150,mejora,Tendencia del ratio cobros/pagos (6 m): -0.56 x/mes,Tendencia del ratio cobros/pagos (6 m): 0.00 x/mes
-COMP_1024,2026-08,2026-07,ss_amt_ratio_w3_w12,-0.1076,mejora,Seg. Social 3 m frente a media 12 m: 0.79 x,Seg. Social 3 m frente a media 12 m: 1.88 x
-COMP_1024,2026-08,2026-07,salary_amt_ratio_w3_w12,-0.0819,mejora,Nóminas 3 m frente a media 12 m: 0.85 x,Nóminas 3 m frente a media 12 m: 2.12 x
-COMP_1024,2026-08,2026-07,hhi_in_delta3,-0.0786,mejora,Cambio en concentración de clientes (3 m): 0.36 idx,Cambio en concentración de clientes (3 m): -0.21 idx
+COMP_0742,2026-08,2026-07,top1_out_share,0.0422,empeora,Peso del mayor proveedor en los pagos: 77%,Peso del mayor proveedor en los pagos: 63%
+COMP_0742,2026-08,2026-07,inv_issued_ratio_w3_w12,0.0339,empeora,Facturas emitidas 3 m frente a media 12 m: 2.70 x,Facturas emitidas 3 m frente a media 12 m: 1.77 x
+COMP_0742,2026-08,2026-07,inv_n_counterparties_w3,0.0308,empeora,Contrapartidas distintas en facturas (3 m): 45 n,Contrapartidas distintas en facturas (3 m): 30 n
+COMP_0742,2026-08,2026-07,cash_balance_T_log,-0.0301,mejora,"Saldo de caja reconstruido a fin de mes: -1,648,024 €","Saldo de caja reconstruido a fin de mes: -1,944,564 €"
+COMP_0757,2026-08,2026-07,inv_n_counterparties_w3,0.1955,empeora,Contrapartidas distintas en facturas (3 m): 14 n,Contrapartidas distintas en facturas (3 m): 11 n
+COMP_0757,2026-08,2026-07,hhi_in_delta3,0.1187,empeora,Cambio en concentración de clientes (3 m): nan idx,Cambio en concentración de clientes (3 m): 0.00 idx
+COMP_0757,2026-08,2026-07,cash_balance_T_log,-0.0899,mejora,"Saldo de caja reconstruido a fin de mes: 2,924,983 €","Saldo de caja reconstruido a fin de mes: 321,543 €"
+COMP_0757,2026-08,2026-07,pay_open_overdue_share_w3,0.0841,empeora,% facturas a pagar vencidas y abiertas (3 m): 42%,% facturas a pagar vencidas y abiertas (3 m): 74%
+COMP_0757,2026-08,2026-07,inflow_w1_log,0.0697,empeora,"Cobros del último mes: 14,208,064 €","Cobros del último mes: 1,954 €"
+COMP_0762,2026-08,2026-07,cash_balance_T_log,-0.0571,mejora,"Saldo de caja reconstruido a fin de mes: 24,877 €","Saldo de caja reconstruido a fin de mes: 41,675 €"
+COMP_0762,2026-08,2026-07,inflow_vol6,-0.0569,mejora,Volatilidad de cobros (6 m): 0.38 x,Volatilidad de cobros (6 m): 0.29 x
+COMP_0762,2026-08,2026-07,io_ratio_w6,0.0457,empeora,Ratio cobros/pagos (6 m): 0.98 x,Ratio cobros/pagos (6 m): 1.04 x
+COMP_0762,2026-08,2026-07,outflow_w1_log,0.0148,empeora,"Pagos del último mes: 123,024 €","Pagos del último mes: 52,521 €"
+COMP_0762,2026-08,2026-07,n_tx_w3_vs_w12,-0.0119,mejora,Actividad transaccional 3 m frente a 12 m: 1.73 x,Actividad transaccional 3 m frente a 12 m: 1.58 x
+COMP_0766,2026-08,2026-07,n_tx_w3_vs_w12,0.2208,empeora,Actividad transaccional 3 m frente a 12 m: 0.64 x,Actividad transaccional 3 m frente a 12 m: 0.50 x
+COMP_0766,2026-08,2026-07,n_tx_trend6,0.0633,empeora,Tendencia de actividad transaccional (6 m): -0.03 log/mes,Tendencia de actividad transaccional (6 m): -0.16 log/mes
+COMP_0766,2026-08,2026-07,inflow_w1_log,0.0455,empeora,"Cobros del último mes: 9,728 €",Cobros del último mes: 0 €
+COMP_0766,2026-08,2026-07,n_tx_w1,0.0449,empeora,Transacciones en el último mes: 26 n,Transacciones en el último mes: 7 n
+COMP_0766,2026-08,2026-07,tax_share_of_outflow_w6,-0.0331,mejora,Impuestos sobre pagos (6 m): 9%,Impuestos sobre pagos (6 m): 12%
+COMP_0771,2026-08,2026-07,reconciled_delta_w3_w12,0.4537,empeora,Cambio en la tasa de conciliación (3 m vs 12 m): +5 pp,Cambio en la tasa de conciliación (3 m vs 12 m): -4 pp
+COMP_0771,2026-08,2026-07,n_tx_w3_vs_w12,0.2417,empeora,Actividad transaccional 3 m frente a 12 m: 0.57 x,Actividad transaccional 3 m frente a 12 m: 0.11 x
+COMP_0771,2026-08,2026-07,active_days_w3,0.1577,empeora,Días con actividad bancaria (3 m): 11 días,Días con actividad bancaria (3 m): 2 días
+COMP_0771,2026-08,2026-07,inflow_vol6,-0.0712,mejora,Volatilidad de cobros (6 m): 2.45 x,Volatilidad de cobros (6 m): 2.45 x
+COMP_0771,2026-08,2026-07,n_tx_w3_log,0.0706,empeora,Transacciones en 3 meses: 21,Transacciones en 3 meses: 4
+COMP_0795,2026-08,2026-07,salary_day_mean_w3,0.2524,empeora,Día del mes en que se pagan las nóminas (3 m): 25 día,Día del mes en que se pagan las nóminas (3 m): 29 día
+COMP_0795,2026-08,2026-07,hhi_in_delta3,0.1503,empeora,Cambio en concentración de clientes (3 m): nan idx,Cambio en concentración de clientes (3 m): 0.15 idx
+COMP_0795,2026-08,2026-07,pay_open_overdue_share_w3,-0.1451,mejora,% facturas a pagar vencidas y abiertas (3 m): 20%,% facturas a pagar vencidas y abiertas (3 m): 11%
+COMP_0795,2026-08,2026-07,resolved_inflow_share_w6,-0.0617,mejora,Cobros con contrapartida identificada (6 m): 38%,Cobros con contrapartida identificada (6 m): 48%
+COMP_0795,2026-08,2026-07,outflow_w1_log,0.0474,empeora,"Pagos del último mes: 348,565 €","Pagos del último mes: 53,839 €"
+COMP_0849,2026-08,2026-07,cash_balance_T_log,1.3362,empeora,"Saldo de caja reconstruido a fin de mes: 1,117,989 €","Saldo de caja reconstruido a fin de mes: -656,173 €"
+COMP_0849,2026-08,2026-07,days_of_cash,0.8012,empeora,Días de caja: 10 días,Días de caja: -5 días
+COMP_0849,2026-08,2026-07,cash_months_of_outflow,0.3803,empeora,Meses de gasto operativo cubiertos por la caja: 0 meses,Meses de gasto operativo cubiertos por la caja: -0 meses
+COMP_0849,2026-08,2026-07,n_tx_w3_vs_w12,0.3181,empeora,Actividad transaccional 3 m frente a 12 m: 1.44 x,Actividad transaccional 3 m frente a 12 m: 0.50 x
+COMP_0849,2026-08,2026-07,reconciled_delta_w3_w12,0.1832,empeora,Cambio en la tasa de conciliación (3 m vs 12 m): +7 pp,Cambio en la tasa de conciliación (3 m vs 12 m): +38 pp
+COMP_0854,2026-08,2026-07,hhi_in_delta3,-0.0853,mejora,Cambio en concentración de clientes (3 m): 0.24 idx,Cambio en concentración de clientes (3 m): -0.07 idx
+COMP_0854,2026-08,2026-07,n_tx_w3_vs_w12,0.0646,empeora,Actividad transaccional 3 m frente a 12 m: 0.88 x,Actividad transaccional 3 m frente a 12 m: 0.80 x
+COMP_0854,2026-08,2026-07,top1_in_delta3,-0.0514,mejora,Cambio en peso del mayor cliente (3 m): +27 pp,Cambio en peso del mayor cliente (3 m): -7 pp
+COMP_0854,2026-08,2026-07,salary_amt_ratio_w3_w12,0.0498,empeora,Nóminas 3 m frente a media 12 m: 1.24 x,Nóminas 3 m frente a media 12 m: 0.98 x
+COMP_0854,2026-08,2026-07,inflow_w3_vs_w12,-0.0453,mejora,Cobros últimos 3 m frente a media 12 m: 1.17 x,Cobros últimos 3 m frente a media 12 m: 1.02 x
+COMP_0861,2026-08,2026-07,io_ratio_w1,0.2202,empeora,Ratio cobros/pagos (último mes): 1.13 x,Ratio cobros/pagos (último mes): 5.00 x
+COMP_0861,2026-08,2026-07,pay_dpd_trend6,0.1430,empeora,Tendencia del retraso de pago (6 m): -0.51 días/mes,Tendencia del retraso de pago (6 m): 2.05 días/mes
+COMP_0861,2026-08,2026-07,hhi_in_delta3,0.0763,empeora,Cambio en concentración de clientes (3 m): -0.03 idx,Cambio en concentración de clientes (3 m): 0.02 idx
+COMP_0861,2026-08,2026-07,inflow_w3_vs_w12,-0.0726,mejora,Cobros últimos 3 m frente a media 12 m: 1.39 x,Cobros últimos 3 m frente a media 12 m: 1.01 x
+COMP_0861,2026-08,2026-07,top1_in_delta3,0.0628,empeora,Cambio en peso del mayor cliente (3 m): -4 pp,Cambio en peso del mayor cliente (3 m): +5 pp
+COMP_0881,2026-08,2026-07,n_tx_w1,0.0752,empeora,Transacciones en el último mes: 197 n,Transacciones en el último mes: 174 n
+COMP_0881,2026-08,2026-07,inflow_w3_vs_w12,0.0645,empeora,Cobros últimos 3 m frente a media 12 m: 1.06 x,Cobros últimos 3 m frente a media 12 m: 1.15 x
+COMP_0881,2026-08,2026-07,ss_day_mean_w3,-0.0524,mejora,Día del mes de pago de Seg. Social (3 m): 28 día,Día del mes de pago de Seg. Social (3 m): 31 día
+COMP_0881,2026-08,2026-07,salary_day_delta,0.0483,empeora,Cambio en el día de pago de nóminas (3 m vs 12 m): -1 días,Cambio en el día de pago de nóminas (3 m vs 12 m): 10 días
+COMP_0881,2026-08,2026-07,inflow_vol6,0.0337,empeora,Volatilidad de cobros (6 m): 1.12 x,Volatilidad de cobros (6 m): 1.16 x
+COMP_0914,2026-08,2026-07,days_of_cash,0.8737,empeora,Días de caja: 3 días,Días de caja: -0 días
+COMP_0914,2026-08,2026-07,cash_min_w6_norm,0.7785,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.08 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.00 x
+COMP_0914,2026-08,2026-07,cash_balance_T_log,0.5565,empeora,"Saldo de caja reconstruido a fin de mes: 12,587 €",Saldo de caja reconstruido a fin de mes: -632 €
+COMP_0914,2026-08,2026-07,inv_n_counterparties_w3,0.3224,empeora,Contrapartidas distintas en facturas (3 m): 16 n,Contrapartidas distintas en facturas (3 m): 9 n
+COMP_0914,2026-08,2026-07,cash_months_of_outflow,0.2283,empeora,Meses de gasto operativo cubiertos por la caja: 0 meses,Meses de gasto operativo cubiertos por la caja: 0 meses
+COMP_0928,2026-08,2026-07,cash_balance_T_log,-0.2019,mejora,"Saldo de caja reconstruido a fin de mes: 16,140 €","Saldo de caja reconstruido a fin de mes: 27,852 €"
+COMP_0928,2026-08,2026-07,n_cash_accounts_neg_T,-0.0469,mejora,Cuentas en negativo a fin de mes: 1 n,Cuentas en negativo a fin de mes: 0 n
+COMP_0928,2026-08,2026-07,ss_day_mean_w3,0.0327,empeora,Día del mes de pago de Seg. Social (3 m): 30 día,Día del mes de pago de Seg. Social (3 m): 30 día
+COMP_0928,2026-08,2026-07,cash_neg_months_w3,-0.0242,mejora,Meses en descubierto (3 m): 1 meses,Meses en descubierto (3 m): 0 meses
+COMP_0928,2026-08,2026-07,tax_months_share_w6,-0.0226,mejora,Meses con pago de impuestos (6 m): 100%,Meses con pago de impuestos (6 m): 100%
+COMP_0930,2026-08,2026-07,io_ratio_trend6,-0.1688,mejora,Tendencia del ratio cobros/pagos (6 m): -0.32 x/mes,Tendencia del ratio cobros/pagos (6 m): -0.08 x/mes
+COMP_0930,2026-08,2026-07,inv_n_counterparties_w3,0.0592,empeora,Contrapartidas distintas en facturas (3 m): 10 n,Contrapartidas distintas en facturas (3 m): 9 n
+COMP_0930,2026-08,2026-07,cash_months_of_outflow,-0.0529,mejora,Meses de gasto operativo cubiertos por la caja: 0 meses,Meses de gasto operativo cubiertos por la caja: 1 meses
+COMP_0930,2026-08,2026-07,pay_dpd_mean_w3,-0.0511,mejora,Retraso medio de pago a proveedores (3 m): 3 días,Retraso medio de pago a proveedores (3 m): 4 días
+COMP_0930,2026-08,2026-07,cash_balance_T_log,-0.0459,mejora,"Saldo de caja reconstruido a fin de mes: 2,849 €","Saldo de caja reconstruido a fin de mes: 16,455 €"
+COMP_0964,2026-08,2026-07,salary_day_mean_w3,0.2549,empeora,Día del mes en que se pagan las nóminas (3 m): 25 día,Día del mes en que se pagan las nóminas (3 m): 29 día
+COMP_0964,2026-08,2026-07,hhi_in_delta3,0.1314,empeora,Cambio en concentración de clientes (3 m): nan idx,Cambio en concentración de clientes (3 m): 0.86 idx
+COMP_0964,2026-08,2026-07,n_tx_w3_vs_w12,0.0736,empeora,Actividad transaccional 3 m frente a 12 m: 3.28 x,Actividad transaccional 3 m frente a 12 m: 2.49 x
+COMP_0964,2026-08,2026-07,io_ratio_w1,0.0569,empeora,Ratio cobros/pagos (último mes): 0.65 x,Ratio cobros/pagos (último mes): 2.34 x
+COMP_0964,2026-08,2026-07,top1_in_delta3,0.0453,empeora,Cambio en peso del mayor cliente (3 m): +nan pp,Cambio en peso del mayor cliente (3 m): +79 pp
+COMP_0977,2026-08,2026-07,io_ratio_w1,0.1285,empeora,Ratio cobros/pagos (último mes): 0.69 x,Ratio cobros/pagos (último mes): 2.71 x
+COMP_0977,2026-08,2026-07,inflow_vol6,-0.0465,mejora,Volatilidad de cobros (6 m): 0.43 x,Volatilidad de cobros (6 m): 0.35 x
+COMP_0977,2026-08,2026-07,cash_balance_T_log,0.0456,empeora,"Saldo de caja reconstruido a fin de mes: 1,887,899 €","Saldo de caja reconstruido a fin de mes: 3,119,799 €"
+COMP_0977,2026-08,2026-07,stress_terms_n_w3,0.0388,empeora,Movimientos con términos de estrés (3 m): 4 n,Movimientos con términos de estrés (3 m): 1 n
+COMP_0977,2026-08,2026-07,pay_dpd_trend6,0.0384,empeora,Tendencia del retraso de pago (6 m): -0.11 días/mes,Tendencia del retraso de pago (6 m): 0.80 días/mes
+COMP_0993,2026-08,2026-07,n_counterparties_w3_mean,-0.3809,mejora,Contrapartidas bancarias distintas por mes (3 m): 37 n,Contrapartidas bancarias distintas por mes (3 m): 35 n
+COMP_0993,2026-08,2026-07,cash_min_w6_norm,-0.1195,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.19 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.21 x
+COMP_0993,2026-08,2026-07,hhi_in_delta3,-0.0732,mejora,Cambio en concentración de clientes (3 m): 0.08 idx,Cambio en concentración de clientes (3 m): -0.09 idx
+COMP_0993,2026-08,2026-07,pay_dpd_trend6,0.0670,empeora,Tendencia del retraso de pago (6 m): -0.32 días/mes,Tendencia del retraso de pago (6 m): -0.28 días/mes
+COMP_0993,2026-08,2026-07,interest_n_w3,0.0629,empeora,Liquidaciones de intereses/descubierto (3 m): 3 n,Liquidaciones de intereses/descubierto (3 m): 4 n
+COMP_1024,2026-08,2026-07,no_counterparty_delta_w3_w12,0.1304,empeora,Cambio en movimientos sin contrapartida (3 m vs 12 m): -1 pp,Cambio en movimientos sin contrapartida (3 m vs 12 m): +0 pp
+COMP_1024,2026-08,2026-07,io_ratio_trend6,-0.1252,mejora,Tendencia del ratio cobros/pagos (6 m): -0.56 x/mes,Tendencia del ratio cobros/pagos (6 m): 0.00 x/mes
+COMP_1024,2026-08,2026-07,ss_amt_ratio_w3_w12,-0.1109,mejora,Seg. Social 3 m frente a media 12 m: 0.79 x,Seg. Social 3 m frente a media 12 m: 1.88 x
+COMP_1024,2026-08,2026-07,salary_amt_ratio_w3_w12,-0.0800,mejora,Nóminas 3 m frente a media 12 m: 0.85 x,Nóminas 3 m frente a media 12 m: 2.12 x
+COMP_1024,2026-08,2026-07,io_ratio_w1,0.0706,empeora,Ratio cobros/pagos (último mes): 1.49 x,Ratio cobros/pagos (último mes): 2.50 x
+COMP_1031,2026-08,2026-07,cash_min_w6_norm,-0.0613,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 1.16 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 1.99 x
 COMP_1031,2026-08,2026-07,outflow_trend6,-0.0547,mejora,Tendencia de pagos (6 m): -0.32 log/mes,Tendencia de pagos (6 m): -0.11 log/mes
-COMP_1031,2026-08,2026-07,cash_vol6,0.0536,empeora,Volatilidad del saldo de caja (6 m): 0.31 x,Volatilidad del saldo de caja (6 m): 0.41 x
-COMP_1031,2026-08,2026-07,cash_min_w6_norm,-0.0453,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 1.16 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 1.99 x
-COMP_1031,2026-08,2026-07,inflow_vol6,0.0253,empeora,Volatilidad de cobros (6 m): 0.86 x,Volatilidad de cobros (6 m): 1.18 x
-COMP_1031,2026-08,2026-07,stress_terms_n_w3,0.0236,empeora,Movimientos con términos de estrés (3 m): 3 n,Movimientos con términos de estrés (3 m): 1 n
-COMP_1034,2026-08,2026-07,cash_min_w6_norm,-0.4856,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.12 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.21 x
-COMP_1034,2026-08,2026-07,cash_vol6,-0.0550,mejora,Volatilidad del saldo de caja (6 m): 0.22 x,Volatilidad del saldo de caja (6 m): 0.19 x
-COMP_1034,2026-08,2026-07,io_ratio_w12,-0.0389,mejora,Ratio cobros/pagos (12 m): 0.70 x,Ratio cobros/pagos (12 m): 0.67 x
-COMP_1034,2026-08,2026-07,cash_months_of_outflow,0.0291,empeora,Meses de gasto operativo cubiertos por la caja: 0 meses,Meses de gasto operativo cubiertos por la caja: 0 meses
-COMP_1034,2026-08,2026-07,net_flow_norm_w3,-0.0252,mejora,Flujo neto sobre pagos (3 m): -0.60 x,Flujo neto sobre pagos (3 m): -0.51 x
-COMP_1036,2026-08,2026-07,io_ratio_trend6,-0.1089,mejora,Tendencia del ratio cobros/pagos (6 m): -0.31 x/mes,Tendencia del ratio cobros/pagos (6 m): -0.20 x/mes
-COMP_1036,2026-08,2026-07,n_tx_w3_vs_w12,0.0748,empeora,Actividad transaccional 3 m frente a 12 m: 4.00 x,Actividad transaccional 3 m frente a 12 m: 3.49 x
-COMP_1036,2026-08,2026-07,inflow_w3_vs_w12,0.0670,empeora,Cobros últimos 3 m frente a media 12 m: 4.00 x,Cobros últimos 3 m frente a media 12 m: 3.06 x
-COMP_1036,2026-08,2026-07,months_in_panel,0.0584,empeora,Meses de historial disponible: 3 meses,Meses de historial disponible: 4 meses
-COMP_1036,2026-08,2026-07,tax_amt_ratio_w3_w12,0.0356,empeora,Impuestos pagados 3 m frente a media 12 m: 4.00 x,Impuestos pagados 3 m frente a media 12 m: 3.17 x
-COMP_1043,2026-08,2026-07,cash_balance_T_log,0.4937,empeora,Saldo de caja reconstruido a fin de mes: 0 €,Saldo de caja reconstruido a fin de mes: 0 €
-COMP_1043,2026-08,2026-07,no_counterparty_share_w3,-0.1925,mejora,Movimientos sin contrapartida resuelta (3 m): 74%,Movimientos sin contrapartida resuelta (3 m): 67%
-COMP_1043,2026-08,2026-07,cash_neg_months_w12,0.1433,empeora,Meses en descubierto (12 m): 0 meses,Meses en descubierto (12 m): 1 meses
-COMP_1043,2026-08,2026-07,tax_amt_ratio_w3_w12,0.1078,empeora,Impuestos pagados 3 m frente a media 12 m: nan x,Impuestos pagados 3 m frente a media 12 m: 4.00 x
-COMP_1043,2026-08,2026-07,inv_n_counterparties_w3,0.0502,empeora,Contrapartidas distintas en facturas (3 m): 167 n,Contrapartidas distintas en facturas (3 m): 138 n
-COMP_1050,2026-08,2026-07,io_ratio_trend6,-0.1652,mejora,Tendencia del ratio cobros/pagos (6 m): -0.60 x/mes,Tendencia del ratio cobros/pagos (6 m): 0.01 x/mes
-COMP_1050,2026-08,2026-07,io_ratio_w6,-0.0963,mejora,Ratio cobros/pagos (6 m): 1.03 x,Ratio cobros/pagos (6 m): 0.90 x
-COMP_1050,2026-08,2026-07,ss_day_mean_w3,-0.0653,mejora,Día del mes de pago de Seg. Social (3 m): 29 día,Día del mes de pago de Seg. Social (3 m): 30 día
-COMP_1050,2026-08,2026-07,cash_balance_T_log,0.0486,empeora,"Saldo de caja reconstruido a fin de mes: 1,613,037 €","Saldo de caja reconstruido a fin de mes: 1,826,886 €"
-COMP_1050,2026-08,2026-07,n_tx_trend6,0.0379,empeora,Tendencia de actividad transaccional (6 m): 0.24 log/mes,Tendencia de actividad transaccional (6 m): -0.05 log/mes
-COMP_1059,2026-08,2026-07,inflow_w3_vs_w12,0.0846,empeora,Cobros últimos 3 m frente a media 12 m: 1.01 x,Cobros últimos 3 m frente a media 12 m: 1.26 x
-COMP_1059,2026-08,2026-07,inflow_vol6,0.0551,empeora,Volatilidad de cobros (6 m): 0.15 x,Volatilidad de cobros (6 m): 0.41 x
-COMP_1059,2026-08,2026-07,inflow_w6_log,0.0550,empeora,"Cobros (6 m): 4,911,065 €","Cobros (6 m): 5,765,386 €"
-COMP_1059,2026-08,2026-07,salary_amt_ratio_w3_w12,-0.0335,mejora,Nóminas 3 m frente a media 12 m: 1.08 x,Nóminas 3 m frente a media 12 m: 1.26 x
-COMP_1059,2026-08,2026-07,inv_n_counterparties_w3,0.0238,empeora,Contrapartidas distintas en facturas (3 m): 0 n,Contrapartidas distintas en facturas (3 m): 0 n
-COMP_1066,2026-08,2026-07,tax_amt_ratio_w3_w12,0.0737,empeora,Impuestos pagados 3 m frente a media 12 m: 1.14 x,Impuestos pagados 3 m frente a media 12 m: 0.94 x
-COMP_1066,2026-08,2026-07,stress_trend6,0.0415,empeora,Tendencia de términos de estrés (6 m): 0.00 pp/mes,Tendencia de términos de estrés (6 m): 0.00 pp/mes
-COMP_1066,2026-08,2026-07,interest_trend6,-0.0395,mejora,Tendencia de liquidaciones de intereses (6 m): 0.23 n/mes,Tendencia de liquidaciones de intereses (6 m): 0.14 n/mes
-COMP_1066,2026-08,2026-07,debt_service_ratio_w6,-0.0375,mejora,Servicio de la deuda sobre cobros (6 m): 8%,Servicio de la deuda sobre cobros (6 m): 7%
-COMP_1066,2026-08,2026-07,interest_n_w6,-0.0300,mejora,Liquidaciones de intereses/descubierto (6 m): 10 n,Liquidaciones de intereses/descubierto (6 m): 11 n
-COMP_1076,2026-08,2026-07,n_tx_w3_vs_w12,0.1379,empeora,Actividad transaccional 3 m frente a 12 m: 1.06 x,Actividad transaccional 3 m frente a 12 m: 0.88 x
-COMP_1076,2026-08,2026-07,cash_min_w6_norm,-0.0701,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.00 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.00 x
-COMP_1076,2026-08,2026-07,inflow_w1_log,-0.0627,mejora,Cobros del último mes: 163 €,"Cobros del último mes: 13,602 €"
-COMP_1076,2026-08,2026-07,n_cash_accounts_neg_T,-0.0378,mejora,Cuentas en negativo a fin de mes: 1 n,Cuentas en negativo a fin de mes: 0 n
-COMP_1076,2026-08,2026-07,salary_day_delta,0.0292,empeora,Cambio en el día de pago de nóminas (3 m vs 12 m): 1 días,Cambio en el día de pago de nóminas (3 m vs 12 m): -1 días
-COMP_1109,2026-08,2026-07,n_tx_w1,0.7082,empeora,Transacciones en el último mes: 7 n,Transacciones en el último mes: 0 n
-COMP_1109,2026-08,2026-07,outflow_trend6,0.2318,empeora,Tendencia de pagos (6 m): 1.24 log/mes,Tendencia de pagos (6 m): -0.88 log/mes
-COMP_1109,2026-08,2026-07,io_ratio_w1,0.1602,empeora,Ratio cobros/pagos (último mes): 0.09 x,Ratio cobros/pagos (último mes): nan x
-COMP_1109,2026-08,2026-07,n_tx_trend6,0.1547,empeora,Tendencia de actividad transaccional (6 m): 0.50 log/mes,Tendencia de actividad transaccional (6 m): -0.20 log/mes
-COMP_1109,2026-08,2026-07,pay_bad_share_w6,-0.1218,mejora,% facturas a pagar con más de 30 días de retraso (6 m): 65%,% facturas a pagar con más de 30 días de retraso (6 m): 93%
-COMP_1119,2026-08,2026-07,io_ratio_w6,0.0769,empeora,Ratio cobros/pagos (6 m): 0.94 x,Ratio cobros/pagos (6 m): 1.01 x
-COMP_1119,2026-08,2026-07,io_ratio_trend6,-0.0610,mejora,Tendencia del ratio cobros/pagos (6 m): 0.29 x/mes,Tendencia del ratio cobros/pagos (6 m): 0.12 x/mes
-COMP_1119,2026-08,2026-07,outflow_w6_log,0.0513,empeora,"Pagos (6 m): 278,747 €","Pagos (6 m): 374,362 €"
-COMP_1119,2026-08,2026-07,inflow_w3_vs_w12,0.0484,empeora,Cobros últimos 3 m frente a media 12 m: 0.66 x,Cobros últimos 3 m frente a media 12 m: 0.86 x
-COMP_1119,2026-08,2026-07,net_flow_norm_w3,-0.0484,mejora,Flujo neto sobre pagos (3 m): 0.42 x,Flujo neto sobre pagos (3 m): 0.15 x
-COMP_1152,2026-08,2026-07,interest_amt_ratio_w6,-0.7393,mejora,Intereses/comisiones de descubierto sobre pagos (6 m): 0%,Intereses/comisiones de descubierto sobre pagos (6 m): nan%
-COMP_1152,2026-08,2026-07,outflow_trend6,-0.3045,mejora,Tendencia de pagos (6 m): -2.45 log/mes,Tendencia de pagos (6 m): 0.00 log/mes
-COMP_1152,2026-08,2026-07,cash_vol6,0.2359,empeora,Volatilidad del saldo de caja (6 m): 0.00 x,Volatilidad del saldo de caja (6 m): 0.00 x
-COMP_1152,2026-08,2026-07,n_tx_w1,-0.2341,mejora,Transacciones en el último mes: 0 n,Transacciones en el último mes: 0 n
-COMP_1152,2026-08,2026-07,cash_min_w6_norm,-0.2245,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.78 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 24.00 x
-COMP_1159,2026-08,2026-07,interest_amt_ratio_w6,-0.6315,mejora,Intereses/comisiones de descubierto sobre pagos (6 m): 0%,Intereses/comisiones de descubierto sobre pagos (6 m): nan%
-COMP_1159,2026-08,2026-07,outflow_trend6,-0.1952,mejora,Tendencia de pagos (6 m): -1.76 log/mes,Tendencia de pagos (6 m): 0.00 log/mes
-COMP_1159,2026-08,2026-07,inflow_vol6,-0.1916,mejora,Volatilidad de cobros (6 m): 2.45 x,Volatilidad de cobros (6 m): 0.00 x
-COMP_1159,2026-08,2026-07,pay_bad_share_w6,-0.1907,mejora,% facturas a pagar con más de 30 días de retraso (6 m): 100%,% facturas a pagar con más de 30 días de retraso (6 m): nan%
-COMP_1159,2026-08,2026-07,pay_dpd_p90_w6,0.1629,empeora,Retraso p90 de pago a proveedores (6 m): 168 días,Retraso p90 de pago a proveedores (6 m): nan días
-COMP_1161,2026-08,2026-07,pay_dpd_trend6,0.2195,empeora,Tendencia del retraso de pago (6 m): -4.69 días/mes,Tendencia del retraso de pago (6 m): -2.44 días/mes
-COMP_1161,2026-08,2026-07,n_tx_trend6,0.0811,empeora,Tendencia de actividad transaccional (6 m): 0.73 log/mes,Tendencia de actividad transaccional (6 m): 0.28 log/mes
-COMP_1161,2026-08,2026-07,salary_amt_ratio_w3_w12,-0.0682,mejora,Nóminas 3 m frente a media 12 m: 2.58 x,Nóminas 3 m frente a media 12 m: 2.26 x
-COMP_1161,2026-08,2026-07,pay_dpd_mean_w3,-0.0633,mejora,Retraso medio de pago a proveedores (3 m): 0 días,Retraso medio de pago a proveedores (3 m): -0 días
-COMP_1161,2026-08,2026-07,pay_max_open_dpd_w12,0.0547,empeora,Factura a pagar más antigua sin pagar: 356 días,Factura a pagar más antigua sin pagar: 257 días
-COMP_1167,2026-08,2026-07,cash_balance_T_log,0.2225,empeora,"Saldo de caja reconstruido a fin de mes: 62,068 €","Saldo de caja reconstruido a fin de mes: 20,521 €"
-COMP_1167,2026-08,2026-07,io_ratio_w1,-0.1257,mejora,Ratio cobros/pagos (último mes): 4.22 x,Ratio cobros/pagos (último mes): 2.43 x
-COMP_1167,2026-08,2026-07,interest_amt_ratio_w6,-0.0914,mejora,Intereses/comisiones de descubierto sobre pagos (6 m): 0%,Intereses/comisiones de descubierto sobre pagos (6 m): 0%
-COMP_1167,2026-08,2026-07,cash_min_w6_norm,-0.0628,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.10 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.14 x
-COMP_1167,2026-08,2026-07,n_tx_w3_vs_w12,0.0431,empeora,Actividad transaccional 3 m frente a 12 m: 0.94 x,Actividad transaccional 3 m frente a 12 m: 0.89 x
-COMP_1188,2026-08,2026-07,n_tx_w1,0.3242,empeora,Transacciones en el último mes: 10 n,Transacciones en el último mes: 1 n
-COMP_1188,2026-08,2026-07,pay_bad_share_delta3,-0.2409,mejora,Cambio en % facturas con >30 d (3 m): -30 pp,Cambio en % facturas con >30 d (3 m): +80 pp
-COMP_1188,2026-08,2026-07,pay_amt_open_overdue_ratio_w6,-0.1858,mejora,Importe vencido abierto sobre facturado a pagar (6 m): 85%,Importe vencido abierto sobre facturado a pagar (6 m): 69%
-COMP_1188,2026-08,2026-07,pay_dpd_p90_w6,0.1691,empeora,Retraso p90 de pago a proveedores (6 m): 149 días,Retraso p90 de pago a proveedores (6 m): 77 días
-COMP_1188,2026-08,2026-07,pay_dpd_trend6,0.1308,empeora,Tendencia del retraso de pago (6 m): -1.31 días/mes,Tendencia del retraso de pago (6 m): 0.74 días/mes
-COMP_1227,2026-08,2026-07,days_of_cash,-0.8291,mejora,Días de caja: -1 días,Días de caja: 3 días
-COMP_1227,2026-08,2026-07,cash_balance_T_log,-0.8031,mejora,"Saldo de caja reconstruido a fin de mes: -11,163 €","Saldo de caja reconstruido a fin de mes: 67,673 €"
-COMP_1227,2026-08,2026-07,cash_months_of_outflow,-0.2824,mejora,Meses de gasto operativo cubiertos por la caja: -0 meses,Meses de gasto operativo cubiertos por la caja: 0 meses
-COMP_1227,2026-08,2026-07,pay_bad_share_delta3,-0.1875,mejora,Cambio en % facturas con >30 d (3 m): +33 pp,Cambio en % facturas con >30 d (3 m): +75 pp
-COMP_1227,2026-08,2026-07,pay_dpd_mean_w6,0.0967,empeora,Retraso medio de pago a proveedores (6 m): 5 días,Retraso medio de pago a proveedores (6 m): 18 días
+COMP_1031,2026-08,2026-07,cash_vol6,0.0425,empeora,Volatilidad del saldo de caja (6 m): 0.31 x,Volatilidad del saldo de caja (6 m): 0.41 x
+COMP_1031,2026-08,2026-07,inflow_vol6,0.0210,empeora,Volatilidad de cobros (6 m): 0.86 x,Volatilidad de cobros (6 m): 1.18 x
+COMP_1031,2026-08,2026-07,stress_terms_n_w3,0.0204,empeora,Movimientos con términos de estrés (3 m): 3 n,Movimientos con términos de estrés (3 m): 1 n
+COMP_1034,2026-08,2026-07,cash_min_w6_norm,-0.4911,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.12 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.21 x
+COMP_1034,2026-08,2026-07,cash_vol6,-0.0531,mejora,Volatilidad del saldo de caja (6 m): 0.22 x,Volatilidad del saldo de caja (6 m): 0.19 x
+COMP_1034,2026-08,2026-07,io_ratio_w12,-0.0391,mejora,Ratio cobros/pagos (12 m): 0.70 x,Ratio cobros/pagos (12 m): 0.67 x
+COMP_1034,2026-08,2026-07,cash_months_of_outflow,0.0351,empeora,Meses de gasto operativo cubiertos por la caja: 0 meses,Meses de gasto operativo cubiertos por la caja: 0 meses
+COMP_1034,2026-08,2026-07,net_flow_norm_w3,-0.0307,mejora,Flujo neto sobre pagos (3 m): -0.60 x,Flujo neto sobre pagos (3 m): -0.51 x
+COMP_1036,2026-08,2026-07,io_ratio_trend6,-0.1105,mejora,Tendencia del ratio cobros/pagos (6 m): -0.31 x/mes,Tendencia del ratio cobros/pagos (6 m): -0.20 x/mes
+COMP_1036,2026-08,2026-07,n_tx_w3_vs_w12,0.0751,empeora,Actividad transaccional 3 m frente a 12 m: 4.00 x,Actividad transaccional 3 m frente a 12 m: 3.49 x
+COMP_1036,2026-08,2026-07,inflow_w3_vs_w12,0.0695,empeora,Cobros últimos 3 m frente a media 12 m: 4.00 x,Cobros últimos 3 m frente a media 12 m: 3.06 x
+COMP_1036,2026-08,2026-07,months_in_panel,0.0590,empeora,Meses de historial disponible: 3 meses,Meses de historial disponible: 4 meses
+COMP_1036,2026-08,2026-07,stress_terms_rate_w6,0.0426,empeora,"Movimientos con términos de estrés (devolución, impagado…) (6 m): 1%","Movimientos con términos de estrés (devolución, impagado…) (6 m): 1%"
+COMP_1043,2026-08,2026-07,cash_balance_T_log,0.4950,empeora,Saldo de caja reconstruido a fin de mes: 0 €,Saldo de caja reconstruido a fin de mes: 0 €
+COMP_1043,2026-08,2026-07,no_counterparty_share_w3,-0.1802,mejora,Movimientos sin contrapartida resuelta (3 m): 74%,Movimientos sin contrapartida resuelta (3 m): 67%
+COMP_1043,2026-08,2026-07,cash_neg_months_w12,0.1474,empeora,Meses en descubierto (12 m): 0 meses,Meses en descubierto (12 m): 1 meses
+COMP_1043,2026-08,2026-07,tax_amt_ratio_w3_w12,0.1075,empeora,Impuestos pagados 3 m frente a media 12 m: nan x,Impuestos pagados 3 m frente a media 12 m: 4.00 x
+COMP_1043,2026-08,2026-07,n_tx_w1,0.0413,empeora,Transacciones en el último mes: 186 n,Transacciones en el último mes: 152 n
+COMP_1050,2026-08,2026-07,io_ratio_trend6,-0.1430,mejora,Tendencia del ratio cobros/pagos (6 m): -0.60 x/mes,Tendencia del ratio cobros/pagos (6 m): 0.01 x/mes
+COMP_1050,2026-08,2026-07,io_ratio_w6,-0.0914,mejora,Ratio cobros/pagos (6 m): 1.03 x,Ratio cobros/pagos (6 m): 0.90 x
+COMP_1050,2026-08,2026-07,ss_day_mean_w3,-0.0780,mejora,Día del mes de pago de Seg. Social (3 m): 29 día,Día del mes de pago de Seg. Social (3 m): 30 día
+COMP_1050,2026-08,2026-07,n_tx_trend6,0.0390,empeora,Tendencia de actividad transaccional (6 m): 0.24 log/mes,Tendencia de actividad transaccional (6 m): -0.05 log/mes
+COMP_1050,2026-08,2026-07,cash_min_w6_norm,0.0385,empeora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.62 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.55 x
+COMP_1059,2026-08,2026-07,inflow_w3_vs_w12,0.1037,empeora,Cobros últimos 3 m frente a media 12 m: 1.01 x,Cobros últimos 3 m frente a media 12 m: 1.26 x
+COMP_1059,2026-08,2026-07,inflow_w6_log,0.0706,empeora,"Cobros (6 m): 4,911,065 €","Cobros (6 m): 5,765,386 €"
+COMP_1059,2026-08,2026-07,inflow_vol6,0.0576,empeora,Volatilidad de cobros (6 m): 0.15 x,Volatilidad de cobros (6 m): 0.41 x
+COMP_1059,2026-08,2026-07,salary_amt_ratio_w3_w12,-0.0339,mejora,Nóminas 3 m frente a media 12 m: 1.08 x,Nóminas 3 m frente a media 12 m: 1.26 x
+COMP_1059,2026-08,2026-07,salary_day_delta,0.0304,empeora,Cambio en el día de pago de nóminas (3 m vs 12 m): -2 días,Cambio en el día de pago de nóminas (3 m vs 12 m): -1 días
+COMP_1066,2026-08,2026-07,tax_amt_ratio_w3_w12,0.0881,empeora,Impuestos pagados 3 m frente a media 12 m: 1.14 x,Impuestos pagados 3 m frente a media 12 m: 0.94 x
+COMP_1066,2026-08,2026-07,debt_service_ratio_w6,-0.0377,mejora,Servicio de la deuda sobre cobros (6 m): 8%,Servicio de la deuda sobre cobros (6 m): 7%
+COMP_1066,2026-08,2026-07,interest_trend6,-0.0341,mejora,Tendencia de liquidaciones de intereses (6 m): 0.23 n/mes,Tendencia de liquidaciones de intereses (6 m): 0.14 n/mes
+COMP_1066,2026-08,2026-07,interest_n_w6,-0.0293,mejora,Liquidaciones de intereses/descubierto (6 m): 10 n,Liquidaciones de intereses/descubierto (6 m): 11 n
+COMP_1066,2026-08,2026-07,stress_trend6,0.0217,empeora,Tendencia de términos de estrés (6 m): 0.00 pp/mes,Tendencia de términos de estrés (6 m): 0.00 pp/mes
+COMP_1076,2026-08,2026-07,n_tx_w3_vs_w12,0.1352,empeora,Actividad transaccional 3 m frente a 12 m: 1.06 x,Actividad transaccional 3 m frente a 12 m: 0.88 x
+COMP_1076,2026-08,2026-07,cash_min_w6_norm,-0.0698,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.00 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.00 x
+COMP_1076,2026-08,2026-07,inflow_w1_log,-0.0511,mejora,Cobros del último mes: 163 €,"Cobros del último mes: 13,602 €"
+COMP_1076,2026-08,2026-07,n_cash_accounts_neg_T,-0.0331,mejora,Cuentas en negativo a fin de mes: 1 n,Cuentas en negativo a fin de mes: 0 n
+COMP_1076,2026-08,2026-07,salary_day_delta,0.0297,empeora,Cambio en el día de pago de nóminas (3 m vs 12 m): 1 días,Cambio en el día de pago de nóminas (3 m vs 12 m): -1 días
+COMP_1109,2026-08,2026-07,n_tx_w1,0.7080,empeora,Transacciones en el último mes: 7 n,Transacciones en el último mes: 0 n
+COMP_1109,2026-08,2026-07,outflow_trend6,0.2272,empeora,Tendencia de pagos (6 m): 1.24 log/mes,Tendencia de pagos (6 m): -0.88 log/mes
+COMP_1109,2026-08,2026-07,io_ratio_w1,0.1624,empeora,Ratio cobros/pagos (último mes): 0.09 x,Ratio cobros/pagos (último mes): nan x
+COMP_1109,2026-08,2026-07,n_tx_trend6,0.1500,empeora,Tendencia de actividad transaccional (6 m): 0.50 log/mes,Tendencia de actividad transaccional (6 m): -0.20 log/mes
+COMP_1109,2026-08,2026-07,pay_bad_share_w6,-0.1208,mejora,% facturas a pagar con más de 30 días de retraso (6 m): 65%,% facturas a pagar con más de 30 días de retraso (6 m): 93%
+COMP_1119,2026-08,2026-07,io_ratio_w6,0.0818,empeora,Ratio cobros/pagos (6 m): 0.94 x,Ratio cobros/pagos (6 m): 1.01 x
+COMP_1119,2026-08,2026-07,outflow_w6_log,0.0499,empeora,"Pagos (6 m): 278,747 €","Pagos (6 m): 374,362 €"
+COMP_1119,2026-08,2026-07,io_ratio_trend6,-0.0486,mejora,Tendencia del ratio cobros/pagos (6 m): 0.29 x/mes,Tendencia del ratio cobros/pagos (6 m): 0.12 x/mes
+COMP_1119,2026-08,2026-07,net_flow_norm_w3,-0.0480,mejora,Flujo neto sobre pagos (3 m): 0.42 x,Flujo neto sobre pagos (3 m): 0.15 x
+COMP_1119,2026-08,2026-07,n_tx_trend6,0.0398,empeora,Tendencia de actividad transaccional (6 m): 0.01 log/mes,Tendencia de actividad transaccional (6 m): -0.04 log/mes
+COMP_1152,2026-08,2026-07,interest_amt_ratio_w6,-0.7183,mejora,Intereses/comisiones de descubierto sobre pagos (6 m): 0%,Intereses/comisiones de descubierto sobre pagos (6 m): nan%
+COMP_1152,2026-08,2026-07,outflow_trend6,-0.2945,mejora,Tendencia de pagos (6 m): -2.45 log/mes,Tendencia de pagos (6 m): 0.00 log/mes
+COMP_1152,2026-08,2026-07,cash_vol6,0.2478,empeora,Volatilidad del saldo de caja (6 m): 0.00 x,Volatilidad del saldo de caja (6 m): 0.00 x
+COMP_1152,2026-08,2026-07,n_tx_w1,-0.2336,mejora,Transacciones en el último mes: 0 n,Transacciones en el último mes: 0 n
+COMP_1152,2026-08,2026-07,cash_min_w6_norm,-0.2184,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.78 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 24.00 x
+COMP_1159,2026-08,2026-07,interest_amt_ratio_w6,-0.6184,mejora,Intereses/comisiones de descubierto sobre pagos (6 m): 0%,Intereses/comisiones de descubierto sobre pagos (6 m): nan%
+COMP_1159,2026-08,2026-07,inflow_vol6,-0.2009,mejora,Volatilidad de cobros (6 m): 2.45 x,Volatilidad de cobros (6 m): 0.00 x
+COMP_1159,2026-08,2026-07,pay_bad_share_w6,-0.1973,mejora,% facturas a pagar con más de 30 días de retraso (6 m): 100%,% facturas a pagar con más de 30 días de retraso (6 m): nan%
+COMP_1159,2026-08,2026-07,outflow_trend6,-0.1771,mejora,Tendencia de pagos (6 m): -1.76 log/mes,Tendencia de pagos (6 m): 0.00 log/mes
+COMP_1159,2026-08,2026-07,pay_dpd_p90_w6,0.1417,empeora,Retraso p90 de pago a proveedores (6 m): 168 días,Retraso p90 de pago a proveedores (6 m): nan días
+COMP_1161,2026-08,2026-07,pay_dpd_trend6,0.2126,empeora,Tendencia del retraso de pago (6 m): -4.69 días/mes,Tendencia del retraso de pago (6 m): -2.44 días/mes
+COMP_1161,2026-08,2026-07,pay_dpd_mean_w3,-0.0613,mejora,Retraso medio de pago a proveedores (3 m): 0 días,Retraso medio de pago a proveedores (3 m): -0 días
+COMP_1161,2026-08,2026-07,n_tx_trend6,0.0600,empeora,Tendencia de actividad transaccional (6 m): 0.73 log/mes,Tendencia de actividad transaccional (6 m): 0.28 log/mes
+COMP_1161,2026-08,2026-07,salary_amt_ratio_w3_w12,-0.0568,mejora,Nóminas 3 m frente a media 12 m: 2.58 x,Nóminas 3 m frente a media 12 m: 2.26 x
+COMP_1161,2026-08,2026-07,pay_max_open_dpd_w12,0.0517,empeora,Factura a pagar más antigua sin pagar: 356 días,Factura a pagar más antigua sin pagar: 257 días
+COMP_1167,2026-08,2026-07,cash_balance_T_log,0.2295,empeora,"Saldo de caja reconstruido a fin de mes: 62,068 €","Saldo de caja reconstruido a fin de mes: 20,521 €"
+COMP_1167,2026-08,2026-07,io_ratio_w1,-0.1224,mejora,Ratio cobros/pagos (último mes): 4.22 x,Ratio cobros/pagos (último mes): 2.43 x
+COMP_1167,2026-08,2026-07,interest_amt_ratio_w6,-0.1132,mejora,Intereses/comisiones de descubierto sobre pagos (6 m): 0%,Intereses/comisiones de descubierto sobre pagos (6 m): 0%
+COMP_1167,2026-08,2026-07,cash_min_w6_norm,-0.0630,mejora,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.10 x,Saldo mínimo de caja (6 m) sobre gasto mensual: 0.14 x
+COMP_1167,2026-08,2026-07,inflow_vol6,-0.0429,mejora,Volatilidad de cobros (6 m): 0.37 x,Volatilidad de cobros (6 m): 0.21 x
+COMP_1188,2026-08,2026-07,n_tx_w1,0.3227,empeora,Transacciones en el último mes: 10 n,Transacciones en el último mes: 1 n
+COMP_1188,2026-08,2026-07,pay_bad_share_delta3,-0.2547,mejora,Cambio en % facturas con >30 d (3 m): -30 pp,Cambio en % facturas con >30 d (3 m): +80 pp
+COMP_1188,2026-08,2026-07,pay_amt_open_overdue_ratio_w6,-0.1877,mejora,Importe vencido abierto sobre facturado a pagar (6 m): 85%,Importe vencido abierto sobre facturado a pagar (6 m): 69%
+COMP_1188,2026-08,2026-07,pay_dpd_p90_w6,0.1562,empeora,Retraso p90 de pago a proveedores (6 m): 149 días,Retraso p90 de pago a proveedores (6 m): 77 días
+COMP_1188,2026-08,2026-07,pay_dpd_trend6,0.1323,empeora,Tendencia del retraso de pago (6 m): -1.31 días/mes,Tendencia del retraso de pago (6 m): 0.74 días/mes
+COMP_1227,2026-08,2026-07,days_of_cash,-0.8255,mejora,Días de caja: -1 días,Días de caja: 3 días
+COMP_1227,2026-08,2026-07,cash_balance_T_log,-0.7980,mejora,"Saldo de caja reconstruido a fin de mes: -11,163 €","Saldo de caja reconstruido a fin de mes: 67,673 €"
+COMP_1227,2026-08,2026-07,cash_months_of_outflow,-0.2787,mejora,Meses de gasto operativo cubiertos por la caja: -0 meses,Meses de gasto operativo cubiertos por la caja: 0 meses
+COMP_1227,2026-08,2026-07,pay_bad_share_delta3,-0.1836,mejora,Cambio en % facturas con >30 d (3 m): +33 pp,Cambio en % facturas con >30 d (3 m): +75 pp
+COMP_1227,2026-08,2026-07,pay_dpd_mean_w6,0.0931,empeora,Retraso medio de pago a proveedores (6 m): 5 días,Retraso medio de pago a proveedores (6 m): 18 días

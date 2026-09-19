@@ -1,0 +1,92 @@
+/* Notch del chat: fijo abajo en el centro, se despliega hacia arriba. */
+.ask {
+  position: fixed; left: 50%; bottom: var(--space-4); transform: translateX(-50%); z-index: 50;
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-3);
+  width: min(40rem, calc(100vw - 2 * var(--space-4)));
+  pointer-events: none;
+}
+.ask > * { pointer-events: auto; }
+
+.ask-notch {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: 10px var(--space-5); border-radius: 999px; font: inherit; font-size: var(--text-sm);
+  background: var(--color-bg); color: var(--color-text); cursor: pointer;
+  border: 1px solid var(--color-accent-border, var(--color-border)); box-shadow: var(--shadow-lg);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+.ask-notch:hover { transform: translateY(-1px); background: var(--color-accent-soft); }
+.ask-notch:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+.ask-panel {
+  width: 100%; max-height: min(34rem, 70vh); display: flex; flex-direction: column;
+  background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--shadow-lg); overflow: hidden;
+  animation: ask-in 180ms ease-out;
+}
+@keyframes ask-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.ask-head {
+  display: flex; align-items: center; gap: var(--space-2); padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border); font-size: var(--text-sm);
+  background: linear-gradient(180deg, var(--color-ai-wash) 0, var(--color-bg) 100%);
+}
+.ask-close {
+  margin-left: auto; border: 0; background: transparent; font-size: 1.25rem; line-height: 1;
+  color: var(--color-text-muted); cursor: pointer; padding: var(--space-1) var(--space-2); border-radius: var(--radius-sm);
+}
+.ask-close:hover { background: var(--color-surface); }
+
+.ask-list { flex: 1; overflow-y: auto; padding: var(--space-4); display: grid; gap: var(--space-3); align-content: start; }
+.ask-empty { margin: 0; color: var(--color-text-muted); font-size: var(--text-sm); }
+.ask-msg { max-width: 88%; padding: var(--space-3) var(--space-4); border-radius: var(--radius-lg, 12px); font-size: var(--text-sm); }
+.ask-msg p { margin: 0; }
+.ask-msg ul { margin: var(--space-2) 0 0; padding-left: 1.1rem; }
+.ask-user { justify-self: end; background: var(--color-accent-soft); color: var(--color-text); }
+.ask-model { justify-self: start; background: var(--color-surface); }
+.ask-error { justify-self: start; background: var(--color-warning-soft); color: var(--color-warning-strong); }
+
+.ask-typing { display: inline-flex; gap: 4px; }
+.ask-typing span {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--color-text-muted);
+  animation: ask-dot 1s infinite ease-in-out;
+}
+.ask-typing span:nth-child(2) { animation-delay: 0.15s; }
+.ask-typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes ask-dot { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
+
+.ask-suggest { display: flex; gap: var(--space-2); flex-wrap: wrap; padding: 0 var(--space-4) var(--space-3); }
+.ask-suggest .chip { font-size: var(--text-xs); }
+
+.ask-form { display: flex; gap: var(--space-2); padding: var(--space-3) var(--space-4); border-top: 1px solid var(--color-border); }
+.ask-form input {
+  flex: 1; font: inherit; font-size: var(--text-sm); padding: 9px var(--space-3);
+  border: 1px solid var(--color-border-control, var(--color-border)); border-radius: var(--radius-sm);
+  background: var(--color-bg); color: var(--color-text);
+}
+.ask-form input:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 1px; }
+.ask-send {
+  font: inherit; font-size: var(--text-sm); padding: 0 var(--space-4); border: 0; border-radius: var(--radius-sm);
+  background: var(--color-accent); color: var(--color-text-on-accent); cursor: pointer;
+}
+.ask-send:disabled { opacity: 0.45; cursor: default; }
+
+/* Deja sitio al final de la página para que el notch no tape contenido. */
+.page { padding-bottom: 6rem; }
+
+/* El destello "piensa" (gira y late, como el logo de Claude) al pasar el ratón y mientras responde. */
+.ask-notch .tellme-mark, .ask-head .tellme-mark { transition: transform 300ms var(--ease); }
+.ask-notch:hover .tellme-mark,
+.ask-thinking .tellme-mark { animation: tellme-think 1.6s var(--ease) infinite; }
+@keyframes tellme-think {
+  0%   { transform: rotate(0deg) scale(1); }
+  25%  { transform: rotate(90deg) scale(0.78); }
+  50%  { transform: rotate(180deg) scale(1.08); }
+  75%  { transform: rotate(270deg) scale(0.82); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+.ask-thinking .ask-notch { box-shadow: var(--shadow-lg), 0 0 0 3px var(--color-accent-soft); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ask-panel, .ask-typing span, .ask-notch .tellme-mark, .ask-thinking .tellme-mark { animation: none; }
+  .ask-notch { transition: none; }
+}

@@ -379,12 +379,12 @@ def build_features(save: bool = True) -> tuple[pd.DataFrame, dict]:
             "block_sizes": {k: len(v) for k, v in blocks.items()}}
     if save:
         long.to_parquet(FEATURES_PATH, index=False)
-        FEATURES_META_PATH.write_text(json.dumps(meta, indent=2, ensure_ascii=False))
+        FEATURES_META_PATH.write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
     return long, meta
 
 
 def load_features() -> tuple[pd.DataFrame, dict]:
-    return pd.read_parquet(FEATURES_PATH), json.loads(FEATURES_META_PATH.read_text())
+    return pd.read_parquet(FEATURES_PATH), json.loads(FEATURES_META_PATH.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

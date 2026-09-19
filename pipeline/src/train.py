@@ -309,7 +309,7 @@ def register(df: pd.DataFrame, X_all: pd.DataFrame, sets: dict, results: dict, c
     joblib.dump({"pipelines": {"lgbm_B": pipe_hB}, "calibrator": cal, "features_B": feats_B, "features_A": feats_A,
                  "main_model": "lgbm_B", "train_max_t_idx": int(hold["train_max"])}, out / "pipeline_holdout.joblib")
     pipe_B.named_steps["clf"].booster_.save_model(str(out / "lgbm_B.txt"))
-    quality = json.loads((C.QUALITY_DIR / "quality_report_latest.json").read_text())
+    quality = json.loads((C.QUALITY_DIR / "quality_report_latest.json").read_text(encoding="utf-8"))
     md = {
         "version": version, "created_at": datetime.now(timezone.utc).isoformat(),
         "git_commit": git_commit(), "dataset_hash": quality["dataset_hash"], "seed": C.SEED,
@@ -325,8 +325,8 @@ def register(df: pd.DataFrame, X_all: pd.DataFrame, sets: dict, results: dict, c
                     "holdout_unseen_companies": results.get("holdout_unseen_companies", {})},
         "feature_blocks": meta["blocks"],
     }
-    (out / "metadata.json").write_text(json.dumps(md, indent=2, ensure_ascii=False, default=str))
-    (C.REGISTRY_DIR / "latest.txt").write_text(version)
+    (out / "metadata.json").write_text(json.dumps(md, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
+    (C.REGISTRY_DIR / "latest.txt").write_text(version, encoding="utf-8")
     return version
 
 
@@ -345,7 +345,7 @@ def run(log=print, labels: pd.DataFrame | None = None, do_register: bool = True,
         return results
     version = register(df, X_all, sets, results, cal, meta)
     results["version"] = version
-    (C.REPORTS_DIR / "train_results.json").write_text(json.dumps(results, indent=2, ensure_ascii=False, default=str))
+    (C.REPORTS_DIR / "train_results.json").write_text(json.dumps(results, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
     preds_holdout.to_parquet(C.REPORTS_DIR / "predictions_holdout.parquet", index=False)
     oof_main.to_parquet(C.REPORTS_DIR / "predictions_oof.parquet", index=False)
     log(f"[train] modelo registrado: {version}  (principal: {results['main_model']})")
