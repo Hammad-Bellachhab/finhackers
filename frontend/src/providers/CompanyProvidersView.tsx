@@ -17,7 +17,9 @@ export function companyIndex(data: Providers): { id: string; name: string }[] {
 }
 
 /** La relación va en un solo sentido: esta empresa y lo que tiene con este proveedor.
- *  Las demás empresas del proveedor son cosa de la vista global. */
+ *  El medidor NO es la salud de la empresa (esa es la misma en todas las tarjetas y ya sale
+ *  arriba en "Su salud"): es la salud media de la cartera del proveedor, que sí distingue
+ *  a un banco de otro. Quién compone esa cartera es cosa de la vista global. */
 function ProviderCard({ p, companyId }: { p: Provider; companyId: string }) {
   const yo = p.rows.find((r) => r.companyId === companyId)!
 
@@ -28,7 +30,10 @@ function ProviderCard({ p, companyId }: { p: Provider; companyId: string }) {
           <h3>{p.name} <KindBadge kind={p.kind} /></h3>
           <p className="provider-services">{p.services.join(' · ')}</p>
         </div>
-        <Gauge score={yo.score} band={yo.healthBand} size="md" label={`banda ${yo.healthBand}`} />
+        <div className="provider-card-mean">
+          <Gauge score={p.meanHealth} size="md" label={`salud media de las ${p.companies} empresas de ${p.name}`} />
+          <span>salud media de su cartera</span>
+        </div>
       </header>
 
       <dl className="provider-card-facts">
