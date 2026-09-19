@@ -34,3 +34,17 @@ el segundo borrando el backend.
 intención de los commits ajenos, rebase encima, y avisar al usuario de lo que hizo el otro —
 especialmente si borra trabajo. Restaurar algo que otra persona borró a propósito es una
 decisión del usuario, no mía, y conviene avisar de que hay que comunicárselo al equipo.
+
+## 2026-09-19 — Distinguir la propiedad del modelo de la forma de los datos
+
+**Corrección**: equilibré la cartera mock a 50/50 entre empresas que mejoran y que empeoran,
+razonando que el reto evalúa "las dos caras". El usuario señaló que no tiene por qué: es
+normal que la mayoría vaya bien.
+
+**Regla**: "las dos caras" es una propiedad del **modelo** —detectar mejora y deterioro con
+la misma sensibilidad, que se mide en la pantalla Evidencia— no de la **distribución de la
+población**. Antes de retocar los datos para que cumplan un criterio, comprobar si el criterio
+habla de los datos o del sistema que los lee.
+
+**Cómo aplicarlo**: los datos mock imitan la realidad; las métricas demuestran el modelo. No
+se maquillan los datos para que las métricas salgan bonitas.

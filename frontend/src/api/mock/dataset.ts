@@ -51,13 +51,40 @@ function trendOf(delta3m: number): Trend {
   return 'flat'
 }
 
-const DRIVER_POOL: { id: string; label: string; detail: string }[] = [
-  { id: 'dso', label: 'El cobro se alarga', detail: 'Tus clientes tardan más en pagarte que hace un año.' },
-  { id: 'dpo', label: 'Pagas más tarde', detail: 'Estás estirando el pago a proveedores.' },
-  { id: 'dscr', label: 'Cobertura de deuda', detail: 'El flujo operativo cubre peor las cuotas.' },
-  { id: 'cash_days', label: 'Colchón de caja', detail: 'Días de caja disponibles al ritmo de gasto actual.' },
-  { id: 'credit_usage', label: 'Uso de líneas', detail: 'Proporción dispuesta sobre el límite concedido.' },
-  { id: 'concentration', label: 'Concentración de clientes', detail: 'Peso del mayor cliente sobre tus cobros.' },
+/** Cada señal se cuenta en las dos direcciones. La etiqueta tiene que concordar
+ *  con el signo del impacto: "el cobro se alarga" no puede sumar puntos. */
+type DriverCopy = { label: string; detail: string }
+const DRIVER_POOL: { id: string; up: DriverCopy; down: DriverCopy }[] = [
+  {
+    id: 'dso',
+    up: { label: 'El cobro se acelera', detail: 'Tus clientes te pagan antes que hace un año.' },
+    down: { label: 'El cobro se alarga', detail: 'Tus clientes tardan más en pagarte que hace un año.' },
+  },
+  {
+    id: 'dpo',
+    up: { label: 'Pagas con más holgura', detail: 'Has ganado plazo con tus proveedores sin tensar la relación.' },
+    down: { label: 'Estiras el pago a proveedores', detail: 'Estás pagando más tarde de lo que acostumbrabas.' },
+  },
+  {
+    id: 'dscr',
+    up: { label: 'Mejora la cobertura de deuda', detail: 'El flujo operativo cubre mejor las cuotas.' },
+    down: { label: 'Empeora la cobertura de deuda', detail: 'El flujo operativo cubre peor las cuotas.' },
+  },
+  {
+    id: 'cash_days',
+    up: { label: 'Crece el colchón de caja', detail: 'Aguantas más días al ritmo de gasto actual.' },
+    down: { label: 'Se reduce el colchón de caja', detail: 'Aguantas menos días al ritmo de gasto actual.' },
+  },
+  {
+    id: 'credit_usage',
+    up: { label: 'Bajas el uso de tus líneas', detail: 'Tienes menos dispuesto sobre el límite concedido.' },
+    down: { label: 'Subes el uso de tus líneas', detail: 'Tienes más dispuesto sobre el límite concedido.' },
+  },
+  {
+    id: 'concentration',
+    up: { label: 'Diversificas clientes', detail: 'Tu mayor cliente pesa menos sobre el total de cobros.' },
+    down: { label: 'Aumenta la concentración de clientes', detail: 'Tu mayor cliente pesa más sobre el total de cobros.' },
+  },
 ]
 
 function buildMetrics(r: () => number, score: number): Metric[] {
@@ -87,15 +114,23 @@ function buildMetrics(r: () => number, score: number): Metric[] {
 function buildDrivers(r: () => number, trend: Trend): Driver[] {
   const picks = [...DRIVER_POOL].sort(() => r() - 0.5).slice(0, 3)
   return picks.map((p, i) => {
-    const sign = trend === 'up' ? 1 : trend === 'down' ? -1 : r() > 0.5 ? 1 : -1
+    // El driver dominante acompaña a la tendencia; los secundarios pueden ir en
+    // contra, que es lo realista: casi nunca se mueve todo en el mismo sentido.
+    const acompaña = i === 0 ? trend !== 'flat' : r() > 0.35
+    const sign = acompaña
+      ? (trend === 'down' ? -1 : 1)
+      : (trend === 'down' ? 1 : -1)
     const impact = Number((sign * (1 + r() * 5) * (1 - i * 0.2)).toFixed(1))
+    const copy = impact > 0 ? p.up : p.down
     return {
       id: p.id,
-      label: p.label,
+      label: copy.label,
       direction: impact > 0 ? ('up' as const) : ('down' as const),
       impact,
-      since: MONTHS_LABELS[Math.floor(12 + r() * 10)],
-      detail: p.detail,
+      // Escalonado: cada señal empieza a moverse en un mes distinto, para que
+      // se vea cual se movio primero.
+      since: MONTHS_LABELS[Math.min(MONTHS - 2, 9 + i * 4 + Math.floor(r() * 4))],
+      detail: copy.detail,
     }
   })
 }
@@ -152,7 +187,11 @@ function buildOne(i: number): MockCompany {
 
   // Trayectoria: nivel de partida mas una deriva, con ruido mensual.
   const start = 25 + r() * 60
-  const drift = (r() - 0.45) * 2.2 // sesgo ligeramente positivo para tener las dos caras
+  // Deriva con sesgo ligeramente positivo: en una cartera real la mayoria de
+  // empresas va bien y solo una minoria se deteriora. "Las dos caras" que pide
+  // el reto es una propiedad del modelo -detectar ambas igual de bien, medido
+  // en la pantalla Evidencia-, no de la distribucion de la poblacion.
+  const drift = (r() - 0.45) * 2.2
   const noise = 1.5 + r() * 2.5
   const dipAt = r() < 0.25 ? 14 + Math.floor(r() * 8) : -1 // bache puntual
 

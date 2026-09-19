@@ -51,6 +51,27 @@ describe('buildDataset', () => {
     }
   })
 
+  it('la etiqueta de cada driver concuerda con el signo de su impacto', () => {
+    // "El cobro se alarga" no puede sumar puntos: si suma, es que se acelera.
+    const MALAS = ['se alarga', 'Empeora', 'Se reduce', 'Subes el uso', 'Aumenta la concentración', 'Estiras']
+    for (const c of data.slice(0, 300)) {
+      for (const d of c.score.drivers) {
+        const suenaMal = MALAS.some((m) => d.label.includes(m))
+        if (d.impact > 0) expect(suenaMal, `"${d.label}" con impacto +${d.impact}`).toBe(false)
+        else expect(suenaMal, `"${d.label}" con impacto ${d.impact}`).toBe(true)
+        expect(d.direction).toBe(d.impact > 0 ? 'up' : 'down')
+      }
+    }
+  })
+
+  it('los drivers no comparten todos la misma fecha de inicio', () => {
+    const conTres = data.filter((c) => c.score.drivers.length === 3).slice(0, 100)
+    const variados = conTres.filter(
+      (c) => new Set(c.score.drivers.map((d) => d.since)).size > 1,
+    )
+    expect(variados.length).toBe(conTres.length)
+  })
+
   it('cada empresa trae al menos una decision accionable', () => {
     for (const c of data.slice(0, 100)) {
       expect(c.decisions.length).toBeGreaterThan(0)

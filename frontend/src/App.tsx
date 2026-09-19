@@ -1,42 +1,48 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './App.css'
-import { PaletteSheet } from './styles/PaletteSheet'
+import { CompanyView } from './company/CompanyView'
+import { EvidenceView } from './portfolio/EvidenceView'
+import { PortfolioView } from './portfolio/PortfolioView'
 
-type Health = {
-  status: string
-  service: string
-  version: string
-}
+type Vista = 'cartera' | 'empresa' | 'evidencia'
+
+const TABS: { id: Vista; label: string }[] = [
+  { id: 'cartera', label: 'Cartera' },
+  { id: 'empresa', label: 'Empresa' },
+  { id: 'evidencia', label: 'Evidencia' },
+]
 
 export default function App() {
-  const [health, setHealth] = useState<Health | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [vista, setVista] = useState<Vista>('cartera')
+  const [companyId, setCompanyId] = useState('c-0001')
 
-  useEffect(() => {
-    fetch('/api/health')
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.json() as Promise<Health>
-      })
-      .then(setHealth)
-      .catch((err: Error) => setError(err.message))
-  }, [])
+  const abrirEmpresa = (id: string) => {
+    setCompanyId(id)
+    setVista('empresa')
+  }
 
   return (
     <div className="shell">
       <header className="topbar">
         <span className="mark" aria-hidden="true" />
-        <strong>finhackers</strong>
-        <span className="topbar-sep">·</span>
-        <span className="topbar-sub">Reto X-Ray de Embat</span>
-        <span className="spacer" />
-        <span className={`pill ${error ? 'pill-danger' : health ? 'pill-ok' : ''}`}>
-          {error ? `API caida (${error})` : health ? `API ${health.status} v${health.version}` : 'conectando…'}
-        </span>
+        <strong>Pulso</strong>
+        <nav>
+          {TABS.map((t) => (
+            <button
+              key={t.id} type="button"
+              className={vista === t.id ? 'on' : ''}
+              onClick={() => setVista(t.id)}
+            >
+              {t.label}
+            </button>
+          ))}
+        </nav>
       </header>
 
-      <main>
-        <PaletteSheet />
+      <main className="page">
+        {vista === 'cartera' && <PortfolioView onSelect={abrirEmpresa} />}
+        {vista === 'empresa' && <CompanyView companyId={companyId} />}
+        {vista === 'evidencia' && <EvidenceView />}
       </main>
     </div>
   )

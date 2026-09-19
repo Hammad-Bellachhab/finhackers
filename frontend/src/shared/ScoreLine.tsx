@@ -68,7 +68,9 @@ export function ScoreLine({
             stroke="var(--color-border)" width={44} allowDataOverflow
           />
           <Tooltip
-            labelFormatter={(m: string) => formatMonth(m)}
+            // Recharts entrega la etiqueta como ReactNode: solo la formateamos
+            // si de verdad es el 'YYYY-MM' que esperamos.
+            labelFormatter={(m) => (typeof m === 'string' ? formatMonth(m) : m)}
             contentStyle={{
               background: 'var(--color-bg)',
               border: '1px solid var(--color-border)',

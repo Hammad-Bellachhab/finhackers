@@ -1,67 +1,32 @@
-.shell {
-  min-height: 100dvh;
-  background: var(--color-bg);
-}
+.shell { min-height: 100dvh; background: var(--color-bg); }
 
 .topbar {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0 1rem;
-  height: 56px;
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0 1rem; height: 56px;
   border-bottom: 1px solid var(--color-border);
-  background: var(--color-bg);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  font-size: 0.9rem;
+  background: var(--color-bg); position: sticky; top: 0; z-index: 10;
 }
 
 .mark {
-  width: 1.15rem;
-  height: 1.15rem;
-  border-radius: 6px;
-  background: var(--embat-gradient);
-  flex: none;
+  width: 1.15rem; height: 1.15rem; border-radius: 6px;
+  background: var(--embat-gradient); flex: none;
 }
 
-.topbar-sep {
-  color: var(--color-border-strong);
+.topbar nav { display: flex; gap: 0.25rem; margin-left: 1rem; }
+.topbar nav button {
+  border: none; background: transparent; color: var(--color-text-muted);
+  font: inherit; font-size: 0.88rem; padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm); cursor: pointer;
+}
+.topbar nav button:hover { background: var(--color-surface); }
+.topbar nav button.on {
+  background: var(--color-accent-soft); color: var(--color-accent); font-weight: 600;
 }
 
-.topbar-sub {
-  color: var(--color-text-muted);
-}
+.page { max-width: 72rem; margin: 0 auto; padding: 1.75rem 1rem 4rem; }
 
-.spacer {
-  flex: 1;
+.page > h2 {
+  font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--color-text-muted); margin: 2rem 0 0.85rem;
 }
-
-.pill {
-  font-size: 0.78rem;
-  padding: 0.25rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text-muted);
-  white-space: nowrap;
-}
-
-.pill-ok {
-  background: var(--color-success-soft);
-  border-color: transparent;
-  color: var(--color-success-strong);
-}
-
-.pill-danger {
-  background: var(--color-danger-soft);
-  border-color: transparent;
-  color: var(--color-danger-strong);
-}
-
-@media (max-width: 560px) {
-  .topbar-sub,
-  .topbar-sep {
-    display: none;
-  }
-}
+.page > h2:first-child { margin-top: 0; }

@@ -1,0 +1,53 @@
+.filters { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.chip {
+  border: 1px solid var(--color-border); background: var(--color-bg);
+  color: var(--color-text-muted); border-radius: 999px;
+  padding: 0.3rem 0.85rem; font: inherit; font-size: 0.82rem; cursor: pointer;
+}
+.chip:hover { background: var(--color-surface); }
+.chip-on {
+  background: var(--color-accent-soft); border-color: transparent;
+  color: var(--color-accent); font-weight: 600;
+}
+
+.portfolio { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.portfolio th {
+  text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--color-text-muted); padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.portfolio td { padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--color-border); }
+.portfolio tbody tr { cursor: pointer; }
+.portfolio tbody tr:hover { background: var(--color-surface); }
+.portfolio .num { font-variant-numeric: tabular-nums; }
+.row-watch { box-shadow: inset 3px 0 0 var(--color-trend-down); }
+
+.holdout-dot {
+  display: inline-block; width: 0.45rem; height: 0.45rem; border-radius: 50%;
+  background: var(--color-accent); margin-left: 0.4rem; vertical-align: middle;
+}
+
+.counts { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.count {
+  background: var(--color-surface); border-radius: var(--radius);
+  padding: 0.6rem 0.9rem; min-width: 7rem;
+}
+.count strong { display: block; font-size: 1.3rem; font-variant-numeric: tabular-nums; }
+.count span { font-size: 0.75rem; color: var(--color-text-muted); }
+
+.monitor { display: grid; gap: 0.5rem; margin-bottom: 2rem; }
+.alert {
+  display: flex; gap: 0.7rem; align-items: baseline; flex-wrap: wrap;
+  padding: 0.6rem 0.9rem; border-radius: var(--radius); background: var(--color-surface);
+  font-size: 0.86rem; cursor: pointer;
+}
+.alert:hover { background: var(--color-surface-pressed); }
+.alert-improving { border-left: 3px solid var(--color-trend-up); }
+.alert-slipping { border-left: 3px solid var(--color-trend-down); }
+.alert .ahead {
+  margin-left: auto; color: var(--color-accent); font-size: 0.78rem; white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .portfolio th:nth-child(5), .portfolio td:nth-child(5) { display: none; }
+}
