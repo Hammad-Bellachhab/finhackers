@@ -74,6 +74,40 @@ export type Decision = {
   caution: string | null
 }
 
+/** Una palanca activa del plan: a cuánto la deja el usuario y qué aporta ella sola.
+ *  Los marginales no suman el total: el modelo es un ensemble de árboles y las palancas se
+ *  solapan. El número bueno es `Plan.scoreDelta`, repuntuado con todas aplicadas a la vez. */
+export type PlanLever = {
+  metricId: MetricId
+  label: string
+  unit: Metric['unit']
+  from: number | null
+  to: number
+  scoreDelta: number
+}
+
+/** Algo que le está bajando el score ahora mismo, en puntos de salud (siempre negativo).
+ *  `metricId` dice con qué palanca se corrige; null = el modelo lo usa pero no se puede mover. */
+export type Drag = {
+  id: string
+  label: string
+  impact: number
+  block: string
+  metricId: MetricId | null
+}
+
+export type Plan = {
+  companyId: string
+  baseHealth: number
+  planHealth: number
+  scoreDelta: number
+  levers: PlanLever[]
+  drags: Drag[]
+  /** true = repuntuado por el motor. false = el motor no respondió y esto sale de sumar la
+   *  rejilla precalculada, que ignora cómo se solapan las palancas. La UI lo dice. */
+  exact: boolean
+}
+
 export type Simulation = {
   metricId: MetricId
   value: number

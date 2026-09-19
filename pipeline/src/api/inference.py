@@ -12,6 +12,7 @@ import pandas as pd
 from src import config as C
 from src.evaluate import describe, load_registry, score_main, shap_values
 from src.features import CATEGORICAL
+from src.metrics import FEATURE_METRIC, METRIC_META, PROFILE, metric_values, overrides_for
 
 # Escenarios "de tesorero" → deltas sobre features (el simulador de la Capa 11).
 SCENARIOS = {
@@ -119,6 +120,61 @@ class InferenceService:
                 "applied_changes": {k: (None if v is None or (isinstance(v, float) and np.isnan(v)) else float(v)) for k, v in applied.items()},
                 "before": {k: before[k] for k in ("score", "band")}, "after": {k: after[k] for k in ("score", "band")},
                 "delta": after["score"] - before["score"], "explanation_after": after["explanation"], "model_version": self.version}
+
+    # --- simulador de palancas ----------------------------------------------------------
+    def health_many(self, rows: list[dict]) -> list[float]:
+        """Salud 0-100 de varias filas en una sola pasada del ensemble."""
+        X = pd.concat([self.frame(r) for r in rows], ignore_index=True)
+        return [100.0 * (1.0 - float(v)) for v in score_main(self.art, X, calibrated=True)]
+
+    def drags(self, base: dict, top_n: int = 6) -> list[dict]:
+        """Lo que le baja el score ahora mismo, en puntos de salud, y con qué palanca se corrige.
+
+        Solo lo accionable: los rasgos de perfil (banco, ERP, antigüedad) pesan en el modelo pero
+        no son algo que la empresa pueda mover, y enseñarlos como problema sería una crueldad inútil.
+        """
+        out = self.score(base, top_n=40)
+        p = out["score"]
+        res = []
+        for e in out["explanation"]:
+            f = e["feature"]
+            # shap > 0 sube la probabilidad de deterioro, o sea baja la salud.
+            # El bloque E (grupo, banco, empresas hermanas) se excluye igual que en el resto del
+            # producto: describe el entorno de la empresa, no algo suyo sobre lo que pueda actuar.
+            if f in PROFILE or e["block"] == "E" or e["shap"] <= 0 or "nan" in (e["text"] or ""):
+                continue
+            # log-odds → puntos de salud con la derivada de la sigmoide (exacto solo para cambios pequeños)
+            res.append({"id": f, "label": e["text"], "impact": round(-100 * p * (1 - p) * e["shap"], 1),
+                        "block": e["block"], "metricId": FEATURE_METRIC.get(f)})
+            if len(res) >= top_n:
+                break
+        return res
+
+    def plan(self, base: dict, targets: dict[str, float], top_n: int = 6) -> dict:
+        """Score exacto de aplicar varias palancas a la vez, más el marginal de cada una.
+
+        El marginal es lo que aporta esa palanca *en solitario*. La suma de marginales no tiene por
+        qué dar el total: el modelo es un ensemble de árboles y las palancas se solapan (DSO y ciclo
+        de caja comparten features). El número que vale es `planHealth`, repuntuado de una vez.
+        """
+        valid = {m: float(v) for m, v in targets.items() if m in METRIC_META and v is not None}
+        combined: dict[str, float] = {}
+        for mid, value in valid.items():
+            combined.update(overrides_for(mid, base, value))
+
+        rows = [base, {**base, **combined}] + [{**base, **overrides_for(m, base, v)} for m, v in valid.items()]
+        h = self.health_many(rows)
+        base_health, plan_health, marginals = h[0], h[1], h[2:]
+
+        now = metric_values(base)
+        levers = [{"metricId": m, "label": METRIC_META[m][0], "unit": METRIC_META[m][1],
+                   "from": None if pd.isna(now[m]) else round(float(now[m]), 3), "to": round(v, 3),
+                   "scoreDelta": round(marg - base_health, 2)}
+                  for (m, v), marg in zip(valid.items(), marginals)]
+        return {"baseHealth": round(base_health, 1), "planHealth": round(plan_health, 1),
+                "scoreDelta": round(plan_health - base_health, 1), "levers": levers,
+                "drags": self.drags(base, top_n), "modelVersion": self.version,
+                "appliedChanges": {k: round(float(v), 4) for k, v in combined.items()}}
 
     def info(self) -> dict:
         m = self.md["metrics"]

@@ -182,3 +182,9 @@
 }
 .tellme-more[open] > summary { margin-bottom: var(--space-3); }
 .tellme-more > summary:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+/* Velocímetro de salud (shared/Gauge.tsx). El color lo pone el componente con tokens. */
+.gauge { display: block; overflow: visible; }
+.gauge-sm { width: 56px; }
+.gauge-md { width: 92px; }
+.gauge-value { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+.gauge-sm .gauge-value { font-size: 22px; }

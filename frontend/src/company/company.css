@@ -135,3 +135,49 @@
   background: var(--color-bg); color: var(--color-text);
 }
 .company-picker input:focus { border-color: var(--color-accent); box-shadow: var(--focus-ring); outline: none; }
+
+/* --- Cómo subir tu score: lo que le hunde y las palancas que lo corrigen --------------- */
+.improve h3 { font-size: 0.95rem; margin: 1.4rem 0 0.5rem; }
+.improve h3:first-of-type { margin-top: 0.5rem; }
+
+.drags { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.4rem; font-size: 0.88rem; }
+.drags li {
+  display: flex; gap: var(--space-2); align-items: baseline; flex-wrap: wrap;
+  padding: 0.5rem 0.8rem; border-radius: var(--radius); background: var(--color-surface);
+}
+.drag-impact { color: var(--color-danger-strong); font-weight: 600; min-width: 3rem; }
+.drag-label { flex: 1 1 16rem; }
+.drag-fix { font-size: 0.8rem; }
+
+.levers { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; }
+.lever {
+  padding: 1rem 1.15rem; background: var(--color-bg);
+  border: 1px solid var(--color-border); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+/* Descartada: se atenúa, pero sigue legible y el estado también va en el texto del botón. */
+.lever-off { background: var(--color-bg-subtle); box-shadow: none; }
+.lever-off .lever-head strong { color: var(--color-text-muted); }
+
+.lever-head { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; }
+.lever-slide {
+  display: grid; grid-template-columns: 1fr auto; align-items: center;
+  gap: 0.35rem var(--space-3); margin-top: 0.6rem;
+}
+.lever-slide label { grid-column: 1 / -1; font-size: 0.88rem; }
+.lever-slide input[type='range'] { width: 100%; accent-color: var(--color-accent); }
+.lever-slide input[type='range']:disabled { accent-color: var(--color-text-disabled); }
+.lever-delta { min-width: 3rem; text-align: right; }
+/* Sin tabular-nums: en Haffer separa el punto decimal y se lee "+0 . 64" (ya visto en la
+   revisión visual de TellMe, tasks/progress-agente-ia.md). */
+.lever small, .lever .caution { display: block; margin-top: 0.5rem; font-size: 0.8rem; }
+
+.plan-total {
+  margin-top: 1.25rem; padding: 1rem 1.15rem;
+  border: 1px dashed var(--color-border-strong); border-radius: var(--radius);
+  background: var(--color-accent-soft);
+}
+.plan-total p { margin: 0; }
+/* Mientras llega el plan nuevo se atenua el anterior en vez de vaciarlo: cualquier cambio de
+   contenido aqui mueve la altura del documento y la pagina salta mientras se arrastra el slider. */
+.plan-total-stale { opacity: 0.55; }
+.plan-total strong { font-size: var(--text-lg); }

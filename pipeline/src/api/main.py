@@ -88,6 +88,12 @@ class SimulateRequest(BaseModel):
     overrides: dict[str, float] = Field(default_factory=dict, description="Cambios directos feature → valor")
 
 
+class PlanRequest(BaseModel):
+    T: str | None = Field(None, description="Mes 'YYYY-MM' de partida; por defecto el último")
+    targets: dict[str, float] = Field(default_factory=dict,
+                                      description="metricId → valor objetivo. Solo las palancas activas; las descartadas simplemente no vienen.")
+
+
 # --------------------------------------------------------------------------------------
 # Endpoints
 # --------------------------------------------------------------------------------------
@@ -196,6 +202,26 @@ def simulate(req: SimulateRequest, s: InferenceService = Depends(svc)):
         raise HTTPException(422, f"escenario desconocido; válidos: {list(SCENARIOS)}")
     out["company_id"], out["T"] = req.company_id, req.T or db.latest_month()
     db.log_inference("/simulate", req.company_id, out["after"]["score"], s.version, {"scenario": req.scenario, "overrides": req.overrides})
+    return out
+
+
+@app.post("/companies/{company_id}/plan", dependencies=[Depends(guard)])
+def plan(company_id: str, req: PlanRequest, s: InferenceService = Depends(svc)):
+    """Plan de mejora: qué le baja el score y a cuánto lo deja mover las palancas que siguen activas.
+
+    Las palancas descartadas por el usuario no llegan en `targets`, así que el plan se recalcula
+    solo con las demás. El score sale de repuntuar el ensemble con todas aplicadas a la vez, no de
+    sumar efectos por separado.
+    """
+    base = db.company_features(company_id, req.T)
+    if base is None:
+        raise HTTPException(404, "empresa / mes sin features")
+    try:
+        out = s.plan(base, req.targets)
+    except ValueError as e:
+        raise HTTPException(422, str(e))
+    out["companyId"], out["T"] = company_id, req.T or db.latest_month()
+    db.log_inference("/plan", company_id, 1 - out["planHealth"] / 100, s.version, {"targets": req.targets})
     return out
 
 

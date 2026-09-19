@@ -24,6 +24,39 @@
 - [ ] Señales en directo: reproducir mes a mes las alertas (máquina del tiempo)
 - [ ] Ensayar el pitch de la demo (cuenta tanto como el producto, según el brief)
 
+## En curso — "Cómo subir tu score" (simulador de palancas con restricciones)
+
+Sección nueva en la vista Empresa que va del diagnóstico a la acción: qué le baja el score y qué
+palancas lo arreglan, cada una graduable y descartable. Absorbe la sección "Qué hacer" actual.
+
+Decidido con el usuario: mejor plan con las palancas que queden activas · slider por palanca
+(no on/off) · score exacto vía FastAPI · la sección absorbe "Qué hacer", "Qué lo ha movido" se queda.
+
+### Backend
+- [x] 1. Extraer `metric_values` / `overrides_for` / `METRIC_META` de `src/pulso.py` a `src/metrics.py`
+      (hoy la API no puede usarlos sin importar el exportador entero). Test de ida y vuelta métrica→features.
+- [x] 2. `POST /companies/{id}/plan` en `src/api/main.py`: recibe `{targets: {metricId: valor}}`,
+      acumula overrides de todas las palancas activas y repuntúa **una sola vez** con el ensemble.
+      Devuelve salud base, salud del plan, delta exacto y el marginal de cada palanca. Tests.
+- [x] 3. `drags`: los drivers negativos del mes, ya en puntos de salud, y qué métrica los corrige.
+
+### Frontend
+- [x] 4. Contrato en `src/api/types.ts` (`Plan`, `PlanLever`, `Drag`) + `getPlan()` en `src/api/index.ts`,
+      con **degradación a `simulate.json`** si el backend no responde (la demo no puede caerse).
+- [x] 5. `src/company/ImproveSection.tsx`: "Te hunde" + palancas con slider y botón de descartar
+      (patrón `aria-pressed` de `AlertsView`, no checkbox) + resumen del plan. Tokens semánticos.
+- [x] 6. Montar en `CompanyView.tsx` y retirar `DecisionsSection` (absorbida); mover sus tests.
+
+### Pendiente de decisión tuya
+- [ ] Regenerar los JSON estáticos (`python -m src.pulso`) para que el camino degradado use la
+      rejilla con la palanca de caja ya corregida. **Ojo**: `pulso.export()` hace `rmtree` de
+      `frontend/public/data/`, lo que borraría los 1.286 `tellme.json` de Gemini. Hay que salvarlos
+      antes o regenerarlos después.
+
+### Verificación
+- [x] 7. `npm test` y `npm run lint` en verde; tests de pytest del endpoint nuevo.
+- [x] 8. Probarlo en el navegador: descartar una palanca y ver que el plan se recalcula.
+
 ## Notas
 
 - El trabajo anterior sigue en el historial de git. Para recuperar algo:
