@@ -53,7 +53,7 @@ describe('PortfolioTable', () => {
 
   it('avisa cuando ningun filtro devuelve empresas', async () => {
     render(<PortfolioTable rows={[rows[2]]} onSelect={() => {}} />)
-    await userEvent.click(screen.getByRole('button', { name: /test oculto/i }))
+    await userEvent.click(screen.getByRole('button', { name: /mejorando/i }))
     expect(screen.getByText(/ninguna empresa cumple/i)).toBeInTheDocument()
   })
 })

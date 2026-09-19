@@ -16,12 +16,22 @@
 @font-face {
   font-family: "Haffer";
   src: url("/fonts-haffer-500.woff2") format("woff2");
-  font-weight: 500 800; font-style: normal; font-display: swap;
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+/* 600 real de Embat: "X-Ray", titulares y negritas (600-800 usan este fichero, sin negrita sintética). */
+@font-face {
+  font-family: "Haffer";
+  src: url("/fonts-haffer-600.woff2") format("woff2");
+  font-weight: 600 800; font-style: normal; font-display: swap;
 }
 
 :root {
   --color-trend-up-soft: #e3f3f6;
   --color-ai-wash: #f5f8ff;
+  /* TellMe: degradado azul → violeta de su logo y velos suaves para las tarjetas de IA */
+  --tellme-gradient: linear-gradient(90deg, #4f7bff 0%, #8b5cf6 55%, #c357ec 100%);
+  --tellme-wash-a: rgb(79 123 255 / 9%);
+  --tellme-wash-b: rgb(195 87 236 / 8%);
   /* ---- Marca (crudos) ---- */
   --embat-navy: #050b2c;
   --embat-blue: #3878f6;
@@ -110,6 +120,8 @@
   color-scheme: dark;
   --color-trend-up-soft: #0b3a44;
   --color-ai-wash: #0d1640;
+  --tellme-wash-a: rgb(79 123 255 / 16%);
+  --tellme-wash-b: rgb(195 87 236 / 14%);
   --color-bg: #050b2c;
   --color-bg-subtle: #050b2c;
   --color-surface: #141a3a;

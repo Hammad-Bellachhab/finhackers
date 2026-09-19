@@ -17,6 +17,7 @@ import numpy as np
 import pandas as pd
 
 from src import config as C
+from src import projection as proj
 from src.api import db
 from src.api.inference import SCENARIOS, InferenceService
 from src.evaluate import score_main
@@ -24,13 +25,12 @@ from src.features import CATEGORICAL
 from src.metrics import metric_values, metrics, num, overrides_for
 from src.providers import providers
 
-STATE: dict = {}          # export() deja aquí el InferenceService
+STATE: dict = {}          # export() deja aquí el InferenceService y el pool de trayectorias
 OUT = C.ROOT.parent / "frontend" / "public" / "data"
 GRID = 11                 # puntos de la rejilla del simulador por métrica
 
 BAND = {"sólida": "healthy", "sana": "healthy", "vigilar": "stable", "riesgo": "risk"}
 TREND = {"mejorando": "up", "deteriorándose": "down"}
-HORIZON = 6
 # Rasgos de perfil (banco, ERP, antigüedad…): el modelo los usa, pero no son algo que la empresa pueda mover
 PROFILE = set(CATEGORICAL) | {"tenure_months", "months_in_panel", "group_size", "country_missing", "erp_missing", "has_invoices"}
 
@@ -49,7 +49,7 @@ def add_months(month: str, n: int) -> str:
 # Lecturas
 # --------------------------------------------------------------------------------------
 def history(cid: str) -> pd.DataFrame:
-    h = db.q('SELECT "T", score, health_smooth, health_band, trajectory, health_delta_1m, health_delta_3m, is_blip, is_structural '
+    h = db.q('SELECT "T", score, health, health_smooth, health_band, trajectory, health_delta_1m, health_delta_3m, is_blip, is_structural '
              'FROM risk_score WHERE company_id = :cid ORDER BY "T"', cid=cid)
     if h.empty:
         raise ValueError(f"empresa sin score: {cid}")
@@ -124,26 +124,22 @@ def company_score(cid: str):
             "metrics": metrics(feats) if not feats.empty else [], "heldOut": cid in held_out()}
 
 
-def projection(h: pd.DataFrame) -> tuple[list, list, list]:
-    """Recta OLS sobre los últimos 6 meses de salud suavizada; banda = ±1,96·σ del residuo·√h."""
-    y = h["health_smooth"].tail(6).to_numpy(float)
-    x = np.arange(len(y))
-    slope, icpt = np.polyfit(x, y, 1) if len(y) > 1 else (0.0, y[-1])
-    sigma = max(float(np.std(y - (slope * x + icpt))), 2.0)
-    T = h["T"].iloc[-1]
-    mid, lo, hi = [], [], []
-    for k in range(1, HORIZON + 1):
-        m, v = add_months(T, k), float(np.clip(y[-1] + slope * k, 0, 100))
-        w = 1.96 * sigma * np.sqrt(k)
-        mid.append({"month": m, "score": round(v, 1)})
-        lo.append({"month": m, "score": round(max(0, v - w), 1)})
-        hi.append({"month": m, "score": round(min(100, v + w), 1)})
-    return mid, lo, hi
+def pool() -> proj.Pool:
+    """Todas las trayectorias de 6 meses del panel; se construye una vez por proceso (≈ 1 s)."""
+    if "pool" not in STATE:
+        df = db.q('SELECT company_id, "T", health, health_smooth FROM risk_score ORDER BY company_id, "T"')
+        STATE["pool"] = proj.build_pool(df)
+        STATE["coverage"] = proj.coverage()
+    return STATE["pool"]
 
 
 def forecast(cid: str):
     h = history(cid)
-    mid, lo, hi = projection(h)
+    # Montecarlo empírico: 2.000 trayectorias de empresas que estaban como esta (src/projection.py).
+    f = proj.fan_for(pool(), h, cid)
+    months = [add_months(h["T"].iloc[-1], k) for k in range(1, proj.HORIZON + 1)]
+    pts = lambda key: [{"month": m, "score": round(float(v), 1)} for m, v in zip(months, f[key])]
+    mid, lo, hi = pts("median"), pts("low"), pts("high")
     last = h.iloc[-1]
     if bool(last["is_structural"]):
         stab, note = "structural", "Caída sostenida tres meses seguidos: es deterioro, conviene actuar."
@@ -154,7 +150,10 @@ def forecast(cid: str):
     else:
         stab, note = "dip", "Sin caída sostenida: el movimiento está dentro de lo normal."
     return {"companyId": cid, "horizon": mid, "bandLow": lo, "bandHigh": hi,
-            "stability": stab, "stabilityNote": note, "detection": detection(cid)}
+            "stability": stab, "stabilityNote": note, "detection": detection(cid),
+            "basis": {"paths": f["nPaths"], "neighbours": f["nNeighbours"], "companies": f["nCompanies"],
+                      "interval": int(round(100 * (proj.HIGH_Q - proj.LOW_Q))), "coverage": STATE.get("coverage"),
+                      "probDrop5": round(f["probDrop5"], 3), "probRisk": round(f["probRisk"], 3)}}
 
 
 def daily(f: dict, key: str) -> float:
@@ -382,6 +381,20 @@ def export() -> None:
     print(f"[pulso] {len(ids)} empresas en {OUT}")
 
 
+def refresh_forecasts() -> None:
+    """Reescribe solo forecast.json de cada empresa, sin tocar el resto de frontend/public/data/.
+
+    `export()` empieza con un rmtree, que se llevaría por delante los tellme.json de Gemini; y
+    cambiar la proyección no cambia nada más del contrato. No hace falta cargar el modelo.
+    """
+    ids = db.q('SELECT DISTINCT company_id FROM risk_score ORDER BY company_id')["company_id"]
+    for i, cid in enumerate(ids):
+        write(OUT / "companies" / cid / "forecast.json", forecast(cid))
+        if i % 200 == 0:
+            print(f"[pulso] forecast {i}/{len(ids)}", flush=True)
+    print(f"[pulso] {len(ids)} forecast.json regenerados en {OUT}")
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")
-    export()
+    refresh_forecasts() if sys.argv[1:2] == ["forecast"] else export()

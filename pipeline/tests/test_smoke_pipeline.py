@@ -39,7 +39,7 @@ def env(tmp_path_factory):
 
 def test_full_pipeline(env):
     for module in ("src.ingest", "src.schema", "src.split_test", "src.labels", "src.features", "src.train", "src.evaluate",
-                   "src.serve_db", "src.evaluate_test"):
+                   "src.serve_db", "src.evaluate_test", "src.projection"):
         run_step(module, env)
     ids = (Path(env["DATA_DIR"]) / "test_companies" / "company_ids.txt").read_text(encoding="utf-8").split()
     assert len(ids) >= 8
@@ -57,6 +57,10 @@ def test_full_pipeline(env):
     assert (Path(env["MODELS_DIR"]) / "registry" / version / "pipeline.joblib").exists()
     assert (Path(env["MODELS_DIR"]) / "registry" / version / "lgbm_B.txt").exists()
     assert md["metrics"]["holdout"]["lgbm_B"]["auc_roc"] > 0.5
+    # La proyeccion es un paso mas del pipeline: tiene que salir un informe con cobertura medible.
+    proj = json.loads((Path(env["REPORTS_DIR"]) / "projection_backtest.json").read_text(encoding="utf-8"))
+    assert proj["n_forecasts"] > 0 and 0 <= proj["montecarlo"]["coverage"] <= 1
+    assert proj["montecarlo"]["band_width"] > 0
 
 
 def test_api_on_smoke_artifacts(env):

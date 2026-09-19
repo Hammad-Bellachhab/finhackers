@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import type { PortfolioRow } from '../api/types'
 import { BandBadge } from '../shared/BandBadge'
 import { Delta } from '../shared/Delta'
@@ -8,14 +8,13 @@ import { TellMeLogo } from '../shared/TellMeLogo'
 import { TellMeCard } from '../shared/TellMeCard'
 import './portfolio.css'
 
-type Filtro = 'todas' | 'up' | 'down' | 'holdout'
+type Filtro = 'todas' | 'up' | 'down'
 type Orden = 'movimiento' | 'caida' | 'mejora' | 'peor' | 'mejor'
 
 const FILTROS: { id: Filtro; label: string }[] = [
   { id: 'todas', label: 'Todas' },
   { id: 'up', label: 'Mejorando' },
   { id: 'down', label: 'Torciéndose' },
-  { id: 'holdout', label: 'Test oculto' },
 ]
 
 const ORDEN: Record<Orden, [string, (a: PortfolioRow, b: PortfolioRow) => number]> = {
@@ -47,7 +46,7 @@ export function PortfolioTable({
   const filtradas = useMemo(() => {
     const t = q.trim().toLowerCase()
     return rows
-      .filter((r) => filtro === 'todas' || (filtro === 'holdout' ? r.heldOut : r.trend === filtro))
+      .filter((r) => filtro === 'todas' || r.trend === filtro)
       .filter((r) => !banda || r.healthBand === banda)
       .filter((r) => !cohorte || r.sizeCohort === cohorte)
       .filter((r) => !t || [r.name, r.companyId, r.group].some((s) => s?.toLowerCase().includes(t)))
@@ -102,11 +101,11 @@ export function PortfolioTable({
               </tr>
             </thead>
             <tbody>
-              {visibles.flatMap((r) => {
+              {visibles.map((r) => {
                 const isExpanded = !!expanded[r.companyId]
-                return [
+                return (
+                  <Fragment key={r.companyId}>
                   <tr
-                    key={r.companyId}
                     // Sana pero cayendo: el caso que el reto quiere que se vea.
                     className={r.band === 'healthy' && r.trend === 'down' ? 'row-watch' : undefined}
                     onClick={() => onSelect(r.companyId)}
@@ -118,10 +117,14 @@ export function PortfolioTable({
                         type="button"
                         className={`btn-expand-tellme ${isExpanded ? 'expanded' : ''}`}
                         title={isExpanded ? 'Cerrar análisis de TellMe' : 'Ver análisis de TellMe'}
+                        aria-label={`${isExpanded ? 'Cerrar' : 'Ver'} el análisis de TellMe de ${r.name}`}
+                        aria-expanded={isExpanded}
                         onClick={(e) => {
                           e.stopPropagation()
                           toggleExpand(r.companyId)
                         }}
+                        // Sin esto, Enter en el botón también abre la ficha (lo recoge la fila).
+                        onKeyDown={(e) => e.stopPropagation()}
                       >
                         <TellMeLogo size={14} />
                       </button>
@@ -143,17 +146,18 @@ export function PortfolioTable({
                       </>
                     )}
                     <td className="muted">{r.topDriver}</td>
-                  </tr>,
-                  isExpanded && (
-                    <tr key={`${r.companyId}-tellme`} className="row-tellme-expansion">
+                  </tr>
+                  {isExpanded && (
+                    <tr className="row-tellme-expansion">
                       <td colSpan={detalle ? 10 : 5}>
                         <div className="portfolio-tellme-card" onClick={(e) => e.stopPropagation()}>
                           <TellMeCard companyId={r.companyId} name={r.name} />
                         </div>
                       </td>
                     </tr>
-                  )
-                ].filter(Boolean) as any[]
+                  )}
+                  </Fragment>
+                )
               })}
             </tbody>
           </table>
