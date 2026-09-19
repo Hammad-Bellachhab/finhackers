@@ -1,0 +1,365 @@
+{
+  "generated_at": "2026-09-19T01:28:14.595372+00:00",
+  "dataset_hash": "b931407baf5dc716",
+  "tables": {
+    "groups": {
+      "source": "C:\\Users\\Usuario\\Downloads\\output\\groups.csv",
+      "sha256": "fa18d3f42cd24d7640bff22d7a9504293574c2338ce85d425e3134f18f169a8c",
+      "rows": 250,
+      "columns": [
+        "group_id",
+        "erp",
+        "n_companies_in_sample"
+      ],
+      "null_counts": {
+        "group_id": 0,
+        "erp": 161,
+        "n_companies_in_sample": 0
+      },
+      "parse_failures": {
+        "n_companies_in_sample": 0
+      },
+      "date_ranges": {},
+      "seconds": 0.1
+    },
+    "companies": {
+      "source": "C:\\Users\\Usuario\\Downloads\\output\\companies.csv",
+      "sha256": "5496ad00a1e9228f7e756a55c71c512fd06a73ad45a09ce3f103a620a5ad72ae",
+      "rows": 1286,
+      "columns": [
+        "company_id",
+        "group_id",
+        "country",
+        "currency",
+        "erp",
+        "created_at"
+      ],
+      "null_counts": {
+        "company_id": 0,
+        "group_id": 0,
+        "country": 1056,
+        "currency": 0,
+        "erp": 541,
+        "created_at": 0
+      },
+      "parse_failures": {
+        "created_at": 0
+      },
+      "date_ranges": {
+        "created_at": {
+          "min": "2021-11-17 10:55:30",
+          "max": "2026-07-16 06:51:09",
+          "out_of_range_2023_2028": 64
+        }
+      },
+      "seconds": 1.1
+    },
+    "banking_products": {
+      "source": "C:\\Users\\Usuario\\Downloads\\output\\banking_products.csv",
+      "sha256": "0fc5aa20fea32981a962cc08251720ece3f2afad8495910111d2fd8b16514d3c",
+      "rows": 5987,
+      "columns": [
+        "product_id",
+        "company_id",
+        "label",
+        "type",
+        "bank_name",
+        "service",
+        "currency",
+        "created_at"
+      ],
+      "null_counts": {
+        "product_id": 0,
+        "company_id": 0,
+        "label": 0,
+        "type": 0,
+        "bank_name": 0,
+        "service": 0,
+        "currency": 0,
+        "created_at": 0
+      },
+      "parse_failures": {
+        "created_at": 0
+      },
+      "date_ranges": {
+        "created_at": {
+          "min": "2021-11-18 15:54:13",
+          "max": "2026-09-15 13:36:10",
+          "out_of_range_2023_2028": 139
+        }
+      },
+      "seconds": 0.4
+    },
+    "debt_products": {
+      "source": "C:\\Users\\Usuario\\Downloads\\output\\debt_products.csv",
+      "sha256": "bf38430ccd15f6a9ca8769113c5f47d4aeee8fe55c425687731481cd002f05d8",
+      "rows": 2239,
+      "columns": [
+        "product_id",
+        "company_id",
+        "label",
+        "type",
+        "bank_name",
+        "service",
+        "currency",
+        "created_at",
+        "granted",
+        "outstanding",
+        "liquidity"
+      ],
+      "null_counts": {
+        "product_id": 0,
+        "company_id": 0,
+        "label": 0,
+        "type": 0,
+        "bank_name": 0,
+        "service": 0,
+        "currency": 0,
+        "created_at": 0,
+        "granted": 169,
+        "outstanding": 0,
+        "liquidity": 1435
+      },
+      "parse_failures": {
+        "created_at": 0,
+        "granted": 0,
+        "outstanding": 0,
+        "liquidity": 0
+      },
+      "date_ranges": {
+        "created_at": {
+          "min": "2022-04-06 07:26:09",
+          "max": "2026-09-15 20:50:53",
+          "out_of_range_2023_2028": 13
+        }
+      },
+      "seconds": 0.7
+    },
+    "debt_schedule_config": {
+      "source": "C:\\Users\\Usuario\\Downloads\\output\\debt_schedule_config.csv",
+      "sha256": "b0d6cc3e6810e31d526eb7f4be3c2abe31496f74f5ddd58163876d60de168ea2",
+      "rows": 87,
+      "columns": [
+        "product_id",
+        "company_id",
+        "settlement_product_id",
+        "currency",
+        "amortization_type",
+        "interest_calc_method",
+        "amortising_frequency",
+        "granted_balance",
+        "outstanding_balance",
+        "total_periods",
+        "next_payment_date",
+        "last_payment_date",
+        "annual_interest_rate_or_spread",
+        "interest_type"
+      ],
+      "null_counts": {
+        "product_id": 0,
+        "company_id": 0,
+        "settlement_product_id": 0,
+        "currency": 0,
+        "amortization_type": 0,
+        "interest_calc_method": 0,
+        "amortising_frequency": 0,
+        "granted_balance": 0,
+        "outstanding_balance": 0,
+        "total_periods": 0,
+        "next_payment_date": 0,
+        "last_payment_date": 0,
+        "annual_interest_rate_or_spread": 0,
+        "interest_type": 0
+      },
+      "parse_failures": {
+        "granted_balance": 0,
+        "outstanding_balance": 0,
+        "total_periods": 0,
+        "next_payment_date": 0,
+        "last_payment_date": 0,
+        "annual_interest_rate_or_spread": 0
+      },
+      "date_ranges": {
+        "next_payment_date": {
+          "min": "2024-03-19 00:00:00",
+          "max": "2027-01-22 00:00:00",
+          "out_of_range_2023_2028": 0
+        },
+        "last_payment_date": {
+          "min": "2024-02-27 15:09:49",
+          "max": "2026-09-15 17:34:50",
+          "out_of_range_2023_2028": 0
+        }
+      },
+      "seconds": 0.3
+    },
+    "balances": {
+      "source": "C:\\Users\\Usuario\\Downloads\\output\\balances.csv",
+      "sha256": "86664c229cf52554d75d7efb864fc07a94a1bebcd61a3ac85abc344f3ba2a30c",
+      "rows": 7996,
+      "columns": [
+        "product_id",
+        "company_id",
+        "date",
+        "balance",
+        "available",
+        "granted",
+        "liquidity",
+        "countable"
+      ],
+      "null_counts": {
+        "product_id": 0,
+        "company_id": 0,
+        "date": 0,
+        "balance": 0,
+        "available": 7996,
+        "granted": 5348,
+        "liquidity": 6100,
+        "countable": 7332
+      },
+      "parse_failures": {
+        "date": 0,
+        "balance": 0,
+        "available": 0,
+        "granted": 0,
+        "liquidity": 0,
+        "countable": 0
+      },
+      "date_ranges": {
+        "date": {
+          "min": "2026-08-25 00:00:00",
+          "max": "2026-09-01 00:00:00",
+          "out_of_range_2023_2028": 0
+        }
+      },
+      "seconds": 0.9
+    },
+    "invoices": {
+      "source": "C:\\Users\\Usuario\\Downloads\\output\\invoices.csv",
+      "sha256": "6686bd878244881bac78348a108852f3f30713ef244267f1fa3754b9be619c53",
+      "rows": 897894,
+      "columns": [
+        "operation_id",
+        "company_id",
+        "document_type",
+        "issuance_date",
+        "due_date",
+        "payment_date",
+        "amount",
+        "pending_amount",
+        "currency",
+        "accounting_currency",
+        "exchange_rate",
+        "status",
+        "concept",
+        "counterparty_id"
+      ],
+      "null_counts": {
+        "operation_id": 0,
+        "company_id": 0,
+        "document_type": 0,
+        "issuance_date": 0,
+        "due_date": 8,
+        "payment_date": 6,
+        "amount": 0,
+        "pending_amount": 0,
+        "currency": 0,
+        "accounting_currency": 0,
+        "exchange_rate": 261,
+        "status": 0,
+        "concept": 3967,
+        "counterparty_id": 11457
+      },
+      "parse_failures": {
+        "issuance_date": 0,
+        "due_date": 0,
+        "payment_date": 0,
+        "amount": 0,
+        "pending_amount": 0,
+        "exchange_rate": 0
+      },
+      "date_ranges": {
+        "issuance_date": {
+          "min": "2024-09-01 00:00:00",
+          "max": "2026-09-01 22:00:00",
+          "out_of_range_2023_2028": 0
+        },
+        "due_date": {
+          "min": "2000-03-01 00:00:00",
+          "max": "7025-07-31 00:00:00",
+          "out_of_range_2023_2028": 552
+        },
+        "payment_date": {
+          "min": "2000-10-31 00:00:00",
+          "max": "6913-11-20 00:00:00",
+          "out_of_range_2023_2028": 472
+        }
+      },
+      "seconds": 9.9
+    },
+    "transactions": {
+      "source": "C:\\Users\\Usuario\\Downloads\\output\\transactions.csv",
+      "sha256": "000a6820a7500c66aa70a17b3e813d0c57a8270b3c58f6f2f006708a20228f2b",
+      "rows": 2556437,
+      "columns": [
+        "transaction_id",
+        "company_id",
+        "product_id",
+        "date",
+        "value_date",
+        "amount",
+        "exchange_rate",
+        "status",
+        "accounting_status",
+        "category",
+        "description",
+        "counterparty_id"
+      ],
+      "null_counts": {
+        "transaction_id": 0,
+        "company_id": 0,
+        "product_id": 0,
+        "date": 0,
+        "value_date": 0,
+        "amount": 0,
+        "exchange_rate": 0,
+        "status": 29839,
+        "accounting_status": 1573869,
+        "category": 330,
+        "description": 464,
+        "counterparty_id": 2305659
+      },
+      "parse_failures": {
+        "date": 0,
+        "value_date": 0,
+        "amount": 0,
+        "exchange_rate": 0
+      },
+      "date_ranges": {
+        "date": {
+          "min": "2024-09-01 00:00:00",
+          "max": "2026-09-01 23:37:04",
+          "out_of_range_2023_2028": 0
+        },
+        "value_date": {
+          "min": "2022-07-01 00:00:00",
+          "max": "2099-12-31 01:00:00",
+          "out_of_range_2023_2028": 54
+        }
+      },
+      "seconds": 27.7
+    }
+  },
+  "referential_integrity": {
+    "companies.group_id_orphans": 0,
+    "banking_products.company_orphans": 0,
+    "debt_products.company_orphans": 0,
+    "balances.company_orphans": 0,
+    "balances.product_orphans": 29,
+    "transactions.company_orphans": 0,
+    "transactions.product_orphans": 1314,
+    "invoices.company_orphans": 0,
+    "companies.without_transactions": 0,
+    "companies.without_invoices": 501
+  }
+}
