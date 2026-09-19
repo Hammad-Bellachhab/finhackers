@@ -1,0 +1,19 @@
+# API
+fastapi>=0.115
+uvicorn[standard]>=0.32
+pydantic>=2.9
+
+# Lectura del dataset. DuckDB consulta los CSV grandes sin cargarlos en memoria:
+# transactions.csv son 472 MB y se lee entero en ~1 s.
+duckdb>=1.5
+polars>=1.4
+pyarrow>=25.0
+pandas>=3.0
+
+# Modelo y explicabilidad. SHAP cubre el requisito de explicacion del reto:
+# "por que esta empresa saca este numero".
+numpy>=2.0
+scikit-learn>=1.9
+lightgbm>=4.7
+shap>=0.52
+matplotlib>=3.11
