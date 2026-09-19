@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getProviders } from '../api'
 import type { Provider, Providers } from '../api/types'
 import { formatMoney } from '../shared/format'
@@ -40,6 +40,39 @@ function ProviderCard({ p, companyId }: { p: Provider; companyId: string }) {
   )
 }
 
+/** Buscador nativo (datalist): nombre o ID, sin librerías, igual que en Empresa. El texto
+ *  refleja siempre la empresa activa, tanto si se llega aquí buscando como desde otra pestaña. */
+function CompanyPicker({
+  companyId, empresas, onSelect,
+}: { companyId: string; empresas: { id: string; name: string }[]; onSelect: (id: string) => void }) {
+  const actual = empresas.find((c) => c.id === companyId)
+  const [q, setQ] = useState(actual?.name ?? companyId)
+
+  useEffect(() => {
+    setQ(actual?.name ?? companyId)
+  }, [companyId, actual?.name])
+
+  const pick = (v: string) => {
+    setQ(v)
+    const hit = empresas.find((c) => c.id === v || `${c.name} · ${c.id}` === v)
+    if (hit) onSelect(hit.id)
+  }
+
+  return (
+    <div className="filters filters-form">
+      <label htmlFor="empresa-proveedores">Empresa</label>
+      <input
+        id="empresa-proveedores" list="empresas-proveedores"
+        value={q} placeholder="Busca por nombre o ID…"
+        onChange={(e) => pick(e.target.value)}
+      />
+      <datalist id="empresas-proveedores">
+        {empresas.map((c) => <option key={c.id} value={`${c.name} · ${c.id}`} />)}
+      </datalist>
+    </div>
+  )
+}
+
 export function CompanyProvidersView({
   companyId, onSelect,
 }: { companyId: string; onSelect: (id: string) => void }) {
@@ -58,15 +91,7 @@ export function CompanyProvidersView({
   return (
     <>
       <h2>Proveedores del cliente{data.month && ` · ${data.month}`}</h2>
-      <div className="filters filters-form">
-        <label htmlFor="empresa-proveedores">Empresa</label>
-        <select
-          id="empresa-proveedores" value={companyId}
-          onChange={(e) => onSelect(e.target.value)}
-        >
-          {empresas.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-        </select>
-      </div>
+      <CompanyPicker companyId={companyId} empresas={empresas} onSelect={onSelect} />
 
       {mios.length === 0 ? (
         <p className="empty">Esta empresa no tiene ningún producto conectado.</p>

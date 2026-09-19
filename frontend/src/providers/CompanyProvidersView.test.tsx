@@ -1,6 +1,11 @@
-import { describe, expect, it } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, expect, it, vi } from 'vitest'
+import { getProviders } from '../api'
 import type { Providers, ProviderCompany } from '../api/types'
-import { companyIndex } from './CompanyProvidersView'
+import { companyIndex, CompanyProvidersView } from './CompanyProvidersView'
+
+vi.mock('../api', { spy: true })
 
 const empresa = (n: number, score: number): ProviderCompany => ({
   companyId: `c-${n}`, name: `Empresa ${n}`, score, band: 'risk', healthBand: 'riesgo',
@@ -21,5 +26,34 @@ describe('companyIndex', () => {
       { id: 'c-1', name: 'Empresa 1' },
       { id: 'c-2', name: 'Empresa 2' },
     ])
+  })
+})
+
+const providers: Providers = {
+  month: '2026-08',
+  totals: { providers: 1, companies: 2, connectors: 1, products: 2 },
+  providers: [
+    {
+      name: 'BBVA', kind: 'banco', services: ['bbva'], companies: 2, products: 2,
+      types: [{ type: 'checking', n: 2 }],
+      bands: { 'sólida': 0, sana: 2, vigilar: 0, riesgo: 0 },
+      meanHealth: 80, riskShare: 0, slipping: 0, improving: 0, granted: 0, outstanding: 0,
+      rows: [empresa(1, 80), { ...empresa(999, 80), name: 'Acería del Norte' }],
+    },
+  ],
+}
+
+describe('CompanyProvidersView', () => {
+  it('cambia de empresa buscando por nombre, sin desplegable plano', async () => {
+    vi.mocked(getProviders).mockResolvedValue(providers)
+    const onSelect = vi.fn()
+    render(<CompanyProvidersView companyId="c-1" onSelect={onSelect} />)
+
+    const buscador = await screen.findByLabelText('Empresa')
+    expect(buscador).toHaveValue('Empresa 1')
+
+    await userEvent.clear(buscador)
+    await userEvent.type(buscador, 'Acería del Norte · c-999')
+    expect(onSelect).toHaveBeenCalledWith('c-999')
   })
 })
