@@ -106,9 +106,10 @@
   --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
 
   /* ---- Forma ---- */
-  /* Ancho de la app: aprovecha la pantalla para no tener que desplazarse en las tablas. */
-  --page-max: 110rem;
-  --landing-max: 88rem;   /* las landings, algo más estrechas: son texto para leer */
+  /* Ancho de la app: contenido centrado con aire a los lados. A 110rem la página llegaba
+     al borde de la pantalla y la app no respiraba; las tablas anchas ya hacen scroll solas. */
+  --page-max: 72rem;
+  --landing-max: 88rem;   /* las landings, algo más anchas: el héroe pide sitio */
 
   --radius-sm: 6px;
   --radius: 8px;
