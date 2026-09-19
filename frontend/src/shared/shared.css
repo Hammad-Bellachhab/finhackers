@@ -110,10 +110,6 @@
   box-shadow: var(--shadow);
   animation: tellme-in 320ms var(--ease);
 }
-/* Filo superior con el degradado de la marca. */
-.tellme::before {
-  content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: var(--tellme-gradient);
-}
 @keyframes tellme-in { from { opacity: 0; transform: translateY(6px); } }
 .tellme-small { padding: var(--space-4); }
 .tellme p { margin: 0; }
