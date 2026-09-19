@@ -32,19 +32,26 @@ def env(tmp_path_factory):
     make(raw, n_companies=48)
     e = dict(os.environ)
     e.update({"RAW_DIR": str(raw), "DATA_DIR": str(base / "data"), "MODELS_DIR": str(base / "models"), "REPORTS_DIR": str(base / "reports"),
-              "DATABASE_URL": f"sqlite:///{(base / 'serve.db').as_posix()}", "PYTHONIOENCODING": "utf-8", "HOLDOUT_MONTHS": "2"})
+              "DATABASE_URL": f"sqlite:///{(base / 'serve.db').as_posix()}", "PYTHONIOENCODING": "utf-8", "HOLDOUT_MONTHS": "2",
+              "N_TEST_COMPANIES": "8"})
     return e
 
 
 def test_full_pipeline(env):
-    for module in ("src.ingest", "src.schema", "src.labels", "src.features", "src.train", "src.evaluate", "src.serve_db"):
+    for module in ("src.ingest", "src.schema", "src.split_test", "src.labels", "src.features", "src.train", "src.evaluate",
+                   "src.serve_db", "src.evaluate_test"):
         run_step(module, env)
+    ids = (Path(env["DATA_DIR"]) / "test_companies" / "company_ids.txt").read_text().split()
+    assert len(ids) >= 8
+    test_eval = json.loads((Path(env["REPORTS_DIR"]) / "test_companies_eval.json").read_text())
+    assert test_eval["n_test_companies"] == len(ids) and 0 <= test_eval["model_B"]["auc_roc"] <= 1
     quality = json.loads((Path(env["DATA_DIR"]) / "quality" / "quality_report_latest.json").read_text())
     assert quality["tables"]["transactions"]["rows"] > 0
     labels_meta = json.loads((Path(env["REPORTS_DIR"]) / "labels_meta.json").read_text())
     assert 0.05 < labels_meta["positive_rate"] < 0.30
     version = (Path(env["MODELS_DIR"]) / "registry" / "latest.txt").read_text().strip()
     md = json.loads((Path(env["MODELS_DIR"]) / "registry" / version / "metadata.json").read_text())
+    assert md["n_test_companies_excluded"] == len(ids)
     for key in ("dataset_hash", "seed", "hyperparameters", "input_schema", "metrics"):
         assert key in md
     assert (Path(env["MODELS_DIR"]) / "registry" / version / "pipeline.joblib").exists()

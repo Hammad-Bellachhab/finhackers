@@ -94,6 +94,7 @@ def build_tables() -> dict[str, pd.DataFrame]:
         "latest_score": last["score"].values, "latest_band": last["band"].values, "latest_delta_1m": last["delta_1m"].values,
         "latest_percentile": last["percentile"].values, "latest_health": last["health_smooth"].values,
         "latest_health_band": last["health_band"].values, "latest_trajectory": last["trajectory"].values,
+        "is_test_company": last.index.isin(list(C.test_company_ids())),
     }).reset_index(drop=True)
 
     # ---------------------------------------------------------------- company_month_kpi

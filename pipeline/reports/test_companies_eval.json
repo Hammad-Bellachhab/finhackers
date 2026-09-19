@@ -1,0 +1,213 @@
+{
+  "n_test_companies": 82,
+  "n_rows_labeled": 707,
+  "positives": 80,
+  "base_rate": 0.11315417256011315,
+  "labeled_months": [
+    "2024-09",
+    "2026-01"
+  ],
+  "model_B": {
+    "n": 707,
+    "positives": 80,
+    "auc_pr": 0.4505404685008579,
+    "auc_roc": 0.8092902711323764,
+    "brier": 0.08348909684582745,
+    "base_rate": 0.11315417256011315,
+    "p@50": 0.12421988106080371,
+    "r@50": 0.9915966386554622,
+    "r@top10pct": 0.426844070961718
+  },
+  "model_A": {
+    "n": 707,
+    "positives": 80,
+    "auc_pr": 0.2873992509627083,
+    "auc_roc": 0.7844896331738438,
+    "brier": 0.1392282848797737,
+    "base_rate": 0.11315417256011315,
+    "p@50": 0.125396351649039,
+    "r@50": 1.0,
+    "r@top10pct": 0.21314192343604108
+  },
+  "lift_B_vs_A": {
+    "auc_pr_A_ci": [
+      0.21485302720824617,
+      0.3852764072358216
+    ],
+    "auc_pr_B_ci": [
+      0.3440533105079044,
+      0.5686603601610944
+    ],
+    "lift_ci": [
+      0.07153620002646871,
+      0.24875132062312544
+    ],
+    "lift_mean": 0.1602586331363499,
+    "p_lift_le_0": 0.001
+  },
+  "health_as_score": {
+    "auc_roc": 0.8052631578947369,
+    "auc_pr": 0.47343397522317815
+  },
+  "by_month": {
+    "2024-09": {
+      "n": 24,
+      "positives": 3,
+      "auc_roc": 0.9206349206349207,
+      "auc_pr": 0.5555555555555556
+    },
+    "2024-10": {
+      "n": 24,
+      "positives": 4,
+      "auc_roc": 0.95,
+      "auc_pr": 0.8303571428571428
+    },
+    "2024-11": {
+      "n": 24,
+      "positives": 5,
+      "auc_roc": 0.8526315789473684,
+      "auc_pr": 0.8526315789473684
+    },
+    "2024-12": {
+      "n": 25,
+      "positives": 4,
+      "auc_roc": 0.7619047619047619,
+      "auc_pr": 0.6142857142857143
+    },
+    "2025-01": {
+      "n": 31,
+      "positives": 4,
+      "auc_roc": 0.8240740740740741,
+      "auc_pr": 0.44791666666666663
+    },
+    "2025-02": {
+      "n": 34,
+      "positives": 4,
+      "auc_roc": 0.9333333333333333,
+      "auc_pr": 0.5595238095238095
+    },
+    "2025-03": {
+      "n": 36,
+      "positives": 5,
+      "auc_roc": 0.9225806451612903,
+      "auc_pr": 0.6444444444444444
+    },
+    "2025-04": {
+      "n": 35,
+      "positives": 4,
+      "auc_roc": 0.9596774193548387,
+      "auc_pr": 0.8125
+    },
+    "2025-05": {
+      "n": 42,
+      "positives": 4,
+      "auc_roc": 0.7960526315789473,
+      "auc_pr": 0.6107142857142858
+    },
+    "2025-06": {
+      "n": 42,
+      "positives": 3,
+      "auc_roc": 0.717948717948718,
+      "auc_pr": 0.33125
+    },
+    "2025-07": {
+      "n": 46,
+      "positives": 3,
+      "auc_roc": 0.5503875968992248,
+      "auc_pr": 0.22129319955406912
+    },
+    "2025-08": {
+      "n": 52,
+      "positives": 5,
+      "auc_roc": 0.6893617021276596,
+      "auc_pr": 0.5958064516129031
+    },
+    "2025-09": {
+      "n": 53,
+      "positives": 3,
+      "auc_roc": 0.4666666666666667,
+      "auc_pr": 0.37238095238095237
+    },
+    "2025-10": {
+      "n": 53,
+      "positives": 5,
+      "auc_roc": 0.675,
+      "auc_pr": 0.37327659574468086
+    },
+    "2025-11": {
+      "n": 55,
+      "positives": 7,
+      "auc_roc": 0.7827380952380952,
+      "auc_pr": 0.5749821606964465
+    },
+    "2025-12": {
+      "n": 60,
+      "positives": 8,
+      "auc_roc": 0.9230769230769231,
+      "auc_pr": 0.6524718337218338
+    },
+    "2026-01": {
+      "n": 71,
+      "positives": 9,
+      "auc_roc": 0.9032258064516129,
+      "auc_pr": 0.49058677289035796
+    }
+  },
+  "deterioration_rate_by_band": {
+    "riesgo": {
+      "share_deteriorate": 0.6285714285714286,
+      "n": 35
+    },
+    "sana": {
+      "share_deteriorate": 0.07228915662650602,
+      "n": 249
+    },
+    "sólida": {
+      "share_deteriorate": 0.03934426229508197,
+      "n": 305
+    },
+    "vigilar": {
+      "share_deteriorate": 0.23728813559322035,
+      "n": 118
+    }
+  },
+  "deterioration_rate_by_trajectory": {
+    "deteriorándose": {
+      "share_deteriorate": 0.38636363636363635,
+      "n": 44
+    },
+    "estable": {
+      "share_deteriorate": 0.09076433121019108,
+      "n": 628
+    },
+    "mejorando": {
+      "share_deteriorate": 0.17142857142857143,
+      "n": 35
+    }
+  },
+  "exceptional_companies": {
+    "n_rows": 129,
+    "share_deteriorate": 0.03875968992248062
+  },
+  "anticipation": {
+    "definition": "evento = primer mes con >=2 meses seguidos malos (caja<0 | >=50% facturas a pagar con >30d | sin transacciones) tras >=3 buenos; alerta = salud suavizada < 75.0 o trayectoria 'deteriorándose' en los 12 meses previos; scores del modelo congelado en el holdout (fuera de muestra desde 2024-09)",
+    "out_of_sample_from": "2024-09",
+    "n_events": 21,
+    "n_anticipated": 4,
+    "share_anticipated": 0.5714285714285714,
+    "share_detected_by_event": 0.3333333333333333,
+    "lead_months_median": 1.0,
+    "lead_months_mean": 1.5714285714285714,
+    "lead_distribution": {
+      "0": 3,
+      "1": 2,
+      "4": 1,
+      "5": 1
+    },
+    "false_alert_rate": 0.05555555555555555,
+    "n_alert_windows": 18,
+    "band_flip_rate": 0.09090909090909091,
+    "n_band_changes": 121,
+    "health_drop_before_event_mean": -9.766850000000002
+  }
+}

@@ -2,7 +2,7 @@
 PY ?= python
 export PYTHONIOENCODING=utf-8
 
-.PHONY: all ingest schema labels features train evaluate db sensitivity api frontend test lint smoke clean docker-up docker-down
+.PHONY: all ingest schema split labels features train evaluate db test-companies sensitivity api frontend test lint smoke clean docker-up docker-down
 
 all:           ## pipeline offline completo desde los CSV (≈ 10 min). Sin make: python -m src.pipeline all
 	$(PY) -m src.pipeline all
@@ -11,7 +11,9 @@ ingest:        ## Capa 1: CSV → Parquet + informe de calidad
 	$(PY) -m src.ingest
 schema:        ## Capa 2: tablas empresa × mes
 	$(PY) -m src.schema
-labels:        ## Capa 3: target de deterioro
+split:         ## reserva ~80 empresas (grupos enteros) como test simulado → data/test_companies/
+	$(PY) -m src.split_test
+labels:        ## Capa 3: target de deterioro (ajustado solo con las empresas de entrenamiento)
 	$(PY) -m src.labels
 features:      ## Capa 4: panel de features
 	$(PY) -m src.features
@@ -21,6 +23,8 @@ evaluate:      ## Capa 6: SHAP, figuras, análisis de errores
 	$(PY) -m src.evaluate
 db:            ## Capa 8: base de datos servida (SQLite o DATABASE_URL)
 	$(PY) -m src.serve_db
+test-companies: ## puntúa las empresas reservadas con predict.py y las compara con lo que les pasó
+	$(PY) -m src.evaluate_test
 sensitivity:   ## §16: 3 vs 6 meses, p85 vs p90
 	$(PY) -m src.sensitivity
 

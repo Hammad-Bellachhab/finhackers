@@ -32,6 +32,19 @@ REPORTS_DIR = Path(os.environ.get("REPORTS_DIR", ROOT / "reports"))
 SERVE_DB_PATH = DATA_DIR / "serve.db"
 DATABASE_URL = os.environ.get("DATABASE_URL", f"sqlite:///{SERVE_DB_PATH.as_posix()}")
 
+# Test simulado: empresas reservadas (grupos enteros) que NO entran en etiquetas, entrenamiento ni calibración.
+TEST_COMPANIES_DIR = DATA_DIR / "test_companies"
+TEST_IDS_FILE = TEST_COMPANIES_DIR / "company_ids.txt"
+N_TEST_COMPANIES = int(os.environ.get("N_TEST_COMPANIES", 80))
+
+
+def test_company_ids() -> set[str]:
+    """IDs de las empresas reservadas para el test simulado (vacío si aún no se ha hecho el split)."""
+    if TEST_IDS_FILE.exists():
+        return {line.strip() for line in TEST_IDS_FILE.read_text().splitlines() if line.strip()}
+    return set()
+
+
 RAW_FILES = [
     "groups", "companies", "banking_products", "debt_products",
     "debt_schedule_config", "balances", "invoices", "transactions",

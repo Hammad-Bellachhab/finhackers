@@ -1,6 +1,6 @@
 """Orquestador del flujo offline (equivalente multiplataforma de `make all`).
 
-    python -m src.pipeline all                 # ingest → schema → labels → features → train → evaluate → db
+    python -m src.pipeline all                 # ingest → schema → split → labels → features → train → evaluate → db → test
     python -m src.pipeline labels features     # solo algunos pasos, en orden
 """
 from __future__ import annotations
@@ -8,7 +8,7 @@ from __future__ import annotations
 import sys
 import time
 
-STEPS = ["ingest", "schema", "labels", "features", "train", "evaluate", "db", "sensitivity"]
+STEPS = ["ingest", "schema", "split", "labels", "features", "train", "evaluate", "db", "test", "sensitivity"]
 ALL = STEPS[:-1]   # sensitivity es opcional (≈ 9 min más)
 
 
@@ -17,6 +17,8 @@ def run(step: str) -> None:
         from src.ingest import run as f
     elif step == "schema":
         from src.schema import build_company_month as f
+    elif step == "split":
+        from src.split_test import run as f
     elif step == "labels":
         from src.labels import build_labels as f
     elif step == "features":
@@ -27,6 +29,8 @@ def run(step: str) -> None:
         from src.evaluate import run as f
     elif step == "db":
         from src.serve_db import run as f
+    elif step == "test":
+        from src.evaluate_test import run as f
     elif step == "sensitivity":
         from src.sensitivity import main as f
     else:

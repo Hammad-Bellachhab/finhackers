@@ -29,3 +29,6 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .venv/
+# test simulado: los CSV se regeneran con `python -m src.split_test` (solo se versiona la lista de empresas)
+pipeline/data/test_companies/*.csv
+pipeline/reports/test_companies/work/

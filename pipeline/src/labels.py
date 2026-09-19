@@ -105,16 +105,23 @@ def build_labels(outcome_months: int = C.OUTCOME_MONTHS, gap_months: int = C.GAP
     lab = pd.concat(rows, ignore_index=True)
     lab = lab[lab["eligible"]].drop(columns="eligible").reset_index(drop=True)
 
-    # --- cohortes de tamaño (cuartiles de salida operativa) ------------------------------
-    lab["size_cohort"] = pd.qcut(lab["size_outflow_6m"].rank(method="first"), 4, labels=["q1", "q2", "q3", "q4"]).astype(str)
+    # --- empresas reservadas para el test simulado: la definición se AJUSTA sin ellas y se les APLICA -----
+    test_ids = C.test_company_ids()
+    lab["is_test_company"] = lab["company_id"].isin(test_ids)
+    fit = ~lab["is_test_company"]
 
-    # --- z-scores por cohorte, winsorizados ----------------------------------------------
+    # --- cohortes de tamaño (cuartiles de salida operativa, cortes fijados en entrenamiento) ----------------
+    edges = np.quantile(lab.loc[fit, "size_outflow_6m"], [0.25, 0.5, 0.75])
+    lab["size_cohort"] = pd.cut(lab["size_outflow_6m"], [-np.inf, *edges, np.inf], labels=["q1", "q2", "q3", "q4"]).astype(str)
+
+    # --- z-scores por cohorte, winsorizados (límites, medias y desviaciones de entrenamiento) ----------------
     comps = list(C.LABEL_WEIGHTS)
     for c in comps:
-        lo, hi = lab[c].quantile([0.01, 0.99])
+        lo, hi = lab.loc[fit, c].quantile([0.01, 0.99])
         v = lab[c].clip(lo, hi)
-        g = v.groupby(lab["size_cohort"])
-        lab[f"z_{c}"] = (v - g.transform("mean")) / g.transform("std").replace(0, np.nan)
+        stats = v[fit].groupby(lab.loc[fit, "size_cohort"]).agg(["mean", "std"])
+        mu = lab["size_cohort"].map(stats["mean"]); sd = lab["size_cohort"].map(stats["std"]).replace(0, np.nan)
+        lab[f"z_{c}"] = (v - mu) / sd
     Z = lab[[f"z_{c}" for c in comps]].to_numpy()
     W = np.array([C.LABEL_WEIGHTS[c] for c in comps])
     avail = ~np.isnan(Z)
@@ -123,7 +130,7 @@ def build_labels(outcome_months: int = C.OUTCOME_MONTHS, gap_months: int = C.GAP
     lab["n_components"] = avail.sum(axis=1)
     lab["D"] = D
     lab = lab[lab["n_components"] >= 2].reset_index(drop=True)   # al menos dos señales disponibles
-    thr = float(np.nanquantile(lab["D"], percentile))
+    thr = float(np.nanquantile(lab.loc[~lab["is_test_company"], "D"], percentile))   # umbral solo con entrenamiento
     lab["y"] = (lab["D"] > thr).astype(int)
     lab["threshold"] = thr
 
@@ -131,6 +138,8 @@ def build_labels(outcome_months: int = C.OUTCOME_MONTHS, gap_months: int = C.GAP
         "outcome_months": outcome_months, "gap_months": gap_months, "percentile": percentile,
         "threshold_D": thr, "n_rows": int(len(lab)), "positive_rate": float(lab["y"].mean()),
         "n_companies": int(lab["company_id"].nunique()),
+        "n_test_companies": int(lab.loc[lab["is_test_company"], "company_id"].nunique()),
+        "positive_rate_test_companies": float(lab.loc[lab["is_test_company"], "y"].mean()) if lab["is_test_company"].any() else None,
         "labeled_months": [months[0], months[last_label_idx]],
         "weights": C.LABEL_WEIGHTS,
         "positive_rate_by_month": lab.groupby("T")["y"].mean().round(3).to_dict(),

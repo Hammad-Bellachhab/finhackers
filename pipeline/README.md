@@ -31,11 +31,12 @@ El lift es robusto al diseño del *target* (§ Sensibilidad): positivo en las cu
 
 | Requisito del reto | Dónde | Resultado |
 |---|---|---|
-| **Predicción sobre el test oculto** (60–80 empresas nuevas) | `python -m src.predict --raw <csv del test> --out <salida>` → `predictions_latest.csv` (una fila por empresa: salud, banda, trayectoria, señal, razones) + `predictions.csv` (todos los meses) + `changes.csv` | 70 empresas en 24 s; mismo código de features que en entrenamiento, sin reentrenar |
-| **Generaliza a empresas no vistas** | `src/train.py` aparta el 25 % de los grupos empresariales (grupo entero) y evalúa en holdout | Modelo B en empresas nuevas: AUC‑ROC **0,765** / AUC‑PR 0,315 (vistas: 0,838 / 0,498). El Modelo A se hunde a 0,605: **memoriza empresas; el comportamiento generaliza**. Lift B−A en no vistas +0,10 [+0,04; +0,16] |
+| **Test (no hay test oficial → test simulado)** | `split_test.py` reserva **82 empresas de 23 grupos enteros** (`data/test_companies/`, mismo formato CSV) que **no entran en la etiqueta, el entrenamiento ni la calibración**; `evaluate_test.py` las puntúa con `predict.py` como si fueran el test oculto y compara con lo que les pasó | Modelo B: **AUC‑ROC 0,809 / AUC‑PR 0,451** (base 11 %) vs. Modelo A 0,784 / 0,287 → lift **+0,16 [+0,07; +0,25]**. Se deteriora el 63 % de las "riesgo", 24 % de "vigilar", 7 % de "sana", 4 % de "sólida"; 39 % de las "deteriorándose" vs. 9 % de las "estable" (`reports/test_companies_eval.json`) |
+| **Predicción sobre empresas nuevas** | `python -m src.predict --raw <csv> --out <salida>` → `predictions_latest.csv` (una fila por empresa: salud, banda, trayectoria, señal, razones) + `predictions.csv` (todos los meses) + `changes.csv` | 82 empresas en ~25 s; mismo código de features que en entrenamiento, sin reentrenar |
+| **Generaliza a empresas no vistas** (segunda comprobación, dentro del entrenamiento) | `src/train.py` aparta además el 25 % de los grupos restantes y evalúa en los meses de holdout | Modelo B: AUC‑ROC **0,832** / AUC‑PR 0,509 en empresas apartadas; el Modelo A cae a 0,598: **el balance memoriza empresas; el comportamiento generaliza** |
 | **Señalización bidireccional**: sólidas / mejorando / deteriorándose | `src/health.py`: salud = 100·(1−p), suavizada (EMA); trayectoria por Δ 3 m con consistencia; bandas sólida ≥ 90 · sana ≥ 75 · vigilar ≥ 50 · riesgo | Último mes: 483 excepcionalmente sólidas, 83 en mejora progresiva, 87 deterioros incipientes, 36 caídas estructurales, 25 caídas bruscas |
 | **Bache puntual vs. caída estructural** | `is_blip` (caída de un mes recuperada al siguiente) vs. `is_structural` (deteriorándose 3 meses seguidos); el suavizado evita que un mes malo cambie la lectura | 17 % de los cambios de banda se revierten al mes siguiente (estabilidad, fuera de muestra) |
-| **Cuántos meses antes anticipa** | `evaluate.anticipation_analysis`: eventos reales de deterioro (caja < 0, ≥ 50 % de facturas a pagar con > 30 d, o cese de actividad, ≥ 2 meses seguidos tras ≥ 3 buenos) vs. primera alerta de un modelo congelado en 2025‑05 (scores fuera de muestra) | **238 eventos, 71 % anticipados, adelanto mediano 3 meses**, 26 % de falsas alertas (`reports/anticipation.json`) |
+| **Cuántos meses antes anticipa** | `evaluate.anticipation_analysis`: eventos reales de deterioro (caja < 0, ≥ 50 % de facturas a pagar con > 30 d, o cese de actividad, ≥ 2 meses seguidos tras ≥ 3 buenos) vs. primera alerta de un modelo congelado en 2025‑05 (scores fuera de muestra) | **238 eventos, 81 % anticipados, adelanto mediano 4 meses**, 27 % de falsas alertas (`reports/anticipation.json`). En las 82 empresas de test: 21 eventos, 57 % anticipados, 6 % de falsas alertas |
 | **Explicar qué señales causaron el cambio** | `score_change_explanation` (Δ SHAP entre T−1 y T, señales propias de la empresa) → `GET /companies/{id}/changes` y "Qué ha cambiado este mes" en la ficha | "Meses en descubierto (3 m): 3 meses (antes: 0)" |
 | **Explicación por empresa** | TreeSHAP top‑8 en lenguaje natural, precalculado → `GET /companies/{id}/score` | — |
 | **Trayectoria documentada** | serie mensual de salud (cruda y suavizada) por empresa en la ficha y en `risk_score` | — |
@@ -47,10 +48,11 @@ El lift es robusto al diseño del *target* (§ Sensibilidad): positivo en las cu
 ```bash
 cd pipeline
 pip install -r requirements.txt
-python -m src.pipeline all        # ≈ 7 min en portátil: CSV → Parquet → panel → etiqueta → features → modelos → SHAP → BD
+python -m src.pipeline all        # ≈ 8 min: CSV → Parquet → panel → split test → etiqueta → features → modelos → SHAP → BD → test
 python -m uvicorn src.api.main:app --port 8000            # API (capas 9-10)      → http://localhost:8000/docs
 python -m streamlit run src/frontend/app.py               # dashboard (capa 11)   → http://localhost:8501
-python -m src.predict --raw ../test_oculto --out reports/test_oculto   # test oculto: CSVs de empresas nuevas → predicciones
+python -m src.evaluate_test                                # test simulado: puntúa las 82 empresas reservadas y las evalúa
+python -m src.predict --raw <carpeta_csv> --out <salida>   # cualquier conjunto de empresas nuevas → predicciones
 ```
 
 Con `make` (`make all`, `make api`, `make frontend`, `make test`, `make sensitivity`) o con Docker
@@ -77,7 +79,9 @@ src/train.py          Capa 5  — validación temporal expansiva con embargo, A 
                       Capa 7  — registro: models/registry/<versión>/{pipeline.joblib, lgbm_B.txt, metadata.json}
 src/evaluate.py       Capa 6  — TreeSHAP global/local, explicación de cambios, anticipación, figuras, errores → reports/
 src/health.py         salud bidireccional (0–100), suavizado, trayectoria, bache vs. estructural, sólidas, alertas
-src/predict.py        test oculto: CSVs de empresas nuevas → predicciones + explicaciones, sin reentrenar
+src/split_test.py     reserva ~80 empresas (grupos enteros) como test simulado → data/test_companies/
+src/predict.py        empresas nuevas: CSVs → predicciones + explicaciones, sin reentrenar
+src/evaluate_test.py  puntúa las empresas reservadas con predict.py y las compara con lo que les pasó
 src/sensitivity.py    § 16   — 3 vs 6 meses × p85 vs p90
 src/serve_db.py       Capa 8  — BD servida (SQLite / PostgreSQL): company, company_month_kpi, risk_score (+ salud/trayectoria),
                                 score_explanation, score_change_explanation, alerts, benchmark, model_info
@@ -129,7 +133,8 @@ $$D_i = \sum_k w_k\, z_{ik}, \qquad y_i = \mathbb{1}[\,D_i > Q_{0.85}(D)\,]$$
 | Cese de actividad `inactivity` | 0,15 | % meses de la ventana sin ninguna transacción |
 
 Cada componente se *winsoriza* (1–99 %) y se estandariza (z‑score) **dentro de su cohorte de tamaño** (cuartil de pagos
-operativos) para que el tamaño no domine. Los pesos se renormalizan sobre los componentes disponibles (una empresa sin ERP no
+operativos) para que el tamaño no domine. Cortes de cohorte, medias, desviaciones y umbral se **ajustan solo con las
+empresas de entrenamiento** y se aplican a las 82 reservadas para test. Los pesos se renormalizan sobre los componentes disponibles (una empresa sin ERP no
 tiene `late_pay_rate`); se exige ≥ 2 componentes. Filas elegibles: empresa activa en los 3 meses hasta T.
 Resultado: **13 143 filas empresa‑mes, 1 197 empresas, 15 % positivos**, tasa estable por mes (12–18 %), y los cinco componentes
 correlacionan con D (0,25–0,71), es decir, ninguno lo monopoliza.

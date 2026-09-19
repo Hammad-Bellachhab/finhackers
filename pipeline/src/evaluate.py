@@ -378,7 +378,8 @@ def change_explanations(art: dict, X: pd.DataFrame, S: pd.DataFrame, top_n: int 
     return pd.DataFrame(rows)
 
 
-def anticipation_analysis(X: pd.DataFrame, art_holdout: dict, months: list[str]) -> tuple[dict, pd.DataFrame]:
+def anticipation_analysis(X: pd.DataFrame, art_holdout: dict | None, months: list[str],
+                          scores: pd.DataFrame | None = None, t_min: int | None = None) -> tuple[dict, pd.DataFrame]:
     """¿Cuántos meses antes de un evento real de deterioro la salud cayó bajo el umbral de alerta?
 
     Evento (independiente del modelo, medido en los datos): primer mes con >= 2 meses seguidos "malos"
@@ -402,13 +403,17 @@ def anticipation_analysis(X: pd.DataFrame, art_holdout: dict, months: list[str])
     first_active = np.argmax(ntx.values > 0, axis=1)
     inactive = (ntx == 0) & (np.arange(len(months))[None, :] > first_active[:, None])
     bad = (neg | late | inactive).to_numpy()
-    # scores fuera de muestra con el modelo congelado
-    sc = X[["company_id", "T", "t_idx"]].copy()
-    sc["p"] = score_main(art_holdout, X, calibrated=True)
-    sc = add_health(sc, "p")
+    # scores fuera de muestra: con el modelo congelado, o los que se pasen (p. ej. predict.py sobre empresas de test)
+    if scores is None:
+        sc = X[["company_id", "T", "t_idx"]].copy()
+        sc["p"] = score_main(art_holdout, X, calibrated=True)
+        sc = add_health(sc, "p")
+        t_min = int(art_holdout.get("train_max_t_idx", 0)) + 1      # primer mes fuera de muestra
+    else:
+        sc = scores
+        t_min = 0 if t_min is None else t_min
     hs = sc.pivot(index="company_id", columns="T", values="health_smooth").reindex(index=companies, columns=months)
     traj = sc.pivot(index="company_id", columns="T", values="trajectory").reindex(index=companies, columns=months)
-    t_min = int(art_holdout.get("train_max_t_idx", 0)) + 1          # primer mes fuera de muestra
     events, false_alerts, n_alert_windows = [], 0, 0
     for i, cid in enumerate(companies):
         b = bad[i]

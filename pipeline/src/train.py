@@ -98,6 +98,10 @@ def load_dataset(labels: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.D
     X, meta = load_features()
     lab = (pd.read_parquet(LABELS_PATH) if labels is None else labels)[["company_id", "T", "y", "D"] + list(C.LABEL_WEIGHTS)]
     df = X.merge(lab, on=["company_id", "T"], how="inner").reset_index(drop=True)
+    # las empresas reservadas para el test simulado no entran en ningún entrenamiento ni calibración
+    test_ids = C.test_company_ids()
+    if test_ids:
+        df = df[~df["company_id"].isin(test_ids)].reset_index(drop=True)
     return df, X, meta
 
 
@@ -315,6 +319,7 @@ def register(df: pd.DataFrame, X_all: pd.DataFrame, sets: dict, results: dict, c
         "hyperparameters": {k: v for k, v in pipe_B.named_steps["clf"].get_params().items() if not callable(v)},
         "input_schema": {"features_B": feats_B, "features_A": feats_A, "categorical": [c for c in feats_B if c in CATEGORICAL]},
         "n_train_rows": int(len(df)), "train_months": [str(df["T"].min()), str(df["T"].max())],
+        "n_test_companies_excluded": len(C.test_company_ids()),
         "metrics": {"cv": results["cv"], "holdout": results["holdout"], "lift": results["lift"],
                     "ablation": results["ablation"], "calibration": results["calibration"], "ensemble": results["ensemble"],
                     "holdout_unseen_companies": results.get("holdout_unseen_companies", {})},
