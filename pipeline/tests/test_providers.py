@@ -9,13 +9,14 @@ import pandas as pd
 import pytest
 
 from src import providers as P
+from src.providers import provider_kind
 
 BANKING = pd.DataFrame([
     # product_id, company_id, bank_name, service, type
     ("P1", "COMP_1", "Santander", "santander_emp", "checking"),
     ("P2", "COMP_1", "Santander", "santander_emp", "card"),
     ("P3", "COMP_2", "Santander", "santander_emp_mx", "checking"),
-    ("P4", "COMP_3", "Paypal", "paypal", "wallet"),
+    ("P4", "COMP_3", "Paypal", "paypal", "checking"),
     ("P5", "COMP_9", "Santander", "santander_emp", "checking"),   # empresa sin salud: se descarta
 ], columns=["product_id", "company_id", "bank_name", "service", "type"])
 
@@ -80,6 +81,25 @@ def test_empresas_ordenadas_de_menos_a_mas_salud(out):
     peor = s["rows"][0]
     assert peor["products"] == 2 and peor["outstanding"] == 20000
     assert peor["types"] == [{"type": "checking", "n": 1}, {"type": "lineofcredit", "n": 1}]
+
+
+def test_clasifica_lo_que_no_es_un_banco():
+    # Por conector: el dataset modela PayPal o Payhawk como cuenta corriente.
+    assert provider_kind(["paypal"], ["checking"]) == "pagos"
+    assert provider_kind(["_payhawk", "payhawk"], ["checking"]) == "gastos"
+    assert provider_kind(["revolut_eu"], ["checking", "investment"]) == "fintech"
+    assert provider_kind(["inhousebanking"], ["checking"]) == "interno"
+    # Por producto, cuando el conector no dice nada.
+    assert provider_kind(["redsys_x"], ["tpv", "card"]) == "pagos"
+    assert provider_kind(["ins_9"], ["card"]) == "tarjetas"
+    assert provider_kind(["ins_9"], ["investment"]) == "inversión"
+    # Un banco que además vende monedero sigue siendo un banco.
+    assert provider_kind(["caixa_emp"], ["checking", "wallet", "loan"]) == "banco"
+
+
+def test_el_tipo_viaja_con_el_proveedor(out):
+    assert by_name(out, "Santander")["kind"] == "banco"
+    assert by_name(out, "Paypal")["kind"] == "pagos"
 
 
 def test_totales(out):

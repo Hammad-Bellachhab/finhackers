@@ -166,6 +166,13 @@
 .tellme-error span { color: var(--color-text-muted); }
 @media (max-width: 640px) { .tellme { padding: var(--space-4); } }
 
+/* Velocímetro de salud (shared/Gauge.tsx). El color lo pone el componente con tokens. */
+.gauge { display: block; overflow: visible; }
+.gauge-sm { width: 56px; }
+.gauge-md { width: 92px; }
+.gauge-value { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+.gauge-sm .gauge-value { font-size: 22px; }
+
 /* El análisis de TellMe se despliega solo si el usuario quiere. */
 .tellme-more > summary {
   display: inline-flex; align-items: center; gap: var(--space-1); cursor: pointer; list-style: none;

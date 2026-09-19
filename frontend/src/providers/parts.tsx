@@ -1,4 +1,4 @@
-import type { HealthBand, ProductCount, ProviderCompany } from '../api/types'
+import type { HealthBand, ProductCount, ProviderCompany, ProviderKind } from '../api/types'
 import { HEALTH_BAND_COLOR } from '../shared/charts'
 import { Delta } from '../shared/Delta'
 import { formatMoney } from '../shared/format'
@@ -15,6 +15,18 @@ const TIPO: Record<string, string> = {
 }
 
 export const BANDAS: HealthBand[] = ['riesgo', 'vigilar', 'sana', 'sólida']
+
+/** Cómo se llama en pantalla cada tipo de proveedor. */
+export const KIND_LABEL: Record<ProviderKind, string> = {
+  banco: 'banco', fintech: 'fintech', pagos: 'pasarela de pago', gastos: 'plataforma de gastos',
+  tarjetas: 'tarjetas', 'inversión': 'inversión', interno: 'tesorería interna',
+}
+
+/** Etiqueta del tipo de proveedor. Los que no son bancos van resaltados: son los que
+ *  se pierden de vista cuando se mira la financiación solo por el banco de siempre. */
+export function KindBadge({ kind }: { kind: ProviderKind }) {
+  return <span className={kind === 'banco' ? 'kind' : 'kind kind-alt'}>{KIND_LABEL[kind]}</span>
+}
 
 export function tipos(items: ProductCount[], max = 3): string {
   const shown = items.slice(0, max).map((t) => `${t.n} ${TIPO[t.type] ?? t.type}`)
