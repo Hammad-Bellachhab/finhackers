@@ -151,7 +151,9 @@ def run() -> dict:
     C.ensure_dirs()
     print(f"[ingest] RAW_DIR={C.RAW_DIR}")
     con = duckdb.connect()
-    con.execute(f"SET threads TO 4; SET memory_limit='6GB'; SET temp_directory='{(C.DATA_DIR / 'tmp').as_posix()}'")
+    # Un solo hilo: con lectura paralela el orden de las filas en Parquet cambia entre ejecuciones y, aguas abajo,
+    # las sumas en coma flotante cambian de último bit (suficiente para mover etiquetas y árboles). Cuesta ~1 min más.
+    con.execute(f"SET threads TO 1; SET memory_limit='6GB'; SET temp_directory='{(C.DATA_DIR / 'tmp').as_posix()}'")
     log: dict = {}
     for name in C.RAW_FILES:
         ingest_table(con, name, log)

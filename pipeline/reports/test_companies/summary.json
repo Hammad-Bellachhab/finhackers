@@ -1,5 +1,5 @@
 {
-  "model_version": "v20260919_133906",
+  "model_version": "v20260919_151311",
   "n_companies": 82,
   "months": [
     "2024-09",
@@ -8,18 +8,18 @@
   "latest_month": "2026-08",
   "n_rows": 1290,
   "bands_latest": {
-    "sana": 37,
-    "sólida": 26,
-    "vigilar": 11,
-    "riesgo": 8
+    "sana": 41,
+    "sólida": 21,
+    "riesgo": 11,
+    "vigilar": 9
   },
   "trajectory_latest": {
     "estable": 63,
-    "deteriorándose": 15,
-    "mejorando": 4
+    "deteriorándose": 16,
+    "mejorando": 3
   },
-  "n_exceptional": 21,
-  "n_structural": 5,
-  "n_blip": 2,
-  "seconds": 26.7
+  "n_exceptional": 18,
+  "n_structural": 4,
+  "n_blip": 1,
+  "seconds": 24.6
 }

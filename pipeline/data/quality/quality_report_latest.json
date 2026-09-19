@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-09-19T01:28:14.595372+00:00",
+  "generated_at": "2026-09-19T13:08:56.194377+00:00",
   "dataset_hash": "b931407baf5dc716",
   "tables": {
     "groups": {
-      "source": "C:\\Users\\Usuario\\Downloads\\output\\groups.csv",
+      "source": "D:\\Cosas Diego\\Universidad\\Proyectos personales\\hackaton\\output\\groups.csv",
       "sha256": "fa18d3f42cd24d7640bff22d7a9504293574c2338ce85d425e3134f18f169a8c",
       "rows": 250,
       "columns": [
@@ -23,7 +23,7 @@
       "seconds": 0.1
     },
     "companies": {
-      "source": "C:\\Users\\Usuario\\Downloads\\output\\companies.csv",
+      "source": "D:\\Cosas Diego\\Universidad\\Proyectos personales\\hackaton\\output\\companies.csv",
       "sha256": "5496ad00a1e9228f7e756a55c71c512fd06a73ad45a09ce3f103a620a5ad72ae",
       "rows": 1286,
       "columns": [
@@ -55,7 +55,7 @@
       "seconds": 1.1
     },
     "banking_products": {
-      "source": "C:\\Users\\Usuario\\Downloads\\output\\banking_products.csv",
+      "source": "D:\\Cosas Diego\\Universidad\\Proyectos personales\\hackaton\\output\\banking_products.csv",
       "sha256": "0fc5aa20fea32981a962cc08251720ece3f2afad8495910111d2fd8b16514d3c",
       "rows": 5987,
       "columns": [
@@ -91,7 +91,7 @@
       "seconds": 0.4
     },
     "debt_products": {
-      "source": "C:\\Users\\Usuario\\Downloads\\output\\debt_products.csv",
+      "source": "D:\\Cosas Diego\\Universidad\\Proyectos personales\\hackaton\\output\\debt_products.csv",
       "sha256": "bf38430ccd15f6a9ca8769113c5f47d4aeee8fe55c425687731481cd002f05d8",
       "rows": 2239,
       "columns": [
@@ -136,7 +136,7 @@
       "seconds": 0.7
     },
     "debt_schedule_config": {
-      "source": "C:\\Users\\Usuario\\Downloads\\output\\debt_schedule_config.csv",
+      "source": "D:\\Cosas Diego\\Universidad\\Proyectos personales\\hackaton\\output\\debt_schedule_config.csv",
       "sha256": "b0d6cc3e6810e31d526eb7f4be3c2abe31496f74f5ddd58163876d60de168ea2",
       "rows": 87,
       "columns": [
@@ -194,7 +194,7 @@
       "seconds": 0.3
     },
     "balances": {
-      "source": "C:\\Users\\Usuario\\Downloads\\output\\balances.csv",
+      "source": "D:\\Cosas Diego\\Universidad\\Proyectos personales\\hackaton\\output\\balances.csv",
       "sha256": "86664c229cf52554d75d7efb864fc07a94a1bebcd61a3ac85abc344f3ba2a30c",
       "rows": 7996,
       "columns": [
@@ -235,7 +235,7 @@
       "seconds": 0.9
     },
     "invoices": {
-      "source": "C:\\Users\\Usuario\\Downloads\\output\\invoices.csv",
+      "source": "D:\\Cosas Diego\\Universidad\\Proyectos personales\\hackaton\\output\\invoices.csv",
       "sha256": "6686bd878244881bac78348a108852f3f30713ef244267f1fa3754b9be619c53",
       "rows": 897894,
       "columns": [
@@ -295,10 +295,10 @@
           "out_of_range_2023_2028": 472
         }
       },
-      "seconds": 9.9
+      "seconds": 15.3
     },
     "transactions": {
-      "source": "C:\\Users\\Usuario\\Downloads\\output\\transactions.csv",
+      "source": "D:\\Cosas Diego\\Universidad\\Proyectos personales\\hackaton\\output\\transactions.csv",
       "sha256": "000a6820a7500c66aa70a17b3e813d0c57a8270b3c58f6f2f006708a20228f2b",
       "rows": 2556437,
       "columns": [
@@ -347,7 +347,7 @@
           "out_of_range_2023_2028": 54
         }
       },
-      "seconds": 27.7
+      "seconds": 40.4
     }
   },
   "referential_integrity": {

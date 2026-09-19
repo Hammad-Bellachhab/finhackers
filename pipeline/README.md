@@ -14,16 +14,17 @@ sin LLMs ni RAG en el camino crítico de la predicción.
 
 | | AUC‑PR (holdout) | AUC‑ROC | precision@50 | Brier |
 |---|---|---|---|---|
-| Regresión logística — A | 0,357 | 0,725 | 0,50 | 0,261 |
-| Regresión logística — B | 0,420 | 0,773 | 0,60 | 0,228 |
-| LightGBM — **A** (proxy FICO, 30 variables) | 0,386 | 0,759 | 0,47 | 0,136 |
-| LightGBM — **B** (A + comportamiento, 154 variables) | **0,466** | **0,838** | **0,59** | 0,116 |
-| CatBoost — B | 0,490 | 0,848 | 0,63 | 0,116 |
-| **Principal servido**: ensemble LightGBM+CatBoost B, calibrado | 0,487 | 0,849 | 0,59 | **0,094** |
+| Regresión logística — A | 0,345 | 0,721 | 0,47 | 0,274 |
+| Regresión logística — B | 0,410 | 0,763 | 0,53 | 0,260 |
+| LightGBM — **A** (proxy FICO, 30 variables) | 0,386 | 0,760 | 0,53 | 0,137 |
+| LightGBM — **B** (A + comportamiento, 154 variables) | **0,445** | **0,824** | **0,56** | 0,123 |
+| CatBoost — B | 0,466 | 0,838 | 0,54 | 0,118 |
+| **Principal servido**: ensemble LightGBM+CatBoost B, calibrado | 0,464 | 0,837 | 0,59 | **0,099** |
 
-**Lift de B sobre A (LightGBM): +0,081 AUC‑PR, IC 95 % bootstrap [+0,049; +0,112], P(lift ≤ 0) < 0,1 %.**
-Base rate del holdout: 14,2 % (AUC‑PR de 0,47 ≈ 3,3× el azar). Frente al *baseline* LR‑A, el modelo principal gana +0,128 AUC‑PR [+0,08; +0,17].
-El 82 % de la importancia SHAP del modelo B proviene de los bloques de comportamiento (B–F).
+**Lift de B sobre A (LightGBM): +0,060 AUC‑PR, IC 95 % bootstrap [+0,030; +0,094], P(lift ≤ 0) < 0,1 %.**
+Base rate del holdout: 14,0 % (AUC‑PR de 0,46 ≈ 3,3× el azar). Frente al *baseline* LR‑A, el modelo principal gana +0,116 AUC‑PR [+0,07; +0,16].
+El 82 % de la importancia SHAP del modelo B proviene de los bloques de comportamiento (B–F). Las 82 empresas del test simulado
+quedan fuera de todo esto (ver tabla siguiente): en ellas el lift es +0,16.
 
 El lift es robusto al diseño del *target* (§ Sensibilidad): positivo en las cuatro combinaciones ventana × umbral.
 
@@ -31,12 +32,12 @@ El lift es robusto al diseño del *target* (§ Sensibilidad): positivo en las cu
 
 | Requisito del reto | Dónde | Resultado |
 |---|---|---|
-| **Test (no hay test oficial → test simulado)** | `split_test.py` reserva **82 empresas de 23 grupos enteros** (`data/test_companies/`, mismo formato CSV) que **no entran en la etiqueta, el entrenamiento ni la calibración**; `evaluate_test.py` las puntúa con `predict.py` como si fueran el test oculto y compara con lo que les pasó | Modelo B: **AUC‑ROC 0,809 / AUC‑PR 0,451** (base 11 %) vs. Modelo A 0,784 / 0,287 → lift **+0,16 [+0,07; +0,25]**. Se deteriora el 63 % de las "riesgo", 24 % de "vigilar", 7 % de "sana", 4 % de "sólida"; 39 % de las "deteriorándose" vs. 9 % de las "estable" (`reports/test_companies_eval.json`) |
+| **Test (no hay test oficial → test simulado)** | `split_test.py` reserva **82 empresas de 23 grupos enteros** (`data/test_companies/`, mismo formato CSV) que **no entran en la etiqueta, el entrenamiento ni la calibración**; `evaluate_test.py` las puntúa con `predict.py` como si fueran el test oculto y compara con lo que les pasó | Modelo B: **AUC‑ROC 0,820 / AUC‑PR 0,445** (base 11 %) vs. Modelo A 0,790 / 0,281 → lift **+0,16 [+0,07; +0,25]**. Se deteriora el 53 % de las "riesgo", 25 % de "vigilar", 5 % de "sana", 3 % de "sólida"; 28 % de las "deteriorándose" vs. 9 % de las "estable" (`reports/test_companies_eval.json`) |
 | **Predicción sobre empresas nuevas** | `python -m src.predict --raw <csv> --out <salida>` → `predictions_latest.csv` (una fila por empresa: salud, banda, trayectoria, señal, razones) + `predictions.csv` (todos los meses) + `changes.csv` | 82 empresas en ~25 s; mismo código de features que en entrenamiento, sin reentrenar |
-| **Generaliza a empresas no vistas** (segunda comprobación, dentro del entrenamiento) | `src/train.py` aparta además el 25 % de los grupos restantes y evalúa en los meses de holdout | Modelo B: AUC‑ROC **0,832** / AUC‑PR 0,509 en empresas apartadas; el Modelo A cae a 0,598: **el balance memoriza empresas; el comportamiento generaliza** |
-| **Señalización bidireccional**: sólidas / mejorando / deteriorándose | `src/health.py`: salud = 100·(1−p), suavizada (EMA); trayectoria por Δ 3 m con consistencia; bandas sólida ≥ 90 · sana ≥ 75 · vigilar ≥ 50 · riesgo | Último mes: 483 excepcionalmente sólidas, 83 en mejora progresiva, 87 deterioros incipientes, 36 caídas estructurales, 25 caídas bruscas |
-| **Bache puntual vs. caída estructural** | `is_blip` (caída de un mes recuperada al siguiente) vs. `is_structural` (deteriorándose 3 meses seguidos); el suavizado evita que un mes malo cambie la lectura | 17 % de los cambios de banda se revierten al mes siguiente (estabilidad, fuera de muestra) |
-| **Cuántos meses antes anticipa** | `evaluate.anticipation_analysis`: eventos reales de deterioro (caja < 0, ≥ 50 % de facturas a pagar con > 30 d, o cese de actividad, ≥ 2 meses seguidos tras ≥ 3 buenos) vs. primera alerta de un modelo congelado en 2025‑05 (scores fuera de muestra) | **238 eventos, 81 % anticipados, adelanto mediano 4 meses**, 27 % de falsas alertas (`reports/anticipation.json`). En las 82 empresas de test: 21 eventos, 57 % anticipados, 6 % de falsas alertas |
+| **Generaliza a empresas no vistas** (segunda comprobación, dentro del entrenamiento) | `src/train.py` aparta además el 25 % de los grupos restantes y evalúa en los meses de holdout | Modelo B: AUC‑ROC **0,813** / AUC‑PR 0,496 en empresas apartadas; el Modelo A cae a 0,612: **el balance memoriza empresas; el comportamiento generaliza** |
+| **Señalización bidireccional**: sólidas / mejorando / deteriorándose | `src/health.py`: salud = 100·(1−p), suavizada (EMA); trayectoria por Δ 3 m con consistencia; bandas sólida ≥ 90 · sana ≥ 75 · vigilar ≥ 50 · riesgo | Último mes: cientos de sólidas, decenas en mejora progresiva, deterioros incipientes y caídas estructurales (tabla `alerts`, vista Alertas) |
+| **Bache puntual vs. caída estructural** | `is_blip` (caída de un mes recuperada al siguiente) vs. `is_structural` (deteriorándose 3 meses seguidos); el suavizado evita que un mes malo cambie la lectura | 16 % de los cambios de banda se revierten al mes siguiente (estabilidad, fuera de muestra) |
+| **Cuántos meses antes anticipa** | `evaluate.anticipation_analysis`: eventos reales de deterioro (caja < 0, ≥ 50 % de facturas a pagar con > 30 d, o cese de actividad, ≥ 2 meses seguidos tras ≥ 3 buenos) vs. primera alerta de un modelo congelado en 2025‑05 (scores fuera de muestra) | **243 eventos, 80 % anticipados, adelanto mediano 4 meses**, 28 % de falsas alertas (`reports/anticipation.json`). En las 82 empresas de test: 21 eventos, 83 % anticipados, mediana 2,5 meses, 14 % de falsas alertas |
 | **Explicar qué señales causaron el cambio** | `score_change_explanation` (Δ SHAP entre T−1 y T, señales propias de la empresa) → `GET /companies/{id}/changes` y "Qué ha cambiado este mes" en la ficha | "Meses en descubierto (3 m): 3 meses (antes: 0)" |
 | **Explicación por empresa** | TreeSHAP top‑8 en lenguaje natural, precalculado → `GET /companies/{id}/score` | — |
 | **Trayectoria documentada** | serie mensual de salud (cruda y suavizada) por empresa en la ficha y en `risk_score` | — |
@@ -58,8 +59,9 @@ python -m src.predict --raw <carpeta_csv> --out <salida>   # cualquier conjunto 
 Con `make` (`make all`, `make api`, `make frontend`, `make test`, `make sensitivity`) o con Docker
 (`docker compose up --build` → postgres + api + frontend; el pipeline offline se ejecuta antes en el host o con
 `docker compose run --rm api python -m src.pipeline all`). Los CSV originales se leen de `../output/` (la carpeta de datos
-del repo; `invoices.csv` y `transactions.csv` se obtienen del zip del reto), o de `data/raw/`, o de donde apunte `RAW_DIR`. Semilla fija (`SEED=42`) en todas partes, DuckDB en un hilo y LightGBM `deterministic`: dos
-ejecuciones completas producen **exactamente** las mismas etiquetas, features y métricas (verificado por hash). Variables de
+del repo; `invoices.csv` y `transactions.csv` se obtienen del zip del reto), o de `data/raw/`, o de donde apunte `RAW_DIR`. Semilla fija (`SEED=42`) en todas partes, DuckDB en un hilo (también en la ingestión: la lectura
+paralela cambia el orden de las filas y con él el último bit de las sumas) y LightGBM `deterministic`: dos ejecuciones completas
+desde los CSV producen **exactamente** las mismas etiquetas, features y métricas (verificado por hash). Variables de
 entorno en `.env` (ver `.env.example`).
 
 Tests: `python -m pytest -q tests` — unitarios (ventanas, tendencias, embargo temporal, codificación, calibración) +
@@ -136,8 +138,8 @@ Cada componente se *winsoriza* (1–99 %) y se estandariza (z‑score) **dentro 
 operativos) para que el tamaño no domine. Cortes de cohorte, medias, desviaciones y umbral se **ajustan solo con las
 empresas de entrenamiento** y se aplican a las 82 reservadas para test. Los pesos se renormalizan sobre los componentes disponibles (una empresa sin ERP no
 tiene `late_pay_rate`); se exige ≥ 2 componentes. Filas elegibles: empresa activa en los 3 meses hasta T.
-Resultado: **13 143 filas empresa‑mes, 1 197 empresas, 15 % positivos**, tasa estable por mes (12–18 %), y los cinco componentes
-correlacionan con D (0,25–0,71), es decir, ninguno lo monopoliza.
+Resultado: **13 143 filas empresa‑mes, 1 197 empresas (72 de ellas de test), 15 % positivos**, tasa estable por mes (12–18 %), y los cinco
+componentes correlacionan con D (0,25–0,70), es decir, ninguno lo monopoliza.
 
 **Disciplina anti‑fuga (regla dura)**: todo lo usado en D está prohibido como feature *en la ventana de resultado*; las mismas
 magnitudes medidas *hasta T* sí son features (el DPD de hoy predice el impago de dentro de seis meses; el DPD de dentro de seis
@@ -165,13 +167,12 @@ split sea "temporal". Por eso el diseño es *rolling origin* con **embargo = gap
 solo se entrena con filas cuyo T ≤ T − 7, exactamente las etiquetas que ya se conocerían en T en producción.
 
 * CV expansiva: fold1 evalúa 2025‑08/09 (train ≤ 2025‑01), fold2 evalúa 2025‑10/11 (train ≤ 2025‑03).
-* **Holdout**: 2025‑12 y 2026‑01 (2 224 filas, 316 positivos), train ≤ 2025‑05 (5 557 filas). Se toca una vez, al final.
+* **Holdout**: 2025‑12 y 2026‑01 (2 093 filas, 293 positivos, sin las empresas de test), train ≤ 2025‑05 (5 282 filas). Se toca una vez, al final.
 * Modelos: regresión logística (baseline obligatorio), LightGBM (principal), CatBoost (contraste). Desbalanceo con
-  `class_weight`/`auto_class_weights` (sin SMOTE). Ensemble por promedio **solo si mejora en CV** (lo hizo: 0,535 vs 0,524).
+  `class_weight`/`auto_class_weights` (sin SMOTE). Ensemble por promedio **solo si mejora en CV** (lo hizo: 0,524 vs 0,515).
 * Métricas: AUC‑PR principal, AUC‑ROC, precision@50 y recall@top‑10 % por mes, Brier + curva de calibración, métrica por fold.
-* Calibración Platt ajustada sobre predicciones *out‑of‑fold*; Brier en holdout 0,114 → 0,094.
-* Estabilidad por fold (AUC‑PR): LightGBM‑B 0,521 / 0,527 (σ 0,003) frente a LightGBM‑A 0,439 / 0,511 (σ 0,036): el modelo
-  comportamental no solo es mejor, es más estable en el tiempo.
+* Calibración Platt ajustada sobre predicciones *out‑of‑fold*; Brier en holdout 0,118 → 0,099.
+* Estabilidad por fold (AUC‑PR): LightGBM‑B 0,501 / 0,529 (σ 0,014) frente a LightGBM‑A 0,473 / 0,517 (σ 0,022).
 
 ## Capa 6 — de dónde viene el lift (ablación y SHAP)
 
@@ -179,25 +180,23 @@ Ablación con LightGBM en holdout (Δ AUC‑PR):
 
 | añadir un bloque al baseline A | Δ vs A | | quitar un bloque al modelo B | Δ vs B |
 |---|---|---|---|---|
-| A + **C** liquidez | **+0,087** | | B − C | **−0,038** |
-| A + F texto/calidad | +0,031 | | B − F | 0,000 |
-| A + B pago de facturas | +0,029 | | B − B | +0,008 |
-| A + D concentración | +0,021 | | B − D | −0,005 |
-| A + E grupo/banco | +0,010 | | B − E | +0,015 |
+| A + **C** liquidez | **+0,056** | | B − C | **−0,038** |
+| A + F texto/calidad | +0,044 | | B − F | −0,015 |
+| A + D concentración | +0,028 | | B − D | −0,004 |
+| A + B pago de facturas | +0,014 | | B − B | +0,011 |
+| A + E grupo/banco | −0,012 | | B − E | +0,026 |
 
 Lectura honesta:
 
 * **La dinámica de liquidez (C) —tendencia y volatilidad de la caja, meses en descubierto, liquidaciones de intereses, caída de
   la ratio cobros/pagos— es la que aporta el lift**, y está disponible para el 99 % de las empresas.
-* El bloque B (timing de pago de facturas) **aporta donde existe**: en las empresas con ERP conectado (61 % del holdout)
-  A+B sube de 0,374 a 0,438 AUC‑PR y de 0,765 a 0,823 AUC‑ROC; en las que no tienen facturas es ruido (0,420 → 0,396).
-  El modelo completo llega a 0,494 AUC‑PR / 0,861 AUC‑ROC en el segmento con ERP.
-  Los bloques son parcialmente redundantes entre sí (una empresa que deja de pagar facturas suele tener la caja en negativo), por
-  eso quitar uno solo penaliza poco y quitarlos todos (= Modelo A) penaliza −0,081.
-* SHAP global (TreeSHAP exacto): cuota de |SHAP| por bloque A 18 % · B 20 % · **C 31 %** · D 4 % · E 15 % · F 12 % → **82 % del
-  score viene de comportamiento**. Variables top: banco principal, saldo mínimo de caja sobre gasto (6 m), ERP, contrapartidas
+* El bloque B (timing de pago de facturas) **aporta donde existe** (empresas con ERP conectado, ~60 % del holdout) y es ruido en
+  las demás. Los bloques son parcialmente redundantes entre sí (una empresa que deja de pagar facturas suele tener la caja en
+  negativo), por eso quitar uno solo penaliza poco y quitarlos todos (= Modelo A) penaliza −0,060.
+* SHAP global (TreeSHAP exacto): cuota de |SHAP| por bloque A 18 % · B 21 % · **C 30 %** · D 4 % · E 15 % · F 12 % → **82 % del
+  score viene de comportamiento**. Variables top: saldo mínimo de caja sobre gasto (6 m), banco principal, ERP, contrapartidas
   distintas en facturas (3 m), antigüedad, % facturas a pagar con >30 días (12 m), transacciones del último mes, días de caja…
-* **Análisis de errores** (holdout, top‑15 % marcado): 168 TP / 148 FN / 165 FP. El 46 % de los falsos negativos son deterioros
+* **Análisis de errores** (holdout, top‑15 % marcado): 152 TP / 141 FN / 161 FP. El 46 % de los falsos negativos son deterioros
   cuyo componente dominante es el **cese súbito de actividad** y el 14 % el colapso de cobros — los menos anticipables desde
   la ventana de observación; los que vienen de morosidad e iliquidez se capturan mejor. Es el argumento para el simulador y para
   revisar la ponderación de `inactivity` en una v2.
@@ -207,7 +206,8 @@ Figuras en `reports/figures/`: `pr_curves_holdout.png`, `calibration_holdout.png
 
 ## Sensibilidad del target (decisiones abiertas del § 16)
 
-`python -m src.sensitivity` reentrena A vs B para cada variante (mismo diseño temporal, embargo = gap + ventana):
+`python -m src.sensitivity` reentrena A vs B para cada variante (mismo diseño temporal, embargo = gap + ventana; cifras de la
+versión anterior al split de test, con todas las empresas):
 
 | variante | filas | AUC‑PR A (LGBM) | AUC‑PR B (LGBM) | B (CatBoost) | lift LGBM [IC 95 %] |
 |---|---|---|---|---|---|
@@ -263,8 +263,8 @@ código (`src/health.py`) en el dashboard y en el test oculto.
 
 **Anticipación** (`reports/anticipation.json`): se definen eventos reales de deterioro en los datos —independientes del
 modelo— y se mide cuántos meses antes la salud (de un modelo congelado en 2025‑05, es decir, fuera de muestra) cayó por
-debajo de 75 o la trayectoria pasó a "deteriorándose": 238 eventos, 71 % anticipados con adelanto mediano de 3 meses;
-26 % de las alertas no van seguidas de evento en 9 meses; 17 % de los cambios de banda se revierten al mes siguiente.
+debajo de 75 o la trayectoria pasó a "deteriorándose": 243 eventos, 80 % anticipados con adelanto mediano de 4 meses;
+28 % de las alertas no van seguidas de evento en 9 meses; 16 % de los cambios de banda se revierten al mes siguiente.
 
 ## Capa 7 — registro de modelos
 
