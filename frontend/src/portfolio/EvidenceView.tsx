@@ -54,7 +54,7 @@ export function EvidenceView() {
 
       <Panel
         title="Acierta"
-        note="Generaliza a empresas no vistas, sigue la trayectoria (no solo el nivel) y detecta la mejora igual que el deterioro."
+        note="Generaliza fuera del entrenamiento, sigue la trayectoria (no solo el nivel) y ve tanto la mejora como el deterioro."
       >
         <div className="counts">
           <Stat value={String(data.holdout.companies)} label="Empresas no vistas nunca" />
