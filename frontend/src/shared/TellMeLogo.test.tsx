@@ -3,25 +3,20 @@ import { describe, expect, it } from 'vitest'
 import { TellMeLogo } from './TellMeLogo'
 
 describe('TellMeLogo', () => {
-  it('renders without crashing and is aria-hidden', () => {
-    const { container } = render(<TellMeLogo />)
-    const svg = container.querySelector('svg')
-    expect(svg).toBeInTheDocument()
+  it('pinta la estrella de un solo trazo y es decorativa', () => {
+    const { container } = render(<TellMeLogo size={42} strokeWidth={8} />)
+    const svg = container.querySelector('svg')!
     expect(svg).toHaveAttribute('aria-hidden', 'true')
-    // Debería tener los 5 rectángulos redondeados de la estrella oficial de TellMe
-    const rects = container.querySelectorAll('rect')
-    expect(rects).toHaveLength(5)
+    expect(svg).toHaveAttribute('width', '42')
+    const path = container.querySelectorAll('path')
+    expect(path).toHaveLength(1)
+    expect(path[0]).toHaveAttribute('stroke-width', '8')
+    expect(path[0]).toHaveAttribute('stroke-linejoin', 'round')
   })
 
-  it('respects custom size and strokeWidth props', () => {
-    const { container } = render(<TellMeLogo size={42} strokeWidth={8} />)
-    const svg = container.querySelector('svg')
-    expect(svg).toHaveAttribute('width', '42')
-    expect(svg).toHaveAttribute('height', '42')
-
-    const rects = container.querySelectorAll('rect')
-    rects.forEach((rect) => {
-      expect(rect).toHaveAttribute('stroke-width', '8')
-    })
+  it('cada logo usa su propio degradado (varios en la misma página)', () => {
+    const { container } = render(<><TellMeLogo /><TellMeLogo /></>)
+    const ids = [...container.querySelectorAll('linearGradient')].map((g) => g.id)
+    expect(new Set(ids).size).toBe(2)
   })
 })

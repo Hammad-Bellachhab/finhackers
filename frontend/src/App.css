@@ -14,16 +14,13 @@
   mask: url(/embat.svg) no-repeat center / contain;
 }
 .topbar-sep { width: 1px; height: 20px; background: var(--color-border-strong); margin: 0 var(--space-3); flex: none; }
+/* "X-Ray" en negrita con el degradado de TellMe (identidad pedida para el producto). */
 .product {
-  font-size: var(--text-lg);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  background: var(--embat-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  display: inline-block;
+  font-size: var(--text-lg); font-weight: 700; letter-spacing: -0.02em; display: inline-block;
+  background: var(--tellme-gradient); -webkit-background-clip: text; background-clip: text; color: transparent;
 }
+.logo-link { display: inline-flex; align-items: center; border-radius: var(--radius-sm); }
+.logo-link:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 
 .topbar nav {
   display: flex; margin-left: var(--space-6);
@@ -95,3 +92,25 @@
 }
 .theme-toggle:hover { background: var(--color-surface-hover); }
 .theme-toggle:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+.product-link { text-decoration: none; }
+/* Transiciones de página y de pestaña: fundido con un leve ascenso. */
+/* Ojo: un transform que se quede aplicado convierte a este contenedor en el de referencia de los
+   position: fixed (notch del chat) y de los sticky. Por eso la ruta solo funde y la pestaña usa
+   fill-mode backwards: al terminar no queda ningún transform. */
+.route-enter { animation: route-in 280ms var(--ease) backwards; }
+.view-enter { animation: view-in 320ms var(--ease) backwards; }
+@keyframes route-in { from { opacity: 0; } }
+@keyframes view-in { from { opacity: 0; transform: translateY(8px); } }
+/* Pestañas: fondo suave al pasar y la raya activa entra desde el centro. */
+.topbar nav button::before {
+  content: ''; position: absolute; inset: 10px 4px; border-radius: var(--radius-sm);
+  background: var(--color-surface-hover); opacity: 0; transform: scale(0.92); z-index: -1;
+  transition: opacity 200ms var(--ease), transform 200ms var(--ease);
+}
+.topbar nav button { z-index: 0; }
+.topbar nav button:hover::before { opacity: 1; transform: scale(1); }
+@media (prefers-reduced-motion: reduce) {
+  .route-enter, .view-enter { animation: none; }
+  .topbar nav button::before { transition: none; }
+}

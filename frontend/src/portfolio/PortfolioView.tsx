@@ -58,7 +58,6 @@ function Cartera({ onSelect }: { onSelect: (id: string) => void }) {
         <div className="count"><strong>{c.risk}</strong><span>En riesgo</span></div>
         <div className="count"><strong>{c.improving}</strong><span>Mejorando</span></div>
         <div className="count"><strong>{c.slipping}</strong><span>Torciéndose</span></div>
-        <div className="count"><strong>{c.heldOut}</strong><span>Test oculto</span></div>
       </div>
       {data.history && (
         <>

@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import './shared.css'
 
 export type TellMeLogoProps = {
@@ -6,9 +7,13 @@ export type TellMeLogoProps = {
   strokeWidth?: number
 }
 
-/** Componente que pinta el logo oficial de TellMe (la estrella de 5 bucles redondeados entrelazados).
- *  Utiliza rectángulos redondeados rotados matemáticamente alrededor del centro. */
-export function TellMeLogo({ className = '', size = 20, strokeWidth = 6 }: TellMeLogoProps) {
+// Estrella de 5 puntas de un solo trazo (pentagrama), como el logo de TellMe:
+// vértices de un pentágono de radio 38 unidos saltando uno (0 → 2 → 4 → 1 → 3).
+const STAR = 'M50 12 L72.3 80.7 L13.9 38.3 L86.1 38.3 L27.7 80.7 Z'
+
+/** Logo de TellMe: estrella azul → violeta con puntas redondeadas. Se anima con CSS (.tellme-logo-svg). */
+export function TellMeLogo({ className = '', size = 20, strokeWidth = 11 }: TellMeLogoProps) {
+  const grad = useId()
   return (
     <svg
       className={`tellme-logo-svg ${className}`}
@@ -20,17 +25,20 @@ export function TellMeLogo({ className = '', size = 20, strokeWidth = 6 }: TellM
       aria-hidden="true"
     >
       <defs>
-        <linearGradient id="tellme-logo-grad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#5c92fe" />
-          <stop offset="50%" stopColor="#b565f3" />
-          <stop offset="100%" stopColor="#c357ec" />
+        <linearGradient id={grad} x1="10" y1="10" x2="90" y2="90" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#4f7bff" />
+          <stop offset="100%" stopColor="#7b5cf5" />
         </linearGradient>
       </defs>
-      <rect x="41" y="12" width="18" height="76" rx="9" stroke="url(#tellme-logo-grad)" strokeWidth={strokeWidth} transform="rotate(0 50 50)" />
-      <rect x="41" y="12" width="18" height="76" rx="9" stroke="url(#tellme-logo-grad)" strokeWidth={strokeWidth} transform="rotate(72 50 50)" />
-      <rect x="41" y="12" width="18" height="76" rx="9" stroke="url(#tellme-logo-grad)" strokeWidth={strokeWidth} transform="rotate(144 50 50)" />
-      <rect x="41" y="12" width="18" height="76" rx="9" stroke="url(#tellme-logo-grad)" strokeWidth={strokeWidth} transform="rotate(216 50 50)" />
-      <rect x="41" y="12" width="18" height="76" rx="9" stroke="url(#tellme-logo-grad)" strokeWidth={strokeWidth} transform="rotate(288 50 50)" />
+      <path
+        d={STAR} stroke={`url(#${grad})`} strokeWidth={strokeWidth}
+        strokeLinejoin="round" strokeLinecap="round"
+      />
     </svg>
   )
+}
+
+/** "TellMe" con el degradado de la marca. */
+export function TellMeWordmark() {
+  return <span className="tellme-wordmark">TellMe</span>
 }

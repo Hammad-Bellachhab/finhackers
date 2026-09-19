@@ -27,3 +27,16 @@ Si la sesión se corta, retomar desde el primer paso sin marcar.
 - [x] Probado en local (wrangler dev + Vite): cartera y COMP_0058 responden con datos reales
 - [x] Producción: `npx wrangler secret put GEMINI_API_KEY` + push
 - [x] Iteración 2: análisis TellMe plegable (details), notch "TellMe" con destello animado (hover y mientras responde), chat sin evidencias ni aviso, modo oscuro con botón y fundido (View Transitions), claro por defecto
+
+## Iteración 3 (rama feat/embat-landing-tellme)
+- [x] Rutas por hash: `#/` inicio Embat (conectamos lo que ya tienes, con bancos y ERP reales), `#/xray` presentación, `#/app` demo; el logo lleva al inicio
+- [x] Logo TellMe = estrella de 5 puntas de un trazo (degradado azul → violeta), respira y gira al pasar el ratón o mientras piensa
+- [x] "X-Ray" en negrita (Haffer 600 real de Embat) con el degradado de TellMe; "TellMe" con degradado
+- [x] Tarjetas TellMe: blancas con velo azul/violeta (se quita la tarjeta oscura de Gemini, que rompía el modo claro)
+- [x] Caja del chat: azul noche con cristal, como la imagen de marca de TellMe
+- [x] Animaciones: entrada de página y de pestaña, fondo al pasar por pestañas (sin transform residual: rompía el notch fijo)
+- [x] Modelo: importancia y ablación en barras horizontales (sin etiquetas solapadas); clic en cualquier gráfica = zoom (<dialog>)
+- [x] Montecarlo: escala fija + previsión sin plan en fantasma (antes el eje se reescalaba y parecía que no cambiaba)
+- [x] Quitado "Test oculto" (chip y contador)
+- [x] Arreglos de lo que dejó Gemini: 752 empresas sin datos por un pulso a medias (restaurado), CSS duplicado, lightbox sin Escape, Enter en el botón de TellMe abría la ficha
+- [ ] Producción: el Worker no tiene GEMINI_API_KEY (secret list = []). Añadirla en el panel de Cloudflare

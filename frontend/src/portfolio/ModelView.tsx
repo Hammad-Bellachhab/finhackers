@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { getModelReport } from '../api'
 import type { ModelReport } from '../api/types'
@@ -15,7 +14,6 @@ const BLOCK_COLORS = ['var(--chart-4)', 'var(--color-danger)', 'var(--chart-1)',
 /** "Rendimiento del modelo" del dashboard de Diego: A (solo balance) frente a B (+ comportamiento). */
 export function ModelView() {
   const { data, error, loading } = useAsync(() => getModelReport(), [])
-  const [zoomImage, setZoomedImage] = useState<string | null>(null)
 
   if (loading) return <Skeleton height="30rem" />
   if (error) return <ErrorNotice error={error} />
@@ -34,17 +32,8 @@ export function ModelView() {
       </div>
       <Importance m={data} />
       <Errors m={data} />
-      <Figures m={data} onZoom={setZoomedImage} />
+      <Figures m={data} />
 
-      {zoomImage && (
-        <div className="figure-zoom-overlay" onClick={() => setZoomedImage(null)}>
-          <div className="figure-zoom-content" onClick={(e) => e.stopPropagation()}>
-            <button type="button" className="figure-zoom-close" onClick={() => setZoomedImage(null)}>×</button>
-            <img className="figure-zoom-img" src={`/data/figures/${zoomImage}`} alt="Diagrama ampliado" />
-            <p className="figure-zoom-caption">{FIG_TITLE[zoomImage] ?? zoomImage}</p>
-          </div>
-        </div>
-      )}
     </>
   )
 }
@@ -165,11 +154,12 @@ function Ablation({ m }: { m: ModelReport }) {
   }))
   return (
     <Panel title="Ablación por bloques (Δ AUC-PR en holdout)" note="Verde: lo que gana el modelo A al añadir un bloque. Rojo: lo que pierde el B al quitarlo (los bloques se solapan en parte).">
-      <ResponsiveContainer width="100%" height={240}>
-        <BarChart data={rows} margin={{ top: 8, right: 8, bottom: 0, left: -8 }}>
-          <CartesianGrid stroke="var(--color-border)" vertical={false} />
-          <XAxis dataKey="exp" {...axis} interval={0} angle={-45} textAnchor="end" height={70} tick={{ fontSize: 10 }} />
-          <YAxis {...axis} tickFormatter={(v) => Number(v).toFixed(2)} />
+      {/* Barras horizontales: las etiquetas se leen rectas y no se pisan. */}
+      <ResponsiveContainer width="100%" height={rows.length * 26 + 30}>
+        <BarChart data={rows} layout="vertical" margin={{ top: 4, right: 16, bottom: 4, left: 8 }}>
+          <CartesianGrid stroke="var(--color-border)" horizontal={false} />
+          <XAxis type="number" {...axis} tickFormatter={(v) => Number(v).toFixed(2)} />
+          <YAxis type="category" dataKey="exp" {...axis} width={56} interval={0} />
           <Tooltip {...tooltip} formatter={(v) => [signed(Number(v)), 'Δ AUC-PR']} />
           <Bar dataKey="delta" isAnimationActive={false}>
             {rows.map((r) => <Cell key={r.exp} fill={r.baseline === 'lgbm_A' ? 'var(--color-success)' : 'var(--color-danger)'} />)}
@@ -188,10 +178,10 @@ function Importance({ m }: { m: ModelReport }) {
       <div className="grid-2">
         <Panel title="Importancia global (TreeSHAP) por bloque">
           <ResponsiveContainer width="100%" height={260}>
-            <BarChart data={blocks} margin={{ top: 8, right: 8, bottom: 0, left: -12 }}>
-              <CartesianGrid stroke="var(--color-border)" vertical={false} />
-              <XAxis dataKey="bloque" {...axis} interval={0} angle={-45} textAnchor="end" height={85} tick={{ fontSize: 10 }} />
-              <YAxis {...axis} tickFormatter={(v) => pct(Number(v))} />
+            <BarChart data={blocks} layout="vertical" margin={{ top: 4, right: 16, bottom: 4, left: 8 }}>
+              <CartesianGrid stroke="var(--color-border)" horizontal={false} />
+              <XAxis type="number" {...axis} tickFormatter={(v) => pct(Number(v))} />
+              <YAxis type="category" dataKey="bloque" {...axis} width={170} interval={0} />
               <Tooltip {...tooltip} formatter={(v) => [pct(Number(v)), 'cuota']} />
               <Bar dataKey="cuota" isAnimationActive={false}>
                 {blocks.map((b, i) => <Cell key={b.bloque} fill={BLOCK_COLORS[i % BLOCK_COLORS.length]} />)}
@@ -246,7 +236,7 @@ const FIG_TITLE: Record<string, string> = {
   'ablation.png': 'Ablación por bloques',
 }
 
-function Figures({ m, onZoom }: { m: ModelReport; onZoom: (img: string) => void }) {
+function Figures({ m }: { m: ModelReport }) {
   return (
     <>
       <h2>Diagramas del entrenamiento</h2>
@@ -254,11 +244,10 @@ function Figures({ m, onZoom }: { m: ModelReport; onZoom: (img: string) => void 
         {m.figures.map((f) => (
           <Panel key={f} title={FIG_TITLE[f] ?? f}>
             <img
-              className="figure figure-zoomable"
+              className="figure"
               src={`/data/figures/${f}`}
               alt={FIG_TITLE[f] ?? f}
               loading="lazy"
-              onClick={() => onZoom(f)}
             />
           </Panel>
         ))}

@@ -56,9 +56,9 @@ export default function App() {
   return (
     <div className="shell">
       <header className="topbar">
-        <span className="logo" role="img" aria-label="Embat" />
+        <a href="#/" className="logo-link" aria-label="Embat, inicio"><span className="logo" /></a>
         <span className="topbar-sep" aria-hidden="true" />
-        <span className="product">X-Ray</span>
+        <a href="#/xray" className="product product-link">X-Ray</a>
         <nav>
           {GRUPOS.map((g) => (
             <div className="navgroup" key={g.id} role="group" aria-label={g.label}>
@@ -87,7 +87,8 @@ export default function App() {
         </button>
       </header>
 
-      <main className="page">
+      {/* key: cada pestaña entra con un fundido corto */}
+      <main className="page view-enter" key={vista}>
         {vista === 'cartera' && <PortfolioView onSelect={abrirEmpresa} />}
         {vista === 'alertas' && <AlertsView onSelect={abrirEmpresa} />}
         {vista === 'proveedores' && <ProvidersView onSelect={abrirEmpresa} />}
