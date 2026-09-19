@@ -29,7 +29,7 @@ def main():
             "cv": {k: {"auc_pr_mean": v["auc_pr_mean"], "auc_pr_std": v["auc_pr_std"]} for k, v in res["cv"].items()},
             "lift": res["lift"], "main_model": res["main_model"],
         }
-    (C.REPORTS_DIR / "sensitivity.json").write_text(json.dumps(out, indent=2, ensure_ascii=False, default=str))
+    (C.REPORTS_DIR / "sensitivity.json").write_text(json.dumps(out, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
     print("\n=== resumen (holdout) ===")
     print(f"{'variante':18s} {'filas':>6s} {'A lgbm':>8s} {'B lgbm':>8s} {'B cat':>8s} {'lift lgbm':>10s} {'IC95':>18s}")
     for k, v in out.items():

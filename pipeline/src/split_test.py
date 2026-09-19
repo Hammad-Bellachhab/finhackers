@@ -34,7 +34,7 @@ def run(n_companies: int = C.N_TEST_COMPANIES, seed: int = C.SEED) -> list[str]:
         if len(ids) >= n_companies:
             break
     ids = sorted(ids)
-    C.TEST_IDS_FILE.write_text("\n".join(ids) + "\n")
+    C.TEST_IDS_FILE.write_text("\n".join(ids) + "\n", encoding="utf-8")
     con = duckdb.connect()
     con.execute("CREATE TABLE sel AS SELECT * FROM (VALUES " + ",".join(f"('{i}')" for i in ids) + ") t(company_id)")
     for f in C.RAW_FILES:

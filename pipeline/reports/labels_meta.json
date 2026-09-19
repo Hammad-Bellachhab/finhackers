@@ -46,8 +46,8 @@
     "inactivity": 1.0
   },
   "component_corr_with_D": {
-    "late_pay_rate": 0.7018650849517586,
-    "neg_cash_share": 0.5525702518959503,
+    "late_pay_rate": 0.7018650849517587,
+    "neg_cash_share": 0.5525702518959504,
     "collection_drop": 0.5453940495801128,
     "credit_util": 0.24689505030142964,
     "inactivity": 0.5184087311035257

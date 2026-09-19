@@ -64,7 +64,7 @@ Sin `make` en Windows: usar `python -m src.pipeline <pasos>`. Python 3.14 en la 
 
 - Holdout temporal (empresas de entrenamiento, meses futuros): LightGBM B AUC-ROC 0,824 / AUC-PR 0,445 vs A 0,760 / 0,386;
   lift +0,060 [+0,030; +0,094]. Principal servido: ensemble LightGBM+CatBoost calibrado (Brier 0,118 → 0,099).
-- **Test simulado (82 empresas nunca vistas)**: B 0,820 / 0,445 vs A 0,790 / 0,281 → lift +0,16 [+0,07; +0,25].
+- **Test simulado (82 empresas nunca vistas)**: B 0,823 / 0,448 vs A 0,790 / 0,281 → lift +0,16 [+0,07; +0,25].
   Se deteriora el 53 % de las "riesgo", 25 % "vigilar", 5 % "sana", 3 % "sólida"; 28 % de "deteriorándose" vs 9 % "estable".
 - Anticipación (fuera de muestra): 243 eventos, 80 % anticipados, mediana 4 meses, 28 % falsas alertas, 16 % flips de banda.
 - 82 % de la importancia SHAP en bloques de comportamiento; el bloque C (dinámica de liquidez) es el que más aporta.

@@ -146,9 +146,9 @@ FEATURE_TEXT = {
 
 
 def load_registry(version: str | None = None) -> tuple[dict, dict, str]:
-    version = version or (C.REGISTRY_DIR / "latest.txt").read_text().strip()
+    version = version or (C.REGISTRY_DIR / "latest.txt").read_text(encoding="utf-8").strip()
     art = joblib.load(C.REGISTRY_DIR / version / "pipeline.joblib")
-    md = json.loads((C.REGISTRY_DIR / version / "metadata.json").read_text())
+    md = json.loads((C.REGISTRY_DIR / version / "metadata.json").read_text(encoding="utf-8"))
     return art, md, version
 
 
@@ -468,7 +468,7 @@ def run() -> dict:
     art["block_of"] = {f: b for b, fs in blocks.items() for f in fs}
     X, meta = load_features()
     lab = pd.read_parquet(LABELS_PATH)
-    results = json.loads((C.REPORTS_DIR / "train_results.json").read_text())
+    results = json.loads((C.REPORTS_DIR / "train_results.json").read_text(encoding="utf-8"))
     preds = pd.read_parquet(C.REPORTS_DIR / "predictions_holdout.parquet")
 
     # --- SHAP global sobre holdout + último mes ------------------------------------------
@@ -492,7 +492,7 @@ def run() -> dict:
     art_h = joblib.load(C.REGISTRY_DIR / version / "pipeline_holdout.joblib")
     antic, ev_df = anticipation_analysis(X, art_h, C.month_range())
     antic = _clean(antic)
-    (C.REPORTS_DIR / "anticipation.json").write_text(json.dumps(antic, indent=2, ensure_ascii=False))
+    (C.REPORTS_DIR / "anticipation.json").write_text(json.dumps(antic, indent=2, ensure_ascii=False), encoding="utf-8")
     ev_df.to_csv(C.REPORTS_DIR / "anticipation_events.csv", index=False)
     print(f"[evaluate] anticipación: {antic['n_events']} eventos, anticipados {antic['share_anticipated'] or 0:.0%} "
           f"(mediana {antic['lead_months_median']} meses), falsas alertas {antic['false_alert_rate'] or 0:.0%}, flips de banda {antic['band_flip_rate'] or 0:.0%}")
@@ -511,7 +511,7 @@ def run() -> dict:
                "error_analysis": err, "cv": {k: {"auc_pr_mean": v["auc_pr_mean"], "auc_pr_std": v["auc_pr_std"]} for k, v in results["cv"].items()},
                "anticipation": antic, "holdout_unseen_companies": results.get("holdout_unseen_companies", {})}
     summary = _clean(summary)
-    (C.REPORTS_DIR / "evaluation_summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False, default=str))
+    (C.REPORTS_DIR / "evaluation_summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
     print(f"[evaluate] figuras en {FIG_DIR}")
     return summary
 

@@ -147,7 +147,7 @@ def build_tables() -> dict[str, pd.DataFrame]:
     bench = pd.DataFrame(rows)
 
     # ---------------------------------------------------------------- model_info
-    ev = json.loads((C.REPORTS_DIR / "evaluation_summary.json").read_text())
+    ev = json.loads((C.REPORTS_DIR / "evaluation_summary.json").read_text(encoding="utf-8"))
     info = pd.DataFrame([{
         "model_version": version, "main_model": md["main_model"], "trained_at": md["created_at"], "dataset_hash": md["dataset_hash"],
         "git_commit": md.get("git_commit"), "seed": md["seed"], "n_train_rows": md["n_train_rows"],

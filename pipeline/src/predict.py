@@ -57,7 +57,7 @@ def stage_raw(raw: Path, work: Path) -> Path:
             g["erp"] = None
             g[["group_id", "erp", "n_companies_in_sample"]].to_csv(staged / "groups.csv", index=False)
         else:
-            (staged / f"{f}.csv").write_text(OPTIONAL[f])
+            (staged / f"{f}.csv").write_text(OPTIONAL[f], encoding="utf-8")
             print(f"[predict] aviso: no hay {f}.csv en el test; se usa vacío")
     return staged
 
@@ -154,7 +154,7 @@ def main(argv=None):
         "n_exceptional": int(latest["is_exceptional"].sum()), "n_structural": int(latest["is_structural"].sum()),
         "n_blip": int(latest["is_blip"].sum()), "seconds": round(time.time() - t0, 1),
     }
-    (out / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False))
+    (out / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
     print(f"[predict] {summary['n_companies']} empresas → {out / 'predictions_latest.csv'}  ({summary['seconds']}s)")
     print(f"[predict] bandas: {summary['bands_latest']}  trayectorias: {summary['trajectory_latest']}")
     return summary
