@@ -51,6 +51,12 @@
 .metric-label { font-size: 0.78rem; color: var(--color-text-muted); display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; }
 .metric-value { font-size: 1.15rem; font-weight: 600; }
 
+.forecast-basis {
+  margin: 0.75rem 0 0; font-size: 0.85rem; line-height: 1.5;
+  color: var(--color-text-muted);
+}
+.forecast-basis strong { color: var(--color-text); }
+
 .stability {
   display: flex; flex-direction: column; gap: 0.2rem;
   margin-top: 1rem; padding: 0.85rem 1rem; border-radius: var(--radius);

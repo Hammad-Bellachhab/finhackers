@@ -25,8 +25,9 @@ wrangler.jsonc   despliegue en Cloudflare (se publica solo en cada push a main);
 ```
 
 Despliegue: tras cambiar datos o modelo, `python -m src.pipeline all` y luego `python -m src.pulso` (≈ 4 min, regenera
-`frontend/public/data/`), commit + push y Cloudflare publica. La rama `clean-start` fue un reinicio del compañero, ya
-fusionada en `main`; no usarla.
+`frontend/public/data/`; ojo: hace `rmtree`, se lleva los `tellme.json`). Si solo cambia la proyección,
+`python -m src.pulso forecast` reescribe únicamente los `forecast.json` sin borrar nada. Commit + push y Cloudflare
+publica. La rama `clean-start` fue un reinicio del compañero, ya fusionada en `main`; no usarla.
 
 ## El motor (`pipeline/`) en una pasada
 
@@ -43,6 +44,7 @@ Cadena `python -m src.pipeline all` (≈ 8 min, reproducible bit a bit: DuckDB e
 | evaluate | `src/evaluate.py` | TreeSHAP (global, local, cambio mes a mes), anticipación fuera de muestra, figuras, errores |
 | db | `src/serve_db.py` | SQLite `data/serve.db` (Postgres vía DATABASE_URL): risk_score con salud/trayectoria, alerts, explicaciones, benchmarks |
 | test | `src/evaluate_test.py` | `predict.py` sobre las 82 empresas reservadas + comparación con lo que les pasó |
+| projection | `src/projection.py` | proyección a 6 meses por montecarlo empírico (2.000 trayectorias de empresas comparables) + backtest de cobertura de la banda |
 
 Otros: `src/providers.py` (bancos y conectores agregados con la salud de sus empresas → pestaña Proveedores),
 `src/health.py` (probabilidad → salud 0–100, suavizado EMA, trayectoria, bache vs. estructural, sólidas, alertas;

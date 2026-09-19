@@ -1,7 +1,30 @@
-import type { CompanyScore, Forecast } from '../api/types'
+import type { CompanyScore, Forecast, ForecastBasis } from '../api/types'
 import { ScoreLine } from '../shared/ScoreLine'
-import { formatMonth } from '../shared/format'
+import { formatMonth, formatPct } from '../shared/format'
 import './company.css'
+
+/** De donde sale la banda. Se ensena siempre que el motor la calcule: una banda sin explicar es
+ *  una banda en la que nadie confia, y en este producto la explicacion es parte del entregable. */
+function BasisNote({ basis }: { basis: ForecastBasis }) {
+  // Espacio duro entre el numero y el %: si no, el navegador parte "81 %" en dos lineas.
+  const pct = (v: number) => formatPct(v).replace(' ', ' ')
+  return (
+    <p className="forecast-basis">
+      <strong>
+        El {pct(basis.probDrop5)} de las trayectorias simuladas pierde más de 5 puntos de salud en seis meses
+        {basis.probRisk >= 0.01 && <> y el {pct(basis.probRisk)} acaba en riesgo</>}.
+      </strong>
+      {' '}
+      La banda del {basis.interval} % no es una fórmula: son los percentiles 10 y 90 de{' '}
+      {basis.paths.toLocaleString('es-ES')} trayectorias sorteadas entre {basis.companies} empresas
+      que estuvieron en la misma situación que esta, y lo que de verdad les pasó después.
+      {basis.coverage !== null && (
+        <> Medido en las empresas que el modelo nunca vio, el {pct(basis.coverage)} de lo que pasó
+        cayó dentro de la banda.</>
+      )}
+    </p>
+  )
+}
 
 export function ForecastSection({ score, forecast }: { score: CompanyScore; forecast: Forecast }) {
   const d = forecast.detection
@@ -17,6 +40,8 @@ export function ForecastSection({ score, forecast }: { score: CompanyScore; fore
         bandHigh={forecast.bandHigh}
         markers={d ? [{ month: d.detectedAt, label: 'Detectado' }] : []}
       />
+
+      {forecast.basis && <BasisNote basis={forecast.basis} />}
 
       <div className={`stability stability-${forecast.stability}`}>
         <strong>{forecast.stability === 'dip' ? 'Bache puntual' : 'Deterioro estructural'}</strong>

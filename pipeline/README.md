@@ -38,6 +38,7 @@ El lift es robusto al diseño del *target* (§ Sensibilidad): positivo en las cu
 | **Señalización bidireccional**: sólidas / mejorando / deteriorándose | `src/health.py`: salud = 100·(1−p), suavizada (EMA); trayectoria por Δ 3 m con consistencia; bandas sólida ≥ 90 · sana ≥ 75 · vigilar ≥ 50 · riesgo | Último mes: cientos de sólidas, decenas en mejora progresiva, deterioros incipientes y caídas estructurales (tabla `alerts`, vista Alertas) |
 | **Bache puntual vs. caída estructural** | `is_blip` (caída de un mes recuperada al siguiente) vs. `is_structural` (deteriorándose 3 meses seguidos); el suavizado evita que un mes malo cambie la lectura | 16 % de los cambios de banda se revierten al mes siguiente (estabilidad, fuera de muestra) |
 | **Cuántos meses antes anticipa** | `evaluate.anticipation_analysis`: eventos reales de deterioro (caja < 0, ≥ 50 % de facturas a pagar con > 30 d, o cese de actividad, ≥ 2 meses seguidos tras ≥ 3 buenos) vs. primera alerta de un modelo congelado en 2025‑05 (scores fuera de muestra) | **243 eventos, 80 % anticipados, adelanto mediano 4 meses**, 28 % de falsas alertas (`reports/anticipation.json`). En las 82 empresas de test: 21 eventos, 83 % anticipados, mediana 2,5 meses, 14 % de falsas alertas |
+| **Hacia dónde va (proyección a 6 meses)** | `src/projection.py`: montecarlo empírico. Para el estado de la empresa (nivel de salud, sorpresa del último mes, inercia a 1 y 3 m) se pesan por parecido los meses-empresa del panel y se sortean **2.000 trayectorias** de las que de verdad ocurrieron después; la banda son los percentiles 10-90 | Medido en las 82 empresas reservadas (586 proyecciones, pool solo de entrenamiento): la banda del 80 % **cubre el 80,9 %** de lo que pasó, MAE **4,91** puntos de salud. La recta que había antes: cobertura 74,3 % y MAE 7,31 (`reports/projection_backtest.json`) |
 | **Explicar qué señales causaron el cambio** | `score_change_explanation` (Δ SHAP entre T−1 y T, señales propias de la empresa) → `GET /companies/{id}/changes` y "Qué ha cambiado este mes" en la ficha | "Meses en descubierto (3 m): 3 meses (antes: 0)" |
 | **Explicación por empresa** | TreeSHAP top‑8 en lenguaje natural, precalculado → `GET /companies/{id}/score` | — |
 | **Trayectoria documentada** | serie mensual de salud (cruda y suavizada) por empresa en la ficha y en `risk_score` | — |
@@ -49,7 +50,7 @@ El lift es robusto al diseño del *target* (§ Sensibilidad): positivo en las cu
 ```bash
 cd pipeline
 pip install -r requirements.txt
-python -m src.pipeline all        # ≈ 8 min: CSV → Parquet → panel → split test → etiqueta → features → modelos → SHAP → BD → test
+python -m src.pipeline all        # ≈ 8 min: CSV → Parquet → panel → split test → etiqueta → features → modelos → SHAP → BD → test → proyección
 python -m uvicorn src.api.main:app --port 8000            # API (capas 9-10)      → http://localhost:8000/docs
 python -m streamlit run src/frontend/app.py               # dashboard (capa 11)   → http://localhost:8501
 python -m src.evaluate_test                                # test simulado: puntúa las 82 empresas reservadas y las evalúa
@@ -80,6 +81,7 @@ src/models.py         pipelines sklearn (preproceso + modelo) que se serializan 
 src/train.py          Capa 5  — validación temporal expansiva con embargo, A vs B, ablación, bootstrap, calibración
                       Capa 7  — registro: models/registry/<versión>/{pipeline.joblib, lgbm_B.txt, metadata.json}
 src/evaluate.py       Capa 6  — TreeSHAP global/local, explicación de cambios, anticipación, figuras, errores → reports/
+src/projection.py     proyeccion a 6 meses por montecarlo empirico sobre empresas comparables + backtest de cobertura
 src/health.py         salud bidireccional (0–100), suavizado, trayectoria, bache vs. estructural, sólidas, alertas
 src/split_test.py     reserva ~80 empresas (grupos enteros) como test simulado → data/test_companies/
 src/predict.py        empresas nuevas: CSVs → predicciones + explicaciones, sin reentrenar
@@ -266,6 +268,36 @@ código (`src/health.py`) en el dashboard y en el test oculto.
 modelo— y se mide cuántos meses antes la salud (de un modelo congelado en 2025‑05, es decir, fuera de muestra) cayó por
 debajo de 75 o la trayectoria pasó a "deteriorándose": 243 eventos, 80 % anticipados con adelanto mediano de 4 meses;
 28 % de las alertas no van seguidas de evento en 9 meses; 16 % de los cambios de banda se revierten al mes siguiente.
+
+## Hacia dónde va: proyección a 6 meses (`src/projection.py`)
+
+La ficha de empresa pinta una previsión a seis meses con una banda. Hasta ahora esa banda era una recta OLS sobre los
+últimos 6 meses de salud suavizada ±1,96·σ·√k: no usaba el modelo, no sabía frenar (proyectaba a **10 empresas hasta
+salud 0** y a 87 caídas de más de 20 puntos, que en el panel no le pasan a casi nadie) y su anchura no estaba medida
+contra nada.
+
+Ahora las trayectorias se muestrean en vez de inventarse. El estado de una empresa en T son cuatro números derivados de
+la probabilidad calibrada del modelo: **nivel** de salud suavizada, **sorpresa** del mes (salud cruda − suavizada: lo
+que el modelo ya dice y la EMA todavía no se ha creído), **inercia** a 1 y a 3 meses. Se buscan los meses-empresa del
+panel que estuvieron en ese estado —con el nivel pesando el doble que el resto—, se pesan con un núcleo gaussiano
+estrecho y se sortean **2.000 trayectorias completas** de lo que de verdad les pasó en los 6 meses siguientes. Mediana
+y percentiles 10-90 de esas 2.000 trayectorias es lo que se pinta. La empresa nunca entra en su propio sorteo.
+
+**Cobertura medida** (`python -m src.projection` → `reports/projection_backtest.json`): 586 proyecciones sobre las 82
+empresas reservadas, con el pool construido solo con empresas de entrenamiento.
+
+| | cobertura de la banda del 80 % | MAE (puntos de salud) | anchura media |
+|---|---|---|---|
+| montecarlo empírico | **80,9 %**, y estable mes a mes: 81,6 % al primero, 80,0 % al sexto | **4,91** (1,9 al primer mes → 7,3 al sexto) | 15,0 |
+| recta anterior | 74,3 %, y se desmorona con el horizonte: 88,2 % al primero, 68,3 % al sexto | 7,31 (2,5 → 11,7) | 16,2 |
+
+La anchura media apenas cambia, pero deja de estar repartida a ciegas: en empresas **sólidas** pasa de 12,1 a **4,6**
+puntos (a 95 de salud no hay ±12 que valga) y en empresas en **riesgo**, de 18,6 a **26,8**, que es lo que de verdad
+mide su incertidumbre. Ninguna empresa se proyecta ya hasta 0.
+
+**Límite declarado**: en la banda "riesgo" la cobertura baja al 71,7 % (50 proyecciones) — hay pocas empresas así en el
+panel, sus futuros son los más dispersos y el método se apoya en vecinos algo menos parecidos. Está en el informe por
+banda (`by_health_band`) en vez de escondido en la media.
 
 ## Capa 7 — registro de modelos
 

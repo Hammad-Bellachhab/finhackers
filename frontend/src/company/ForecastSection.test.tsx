@@ -20,6 +20,10 @@ const estructural: Forecast = {
   stability: 'structural',
   stabilityNote: 'El deterioro es estructural: lleva varios meses en la misma dirección.',
   detection: { detectedAt: '2026-04', evidentAt: '2026-09', monthsAhead: 5 },
+  basis: {
+    paths: 2000, neighbours: 358, companies: 208, interval: 80,
+    coverage: 0.809, probDrop5: 0.26, probRisk: 0.04,
+  },
 }
 
 describe('ForecastSection', () => {
@@ -44,6 +48,22 @@ describe('ForecastSection', () => {
     render(<ForecastSection score={score} forecast={bache} />)
     expect(screen.getByText('Bache puntual')).toBeInTheDocument()
     expect(screen.getByText(/no hace falta actuar/i)).toBeInTheDocument()
+  })
+
+  it('dice de donde sale la banda, con los numeros del motor', () => {
+    const { container } = render(<ForecastSection score={score} forecast={estructural} />)
+    // El texto va partido en varios nodos (numeros interpolados), asi que se lee el parrafo entero.
+    const nota = container.querySelector('.forecast-basis')?.textContent ?? ''
+    expect(nota).toMatch(/El 26\s% de las trayectorias simuladas pierde más de 5 puntos/)
+    expect(nota).toMatch(/el 4\s% acaba en riesgo/)
+    expect(nota).toMatch(/2000 trayectorias sorteadas entre 208 empresas/)
+    expect(nota).toMatch(/el 81\s% de lo que pasó cayó dentro/)
+  })
+
+  it('no ensena la nota si el motor no la manda (modo demo)', () => {
+    const sinBase: Forecast = { ...estructural, basis: undefined }
+    const { container } = render(<ForecastSection score={score} forecast={sinBase} />)
+    expect(container.querySelector('.forecast-basis')).toBeNull()
   })
 
   it('no inventa anticipacion cuando no la hay', () => {
