@@ -1,7 +1,17 @@
-:root {
+@import "./styles/tokens.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html {
   color-scheme: light dark;
 }
 
 body {
   margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }

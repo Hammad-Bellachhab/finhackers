@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { PaletteSheet } from './styles/PaletteSheet'
 
 type Health = {
   status: string
@@ -22,20 +23,21 @@ export default function App() {
   }, [])
 
   return (
-    <main>
-      <h1>finhackers</h1>
-      <p className="status">
-        Backend:{' '}
-        {error ? (
-          <span className="ko">sin conexion ({error})</span>
-        ) : health ? (
-          <span className="ok">
-            {health.status} — {health.service} v{health.version}
-          </span>
-        ) : (
-          <span>comprobando…</span>
-        )}
-      </p>
-    </main>
+    <div className="shell">
+      <header className="topbar">
+        <span className="mark" aria-hidden="true" />
+        <strong>finhackers</strong>
+        <span className="topbar-sep">·</span>
+        <span className="topbar-sub">Reto X-Ray de Embat</span>
+        <span className="spacer" />
+        <span className={`pill ${error ? 'pill-danger' : health ? 'pill-ok' : ''}`}>
+          {error ? `API caida (${error})` : health ? `API ${health.status} v${health.version}` : 'conectando…'}
+        </span>
+      </header>
+
+      <main>
+        <PaletteSheet />
+      </main>
+    </div>
   )
 }
