@@ -24,3 +24,7 @@ Thumbs.db
 # Dataset del reto (646 MB descomprimido, fuera de git).
 # Ver docs/reto-embat.md para su procedencia.
 data/
+
+# Base de datos generada (~1.2 GB, se reconstruye con db/build_db.py)
+db/*.db
+db/*.sqlite
