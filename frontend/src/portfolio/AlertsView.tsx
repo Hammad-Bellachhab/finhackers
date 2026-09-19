@@ -15,24 +15,18 @@ const SEÑALES = [
 export function AlertsView({ onSelect }: { onSelect: (id: string) => void }) {
   const { data, error, loading } = useAsync(() => getAlerts(), [])
   const [sel, setSel] = useState<string[]>(SEÑALES.slice(0, 4))
-  const [grupo, setGrupo] = useState('')
   const [tamaño, setTamaño] = useState('')
   const [q, setQ] = useState('')
 
   const detalle = !!data?.some((a) => a.group)
-  const grupos = useMemo(
-    () => [...new Set((data ?? []).map((a) => a.group).filter((g): g is string => !!g))].sort(),
-    [data],
-  )
 
   const visibles = useMemo(() => {
     const t = q.trim().toLowerCase()
     return (data ?? [])
       .filter((a) => sel.includes(a.signal ?? ''))
-      .filter((a) => !grupo || a.group === grupo)
       .filter((a) => !tamaño || a.sizeCohort === tamaño)
       .filter((a) => !t || [a.companyName, a.companyId, a.group].some((s) => s?.toLowerCase().includes(t)))
-  }, [data, sel, grupo, tamaño, q])
+  }, [data, sel, tamaño, q])
 
   if (loading) return <Skeleton height="26rem" />
   if (error) return <ErrorNotice error={error} />
@@ -59,10 +53,6 @@ export function AlertsView({ onSelect }: { onSelect: (id: string) => void }) {
 
       {detalle && (
         <div className="filters filters-form">
-          <select aria-label="Cartera / grupo" value={grupo} onChange={(e) => setGrupo(e.target.value)}>
-            <option value="">Todas las carteras</option>
-            {grupos.map((g) => <option key={g} value={g}>{g}</option>)}
-          </select>
           <select aria-label="Tamaño" value={tamaño} onChange={(e) => setTamaño(e.target.value)}>
             <option value="">Todos los tamaños</option>
             {['q1', 'q2', 'q3', 'q4'].map((c) => <option key={c} value={c}>tamaño {c}{c === 'q4' ? ' (mayores)' : ''}</option>)}
