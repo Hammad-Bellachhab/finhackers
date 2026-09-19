@@ -247,7 +247,6 @@ export type ChatTurn = { role: 'user' | 'model'; text: string }
 export type AskResponse = {
   answer: string
   bullets: string[]
-  evidence: { label: string; value: string }[]
   followUps: string[]
   model: string
 }

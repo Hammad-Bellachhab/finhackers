@@ -41,7 +41,6 @@
 .ask-msg { max-width: 88%; padding: var(--space-3) var(--space-4); border-radius: var(--radius-lg, 12px); font-size: var(--text-sm); }
 .ask-msg p { margin: 0; }
 .ask-msg ul { margin: var(--space-2) 0 0; padding-left: 1.1rem; }
-.ask-msg .tellme-evidence { margin-top: var(--space-2); }
 .ask-user { justify-self: end; background: var(--color-accent-soft); color: var(--color-text); }
 .ask-model { justify-self: start; background: var(--color-surface); }
 .ask-error { justify-self: start; background: var(--color-warning-soft); color: var(--color-warning-strong); }
@@ -70,12 +69,24 @@
   background: var(--color-accent); color: var(--color-text-on-accent); cursor: pointer;
 }
 .ask-send:disabled { opacity: 0.45; cursor: default; }
-.ask-note { margin: 0; padding: 0 var(--space-4) var(--space-3); font-size: var(--text-xs); color: var(--color-text-muted); }
 
 /* Deja sitio al final de la página para que el notch no tape contenido. */
 .page { padding-bottom: 6rem; }
 
+/* El destello "piensa" (gira y late, como el logo de Claude) al pasar el ratón y mientras responde. */
+.ask-notch .tellme-mark, .ask-head .tellme-mark { transition: transform 300ms var(--ease); }
+.ask-notch:hover .tellme-mark,
+.ask-thinking .tellme-mark { animation: tellme-think 1.6s var(--ease) infinite; }
+@keyframes tellme-think {
+  0%   { transform: rotate(0deg) scale(1); }
+  25%  { transform: rotate(90deg) scale(0.78); }
+  50%  { transform: rotate(180deg) scale(1.08); }
+  75%  { transform: rotate(270deg) scale(0.82); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+.ask-thinking .ask-notch { box-shadow: var(--shadow-lg), 0 0 0 3px var(--color-accent-soft); }
+
 @media (prefers-reduced-motion: reduce) {
-  .ask-panel, .ask-typing span { animation: none; }
+  .ask-panel, .ask-typing span, .ask-notch .tellme-mark, .ask-thinking .tellme-mark { animation: none; }
   .ask-notch { transition: none; }
 }

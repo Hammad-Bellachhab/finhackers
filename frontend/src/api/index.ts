@@ -72,7 +72,7 @@ export async function askTellMe(question: string, companyId?: string, history: C
   if (USE_MOCK) {
     return {
       answer: 'Respuesta de ejemplo (mock). En modo real responde TellMe con los datos del motor.',
-      bullets: [], evidence: [], followUps: ['¿Qué hago primero?'], model: 'mock',
+      bullets: [], followUps: ['¿Qué hago primero?'], model: 'mock',
     }
   }
   const res = await fetch('/api/ask', {

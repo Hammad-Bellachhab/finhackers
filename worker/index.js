@@ -11,13 +11,9 @@ const SCHEMA = {
   properties: {
     answer: { type: 'STRING' },
     bullets: { type: 'ARRAY', items: { type: 'STRING' } },
-    evidence: {
-      type: 'ARRAY',
-      items: { type: 'OBJECT', properties: { label: { type: 'STRING' }, value: { type: 'STRING' } }, required: ['label', 'value'] },
-    },
     followUps: { type: 'ARRAY', items: { type: 'STRING' } },
   },
-  required: ['answer', 'bullets', 'evidence', 'followUps'],
+  required: ['answer', 'bullets', 'followUps'],
 }
 
 const SYSTEM = `Eres TellMe, el asistente de salud financiera de Embat. Hablas con alguien que no es experto en finanzas.
@@ -26,7 +22,7 @@ Reglas:
 - Usa SOLO los datos del contexto. Si la respuesta no está ahí, dilo claramente y sugiere qué sí puedes contestar.
 - No inventes cifras: copia o redondea las del contexto.
 - La salud va de 0 a 100 (más es mejor). Reconoce las mejoras igual que los problemas.
-- "answer": 1-3 frases. "bullets": 0-4 puntos clave. "evidence": las cifras del contexto que usas.
+- "answer": 1-3 frases. "bullets": 0-4 puntos clave, con las cifras del contexto que respaldan la respuesta.
   "followUps": 2-3 preguntas cortas que el usuario podría hacer después.
 - No des consejos de inversión personales; habla de la empresa y sus números.`
 

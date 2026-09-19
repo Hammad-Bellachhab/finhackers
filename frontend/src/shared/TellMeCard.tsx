@@ -107,6 +107,8 @@ export function TellMeCard({ companyId, name }: { companyId?: string; name?: str
     <section className="tellme" aria-labelledby={titleId}>
       <Eyebrow scope={scope} />
       <h2 id={titleId} className="tellme-headline">{data.headline}</h2>
+      <details className="tellme-more">
+      <summary>Ver el análisis de TellMe</summary>
       <p className="tellme-summary">{data.summary}</p>
       {insights.length > 0 && (
         <ul className="tellme-insights">
@@ -125,6 +127,7 @@ export function TellMeCard({ companyId, name }: { companyId?: string; name?: str
         Generado por TellMe · {data.model} · <time dateTime={data.generatedAt}>{fecha.format(new Date(data.generatedAt))}</time>
         {' '}· Texto generado por IA a partir de los datos del motor; revisa las cifras.
       </p>
+      </details>
     </section>
   )
 }

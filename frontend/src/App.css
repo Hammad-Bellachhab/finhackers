@@ -49,3 +49,11 @@
   .topbar-sep, .product { display: none; }
   .topbar nav { margin-left: var(--space-3); }
 }
+
+.theme-toggle {
+  margin-left: auto; flex: none; width: 36px; height: 36px; border-radius: 999px;
+  border: 1px solid var(--color-border); background: var(--color-bg); color: var(--color-text);
+  font-size: 1rem; line-height: 1; cursor: pointer; transition: background-color 160ms var(--ease);
+}
+.theme-toggle:hover { background: var(--color-surface-hover); }
+.theme-toggle:focus-visible { outline: none; box-shadow: var(--focus-ring); }

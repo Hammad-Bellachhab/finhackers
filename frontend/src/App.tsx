@@ -3,6 +3,7 @@ import './App.css'
 import { DEFAULT_COMPANY } from './api'
 import { CompanyView } from './company/CompanyView'
 import { AskTellMe } from './shared/AskTellMe'
+import { applyTheme, type Theme } from './shared/theme'
 import { AlertsView } from './portfolio/AlertsView'
 import { EvidenceView } from './portfolio/EvidenceView'
 import { ModelView } from './portfolio/ModelView'
@@ -21,6 +22,13 @@ const TABS: { id: Vista; label: string }[] = [
 export default function App() {
   const [vista, setVista] = useState<Vista>('cartera')
   const [companyId, setCompanyId] = useState(DEFAULT_COMPANY)
+
+  const [theme, setTheme] = useState<Theme>(() => (document.documentElement.dataset.theme as Theme) ?? 'light')
+  const toggleTheme = () => {
+    const t: Theme = theme === 'dark' ? 'light' : 'dark'
+    setTheme(t)
+    applyTheme(t)
+  }
 
   const abrirEmpresa = (id: string) => {
     setCompanyId(id)
@@ -45,6 +53,13 @@ export default function App() {
             </button>
           ))}
         </nav>
+        <button
+          type="button" className="theme-toggle" onClick={toggleTheme}
+          aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+          title={theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
+        >
+          {theme === 'dark' ? '☀' : '☾'}
+        </button>
       </header>
 
       <main className="page">

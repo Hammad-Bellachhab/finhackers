@@ -12,7 +12,7 @@ Si la sesión se corta, retomar desde el primer paso sin marcar.
 - [x] 5a. Revisión ui-finish-gate-reviewer: aplicados 2,3(favicon),4,6,7,9,10,11. No aplicados: 1 (tabular-nums rompe decimales en Haffer), 8 (escala tipográfica, cosmético), 5/12 (a11y menor)
 - [x] 5. Preview local lista en http://localhost:5173 (pendiente: visto bueno del usuario) — **el usuario la aprueba antes de push**
 - [x] 6. Checklist "ningún dato perdido" (tasks/checklist-datos.md): todas las secciones en las 5 pestañas, 0 errores
-- [ ] 7. Commit + push (lo hace el usuario)
+- [x] 7. Commit + push (lo hace el usuario)
 
 ## Notas
 - Gemini: key OK; modelos disponibles incluyen gemini-flash-latest, gemini-3.5-flash. ~2 s por llamada.
@@ -26,3 +26,4 @@ Si la sesión se corta, retomar desde el primer paso sin marcar.
 - [x] Front: `shared/AskTellMe.tsx` + `ask-tellme.css`, contexto = empresa abierta o cartera
 - [x] Probado en local (wrangler dev + Vite): cartera y COMP_0058 responden con datos reales
 - [ ] Producción: `npx wrangler secret put GEMINI_API_KEY` (usuario) + push
+- [x] Iteración 2: análisis TellMe plegable (details), notch "TellMe" con destello animado (hover y mientras responde), chat sin evidencias ni aviso, modo oscuro con botón y fundido (View Transitions), claro por defecto
