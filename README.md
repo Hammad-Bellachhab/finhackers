@@ -91,7 +91,10 @@ Documento de negocio de referencia: [arquitectura.pdf](docs/arquitectura.pdf).
 
 ## Datos
 
-Todos los datos que muestra la aplicación son **sintéticos**, generados por el mock con semilla fija. No hay empresas reales, ni datos de clientes, ni información propietaria en este repositorio. Los nombres, importes, scores y métricas del modelo (IC, ablación, SHAP) son ilustrativos.
+Todos los datos del repositorio son **sintéticos**. No hay empresas reales, ni datos de clientes, ni información propietaria.
+
+- `output/`: dataset del reto (1.286 empresas, 250 grupos, 24 meses), descrito en [output/data_dictionary.md](output/data_dictionary.md). `invoices.csv` y `transactions.csv` pesan demasiado y están en `.gitignore`: se obtienen del zip original del reto.
+- `frontend/src/api/mock/`: el mock del frontend genera su propio dataset determinista con la misma forma (1.286 empresas, 250 grupos). Los nombres, importes, scores y métricas del modelo (IC, ablación, SHAP) son ilustrativos y todavía no salen del dataset de `output/`.
 
 ## Hoja de ruta
 

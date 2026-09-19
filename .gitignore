@@ -4,6 +4,11 @@ dist/
 .env
 .claude/
 
+# Datos pesados: no se suben a git (ver output/data_dictionary.md)
+output/invoices.csv
+output/transactions.csv
+output_hackspain_data.zip
+
 # Material de trabajo local, no forma parte del proyecto
 overnight.md
 overnight.log
