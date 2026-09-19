@@ -1,110 +1,140 @@
 <div align="center">
 
-  # embat-scoring
+  # finhackers · scoring de salud financiera de PYMEs
 
-  **Guía paso a paso para construir el frontend de scoring de salud financiera de PYMEs (HackSpain, reto Embat)**
+  **Sistema completo para anticipar el deterioro financiero de una cartera de PYMEs (HackSpain, reto Embat): datos, modelo, API y frontend**
 
   ![License](https://img.shields.io/badge/license-MIT-blue)
-  ![React](https://img.shields.io/badge/React-18-61DAFB)
-  ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6)
-  ![Vite](https://img.shields.io/badge/Vite-8-646CFF)
+  ![Python](https://img.shields.io/badge/pipeline-Python-3776AB)
+  ![React](https://img.shields.io/badge/frontend-React%20%2B%20TypeScript-61DAFB)
 </div>
 
 ---
 
 ## Sobre el proyecto
 
-Este repositorio documenta cómo se construye, bloque a bloque, el frontend de una herramienta que muestra la **probabilidad de deterioro financiero** de una cartera de PYMEs (score de 0 a 100, DPD, liquidez, cobros y pagos) para que un equipo de tesorería pueda actuar antes de que el problema llegue.
+Herramienta que estima, para cada empresa de una cartera, la **probabilidad de deterioro financiero** en los próximos meses (score de 0 a 100), la explica en lenguaje natural y la compara con su cohorte, para que un equipo de tesorería actúe antes de que el problema llegue.
 
-El frontend trabaja contra una capa de datos tipada con un **mock determinista** (1.286 empresas, 250 grupos, 24 meses). Cuando exista el backend real, solo cambia la implementación de la interfaz `ScoringApi`.
+El proyecto cubre toda la cadena, de los datos en bruto a la pantalla, y está repartido entre varias personas del equipo:
 
-Cada decisión de diseño y cada bloque verificado están anotados en `docs/`, incluidos los descartes y sus motivos.
+| Parte | Qué es | Carpeta | Estado en el repo |
+| --- | --- | --- | --- |
+| Datos | Dataset sintético del reto (1.286 empresas, 250 grupos, 24 meses) | [`output/`](output/) | Subido |
+| Pipeline y modelo | Ingesta, etiquetado, features, entrenamiento, evaluación | `pipeline/` | Lo lleva el equipo, aún no subido |
+| Base de datos y API | Persistencia de scores y endpoints REST | `db/`, `backend/` | Lo lleva el equipo, aún no subido |
+| Frontend | Cartera, ficha de empresa, benchmarks, simulador, rendimiento del modelo | [`frontend/`](frontend/) | En desarrollo (2 de 5 vistas) |
+| Documentación | Arquitectura de referencia y guías | [`docs/`](docs/) | Subido |
+
+La arquitectura completa, con las 12 capas, está en [docs/arquitectura.pdf](docs/arquitectura.pdf).
 
 ## Índice
 
-- [Características](#características)
 - [Arquitectura](#arquitectura)
-- [Requisitos](#requisitos)
+- [Estructura del repositorio](#estructura-del-repositorio)
 - [Inicio rápido](#inicio-rápido)
-- [Guía / Capítulos](#guía--capítulos)
+- [Documentación](#documentación)
 - [Datos](#datos)
 - [Hoja de ruta](#hoja-de-ruta)
+- [Cómo trabajamos](#cómo-trabajamos)
 - [Licencia](#licencia)
-
-## Características
-
-- Vista **Cartera**: tabla semántica ordenada por riesgo, filtros por banda, sector y grupo, y destaque de las empresas cuyo score sube rápido en el mes
-- Vista **Ficha de empresa**: evolución del score, DPD y liquidez con explicación en lenguaje natural
-- Tema claro ("Índice de tesorería") y oscuro ("Terminal Embat") con persistencia
-- TypeScript estricto (`strict`, `noUncheckedIndexedAccess`, sin `any`) y contraste AA comprobado en ambos temas
-- Sin router externo: navegación por hash con un hook propio
 
 ## Arquitectura
 
 ```mermaid
 flowchart LR
-    A[Vistas React<br/>Cartera, Ficha] --> B[src/api/index.ts<br/>puerta única]
-    B --> C[ScoringApi<br/>contrato tipado]
-    C --> D[mockApi<br/>dataset determinista]
-    C -.futuro.-> E[Backend real<br/>REST]
+    subgraph OFF[Flujo offline, Python]
+        A[Datos CSV] --> B[Ingesta y<br/>modelo de datos]
+        B --> C[Etiquetado<br/>y features]
+        C --> D[Entrenamiento<br/>y evaluación]
+    end
 
-    classDef ui fill:#16233B,stroke:#0b1220,color:#fff
-    classDef api fill:#B8863B,stroke:#7d5a25,color:#fff
-    classDef mock fill:#009688,stroke:#00695c,color:#fff
-    classDef future fill:#6b7280,stroke:#374151,color:#fff
+    D --> E[(Registro<br/>de modelos)]
+    D --> F[(Base de datos<br/>servida)]
 
-    class A ui
-    class B,C api
-    class D mock
-    class E future
+    subgraph ON[Flujo online]
+        E --> G[API<br/>inferencia]
+        F --> G
+        G --> H[Frontend<br/>React]
+    end
+
+    classDef data fill:#0B5FFF,stroke:#083d99,color:#fff
+    classDef ml fill:#009688,stroke:#00695c,color:#fff
+    classDef store fill:#6b7280,stroke:#374151,color:#fff
+    classDef api fill:#C74634,stroke:#8f2f22,color:#fff
+    classDef ui fill:#B8863B,stroke:#7d5a25,color:#fff
+
+    class A data
+    class B,C,D ml
+    class E,F store
+    class G api
+    class H ui
 ```
 
-Flujo general:
+Los dos flujos solo se comunican por el registro de modelos y la base de datos:
 
-1. Las vistas solo hablan con `src/api/index.ts`; ningún fichero fuera de `src/api/` importa datos mock
-2. `ScoringApi` define una función por endpoint (`listCompanies`, `getScore`, `getExplanation`, `getKpis`, ...)
-3. `mockApi` genera un dataset coherente a partir de una serie latente de estrés por empresa, con contagio dentro del grupo
-4. El tema y los filtros se guardan en `localStorage` / `sessionStorage` para conservar el contexto
+1. **Offline**: se ingieren los CSV, se define la variable objetivo (índice de deterioro), se construyen las features por empresa y mes, y se entrenan y evalúan los modelos (A: solo variables estructurales; B: todos los bloques)
+2. **Registro y base de datos**: el modelo versionado y los scores, explicaciones, KPIs y benchmarks ya calculados
+3. **Online**: la API sirve los datos y la inferencia; el frontend los muestra en cinco vistas
 
-## Requisitos
+## Estructura del repositorio
 
-- Node.js 20 o superior
-- npm
+```
+.
+├── output/      Dataset sintético del reto y su diccionario de datos
+├── frontend/    App React + Vite + TypeScript
+├── docs/        Arquitectura de referencia y guías
+│   ├── arquitectura.pdf
+│   └── frontend/    Guía paso a paso del frontend
+├── LICENSE
+└── README.md
+```
+
+Las carpetas `pipeline/`, `db/` y `backend/` se añaden al subir cada parte.
 
 ## Inicio rápido
+
+Hoy se puede arrancar el frontend, que trabaja contra un mock mientras no exista la API:
 
 ```bash
 cd frontend
 npm install
-npm run dev        # servidor de desarrollo
-npm run build      # typecheck + build de producción
+npm run dev
 ```
 
-## Guía / Capítulos
+Detalles en la [guía del frontend](docs/frontend/01-puesta-en-marcha.md).
 
-1. [Puesta en marcha](docs/01-puesta-en-marcha.md)
-2. [Arquitectura del frontend](docs/02-arquitectura-frontend.md)
-3. [Decisiones de diseño](docs/03-decisiones.md)
-4. [Progreso por bloques](docs/04-progreso.md)
+## Documentación
 
-Documento de negocio de referencia: [arquitectura.pdf](docs/arquitectura.pdf).
+| Documento | Contenido |
+| --- | --- |
+| [Arquitectura](docs/arquitectura.pdf) | Las 12 capas del sistema y el contexto de negocio |
+| [Diccionario de datos](output/data_dictionary.md) | Los CSV del reto y sus columnas |
+| [Frontend: puesta en marcha](docs/frontend/01-puesta-en-marcha.md) | Instalar, arrancar, scripts, rutas |
+| [Frontend: arquitectura](docs/frontend/02-arquitectura-frontend.md) | Estructura, capa de datos, mock, diseño |
+| [Frontend: decisiones](docs/frontend/03-decisiones.md) | Decisiones de diseño con su justificación |
+| [Frontend: progreso](docs/frontend/04-progreso.md) | Qué está hecho y verificado, bloque a bloque |
 
 ## Datos
 
-Todos los datos del repositorio son **sintéticos**. No hay empresas reales, ni datos de clientes, ni información propietaria.
+Todos los datos son **sintéticos**: no hay empresas reales, ni datos de clientes, ni información propietaria.
 
-- `output/`: dataset del reto (1.286 empresas, 250 grupos, 24 meses), descrito en [output/data_dictionary.md](output/data_dictionary.md). `invoices.csv` y `transactions.csv` pesan demasiado y están en `.gitignore`: se obtienen del zip original del reto.
-- `frontend/src/api/mock/`: el mock del frontend genera su propio dataset determinista con la misma forma (1.286 empresas, 250 grupos). Los nombres, importes, scores y métricas del modelo (IC, ablación, SHAP) son ilustrativos y todavía no salen del dataset de `output/`.
+- `output/`: dataset del reto, descrito en [output/data_dictionary.md](output/data_dictionary.md). `invoices.csv` y `transactions.csv` pesan demasiado y están en `.gitignore`: se obtienen del zip original del reto.
+- `frontend/src/api/mock/`: el frontend genera su propio dataset determinista con la misma forma, para poder trabajar sin backend. Sus scores y métricas del modelo son ilustrativos y no salen todavía del modelo real.
 
 ## Hoja de ruta
 
-- [x] Bloque 1: scaffold Vite + React + TS, tokens de diseño y toggle de tema
-- [x] Bloque 2: capa de datos tipada con `mockApi`
-- [x] Bloque 3: vista Cartera
-- [x] Ficha de empresa (score, DPD y liquidez)
-- [ ] Rendimiento del modelo (comparación A/B, curva PR)
-- [ ] Benchmarks por cohorte
-- [ ] Simulador de escenarios
+- [x] Dataset del reto en el repo
+- [x] Frontend: scaffold, capa de datos tipada con mock, vista Cartera y ficha de empresa
+- [ ] Pipeline: ingesta, etiquetado, features, entrenamiento y evaluación
+- [ ] Base de datos y API
+- [ ] Frontend: benchmarks, simulador y rendimiento del modelo
+- [ ] Frontend conectado a la API real (sustituir el mock por llamadas HTTP)
+
+## Cómo trabajamos
+
+- `main` siempre debe funcionar
+- Cada parte vive en su carpeta, para no pisarnos
+- Los datos pesados no se suben; las credenciales tampoco
 
 ## Licencia
 

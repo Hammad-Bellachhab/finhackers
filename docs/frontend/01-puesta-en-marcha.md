@@ -1,4 +1,4 @@
-# 01. Puesta en marcha
+# Frontend 01. Puesta en marcha
 
 ## Requisitos
 
@@ -8,8 +8,8 @@
 ## Instalar y arrancar
 
 ```bash
-git clone <url-del-repo>
-cd embat-scoring/frontend
+git clone https://github.com/Hammad-Bellachhab/finhackers.git
+cd finhackers/frontend
 npm install
 npm run dev
 ```

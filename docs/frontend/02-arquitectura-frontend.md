@@ -1,4 +1,4 @@
-# 02. Arquitectura del frontend
+# Frontend 02. Arquitectura
 
 ## Estructura de `frontend/src`
 
