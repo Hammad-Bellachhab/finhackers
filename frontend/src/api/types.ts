@@ -135,6 +135,10 @@ export type Alert = {
   severity?: number
   delta1m?: number
   why?: string
+  // Para filtrar el monitor por empresa/cartera, como en la vista Cartera. Opcionales: el mock no los trae.
+  group?: string
+  sizeCohort?: string
+  country?: string
 }
 
 export type Evidence = {
