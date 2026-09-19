@@ -117,6 +117,15 @@ export function ImproveSection({
   // (aun sin peticion en vuelo), la peticion en curso y el fallo que deja el plan anterior.
   const desfasado = !vista || ultimo.current?.key !== targetsKey
 
+  // Lo que le baja el score y ningun slider toca (metricId nulo, o una metrica que no se ofrece
+  // como palanca). No entra en planHealth, asi que se enseña aparte como techo: hasta donde
+  // llegaria si ademas resolviera eso. Ojo, no es comparable con planHealth y por eso no se suma
+  // dentro: planHealth lo repuntua el modelo, y estos impactos son la linealizacion de SHAP que
+  // hace inference.drags(), que ademas se solapa entre señales y tiende a inflarse.
+  const sinPalanca = drags.current.filter((d) => !levers.some((l) => l.metric.id === d.metricId))
+  const margen = Math.round(sinPalanca.reduce((a, d) => a - d.impact, 0) * 10) / 10
+  const techo = vista && margen > 0 ? Math.min(100, Math.round((vista.planHealth + margen) * 10) / 10) : null
+
   if (levers.length === 0) {
     return (
       <section className="section">
@@ -228,6 +237,16 @@ export function ImproveSection({
                 {`(${vista.scoreDelta > 0 ? '+' : ''}${vista.scoreDelta} puntos)`}
               </span>
             </p>
+            {techo !== null && (
+              <p className="plan-ceiling">
+                Si además resolviera lo que no tiene palanca directa{' '}
+                ({sinPalanca.length} {sinPalanca.length === 1 ? 'señal' : 'señales'}, {margen} puntos),
+                el techo estaría en <strong data-testid="plan-ceiling">{techo}</strong>.{' '}
+                <span className="muted">
+                  Aproximado: son los pesos del modelo sumados uno a uno, sin repuntuar.
+                </span>
+              </p>
+            )}
             <small className="muted">
               {plan.error
                 ? 'No se ha podido actualizar: este es el último plan que sí se calculó.'

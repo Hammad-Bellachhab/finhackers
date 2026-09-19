@@ -143,6 +143,17 @@
 .company-picker input:focus { border-color: var(--color-accent); box-shadow: var(--focus-ring); outline: none; }
 
 /* --- Cómo subir tu score: lo que le hunde y las palancas que lo corrigen --------------- */
+/* Es la única sección de la ficha donde se decide algo, no solo se mira: va en tarjeta propia
+   con filo de acento, para que pese más que las secciones de diagnóstico que tiene encima. */
+.improve {
+  background: var(--color-surface); border-radius: var(--radius-lg);
+  border-left: 3px solid var(--color-accent);
+  padding: var(--space-5) var(--space-5) var(--space-6);
+  box-shadow: var(--shadow);
+}
+.improve > h2 { margin-top: 0; }
+/* Los tiles de dentro compartían fondo con la tarjeta y se perdían: pasan a blanco. */
+.improve .drags li { background: var(--color-bg); }
 .improve h3 { font-size: 0.95rem; margin: 1.4rem 0 0.5rem; }
 .improve h3:first-of-type { margin-top: 0.5rem; }
 
@@ -189,4 +200,10 @@
 /* El pie cambia de texto segun el estado (recalculando, estimacion, fallo) y esos textos ocupan
    distinto: se le reserva el alto para que cambiar de uno a otro no mueva la pagina. */
 .plan-total small { display: block; min-height: 2.6em; margin-top: var(--space-2); }
-.plan-total strong { font-size: var(--text-lg); }
+.plan-total strong { font-size: var(--text-kpi); }
+/* El techo va debajo y por debajo en jerarquía: es una estimación, no el número repuntuado. */
+.plan-ceiling {
+  margin-top: var(--space-3); padding-top: var(--space-3);
+  border-top: 1px dashed var(--color-border-strong); font-size: 0.9rem;
+}
+.plan-ceiling strong { font-size: var(--text-lg); }

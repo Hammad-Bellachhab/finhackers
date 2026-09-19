@@ -169,6 +169,37 @@ describe('ImproveSection', () => {
     expect(document.querySelectorAll('.drags li').length).toBe(antes)
   })
 
+  it('suma en el techo lo que le hunde y ningun slider toca', async () => {
+    // El diagnostico se fija con la primera respuesta, asi que el mock va antes del render.
+    vi.mocked(getPlan).mockResolvedValueOnce({
+      companyId: 'c-0001', baseHealth: 60, planHealth: 70, scoreDelta: 10, levers: [], exact: true,
+      drags: [
+        // Este si tiene palanca (dso): ya esta dentro de planHealth, no puede contar dos veces.
+        { id: 'g1', label: 'Cobra tarde', impact: -3, block: 'C', metricId: 'dso' },
+        { id: 'g2', label: 'Ingresos a la baja', impact: -2.5, block: 'B', metricId: null },
+        // ccc queda fuera de las palancas a proposito (pisaria a dso), asi que cuenta aqui.
+        { id: 'g3', label: 'Ciclo de caja largo', impact: -1.5, block: 'C', metricId: 'ccc' },
+      ],
+    })
+    render1()
+
+    await waitFor(() => expect(screen.getByTestId('plan-ceiling')).toBeInTheDocument())
+    // 70 + 2,5 + 1,5 = 74. El drag de dso no entra.
+    expect(screen.getByTestId('plan-ceiling').textContent).toBe('74')
+    expect(screen.getByText(/2 señales, 4 puntos/)).toBeInTheDocument()
+  })
+
+  it('sin drags huerfanos no hay linea de techo', async () => {
+    vi.mocked(getPlan).mockResolvedValueOnce({
+      companyId: 'c-0001', baseHealth: 60, planHealth: 70, scoreDelta: 10, levers: [], exact: true,
+      drags: [{ id: 'g1', label: 'Cobra tarde', impact: -3, block: 'C', metricId: 'dso' }],
+    })
+    render1()
+
+    await waitFor(() => expect(screen.getByTestId('plan-score')).toBeInTheDocument())
+    expect(screen.queryByTestId('plan-ceiling')).toBeNull()
+  })
+
   it('avisa cuando no hay nada que corregir', () => {
     render(<ImproveSection companyId="c-0001" decisions={[]} metrics={[metrics[2]]} />)
     expect(screen.getByText(/no hay nada que corregir/i)).toBeInTheDocument()

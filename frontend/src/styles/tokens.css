@@ -106,10 +106,11 @@
   --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
 
   /* ---- Forma ---- */
-  /* Ancho de la app: contenido centrado con aire a los lados. A 110rem la página llegaba
-     al borde de la pantalla y la app no respiraba; las tablas anchas ya hacen scroll solas. */
-  --page-max: 72rem;
-  --landing-max: 88rem;   /* las landings, algo más anchas: el héroe pide sitio */
+  /* Ancho de la app: el punto medio entre las dos quejas. A 110rem llegaba al borde de la
+     pantalla y no respiraba; a 72rem no cabían las tablas. 88rem = el mismo de las landings,
+     así la barra, el héroe y el contenido comparten vertical. */
+  --page-max: 88rem;
+  --landing-max: 88rem;
 
   --radius-sm: 6px;
   --radius: 8px;
