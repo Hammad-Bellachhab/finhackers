@@ -1,31 +1,22 @@
+# Node
 node_modules/
 dist/
-*.log
-.env
-.claude/
+*.local
 
-# Datos pesados: no se suben a git (ver output/data_dictionary.md)
-output/invoices.csv
-output/transactions.csv
-output_hackspain_data.zip
-
-# Material de trabajo local, no forma parte del proyecto
-overnight.md
-overnight.log
-ESTRUCTURA_REPO.txt
-prompt-frontend-embat-claude-code.md
-
-# ---- pipeline/ (sistema Python: datos derivados, modelos y artefactos pesados no se suben) ----
-pipeline/data/parquet/
-pipeline/data/tmp/
-pipeline/data/serve.db
-pipeline/data/quality/quality_report_2*.json
-pipeline/models/registry/v*/*
-!pipeline/models/registry/v*/metadata.json
-pipeline/reports/*.parquet
-pipeline/reports/*_log.txt
-__pycache__/
-*.pyc
-.pytest_cache/
-.ruff_cache/
+# Python
 .venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Entorno
+.env
+.env.*
+!.env.example
+
+# Editores / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

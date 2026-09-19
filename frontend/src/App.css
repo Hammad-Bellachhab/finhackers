@@ -1,0 +1,25 @@
+main {
+  max-width: 40rem;
+  margin: 4rem auto;
+  padding: 0 1rem;
+  font-family: system-ui, sans-serif;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.status {
+  color: #555;
+}
+
+.ok {
+  color: #0a7d32;
+  font-weight: 600;
+}
+
+.ko {
+  color: #b3261e;
+  font-weight: 600;
+}
