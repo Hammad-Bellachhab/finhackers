@@ -15,15 +15,18 @@ estabilidad) y viabilidad (producto, comprador, explicación, demo).
 ## Estructura del repo (rama `main`, todos hacen `git pull` de `main`)
 
 ```
-data/raw/        los 8 CSV del reto (fuera de git; invoices.csv y transactions.csv van por Git LFS: `git lfs pull`)
+data/raw/        los 8 CSV del reto, en git (invoices.csv y transactions.csv por Git LFS: `git lfs pull`)
 pipeline/        MOTOR DE SCORING (Python) — ver pipeline/README.md, es la documentación completa con cifras
-frontend/        SPA React + Vite del compañero (concepto "Pulso"), hoy contra datos mock; NO conectada al motor
-db/              esquema SQL + ETL a SQLite del compañero (independiente del motor)
-docs/            brief, diccionario de datos, paleta, diagrama ER, docs/superpowers/specs/2026-09-19-pulso-design.md
+frontend/        SPA React + Vite (producto "Pulso"): se sirve estática en Cloudflare con las respuestas del motor
+                 precalculadas en frontend/public/data/ por `python -m src.pulso` (contrato en frontend/src/api/types.ts)
+docs/            brief, diccionario de datos, paleta, docs/superpowers/specs/2026-09-19-pulso-design.md
+wrangler.jsonc   despliegue en Cloudflare (se publica solo en cada push a main); tasks/todo.md: lista del equipo
 .github/workflows/ci.yml   lint + tests + smoke test del pipeline
 ```
 
-La rama `clean-start` fue un reinicio del compañero; ya está fusionada en `main` y no hace falta usarla.
+Despliegue: tras cambiar datos o modelo, `python -m src.pipeline all` y luego `python -m src.pulso` (≈ 4 min, regenera
+`frontend/public/data/`), commit + push y Cloudflare publica. La rama `clean-start` fue un reinicio del compañero, ya
+fusionada en `main`; no usarla.
 
 ## El motor (`pipeline/`) en una pasada
 
@@ -79,8 +82,8 @@ premiar, del corte de grifo al aviso, del banco que juzga a la empresa que se en
 "no existe hoy para una pyme y está medido" convence más que "revolucionario".
 
 **Pendiente para la demo** (no construido): tabla de reglas salud/trayectoria → límite y precio; pantalla del
-prestamista (cartera de líneas con alertas) sobre la API; pantalla de consentimiento de la pyme; conectar el front
-React (`/api/...`, contrato en `frontend/src/api/types.ts`) con el motor (hablan contratos distintos).
+prestamista (cartera de líneas con alertas); pantalla de consentimiento de la pyme. El front de Pulso ya consume el
+motor vía `src/pulso.py` (export estático); cualquier dato nuevo para el front se añade ahí y se regenera.
 
 ## Cómo trabajar en este repo
 
@@ -90,7 +93,7 @@ React (`/api/...`, contrato en `frontend/src/api/types.ts`) con el motor (hablan
   Parquet, serve.db, joblib, CSV de test y `work/` quedan fuera; sí se suben `metadata.json`, informes y figuras).
 - Tras cambiar el modelo o las reglas: `python -m src.pipeline train evaluate db test`, actualizar cifras del
   `pipeline/README.md`, `pytest`, y dejar solo la versión servida en `models/registry/` (borrar las antiguas).
-- Puede haber **otra sesión de Claude** trabajando en el mismo repo (hubo commits concurrentes): `git fetch` antes de
-  commitear y no forzar pushes.
+- Puede haber **otra sesión de Claude** (la del front/Pulso) trabajando en el mismo repo: `git fetch` + `git pull --rebase`
+  antes de commitear y nunca forzar pushes. Esa sesión también toca `pipeline/src` (p. ej. `pulso.py`, limpiezas).
 - Datos: `config.py` busca los CSV en `../data/raw`, `../output`, `pipeline/data/raw` o `RAW_DIR`. La carpeta
   `output/` local es un duplicado antiguo, no está en git y se puede borrar.
