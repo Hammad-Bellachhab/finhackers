@@ -108,6 +108,7 @@
   /* ---- Forma ---- */
   /* Ancho de la app: aprovecha la pantalla para no tener que desplazarse en las tablas. */
   --page-max: 110rem;
+  --landing-max: 88rem;   /* las landings, algo más estrechas: son texto para leer */
 
   --radius-sm: 6px;
   --radius: 8px;
