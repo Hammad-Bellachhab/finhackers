@@ -2,6 +2,7 @@ import { useId, useState } from 'react'
 import { getTellMe } from '../api'
 import type { Insight, InsightKind } from '../api/types'
 import { useAsync } from './useAsync'
+import { TellMeLogo } from './TellMeLogo'
 import './shared.css'
 
 const KIND: Record<InsightKind, [string, string]> = {
@@ -15,7 +16,11 @@ const ORDEN = { alert: 0, watch: 1, info: 2 }
 const fecha = new Intl.DateTimeFormat('es-ES', { dateStyle: 'medium', timeStyle: 'short' })
 
 function Mark() {
-  return <span className="tellme-mark" aria-hidden="true">✦</span>
+  return (
+    <span className="tellme-mark" aria-hidden="true">
+      <TellMeLogo size={20} />
+    </span>
+  )
 }
 
 function Eyebrow({ scope }: { scope?: string }) {

@@ -110,8 +110,7 @@
 .tellme-eyebrow strong { color: var(--color-text); font-weight: 500; }
 /* Único sitio de la app con el gradiente: igual que en embat.io, gradiente = TellMe. */
 .tellme-mark {
-  width: 20px; height: 20px; border-radius: 6px; background: var(--embat-gradient);
-  color: var(--color-text-on-accent); font-size: 12px; display: inline-grid; place-items: center; flex: none;
+  width: 20px; height: 20px; display: inline-grid; place-items: center; flex: none;
 }
 .tellme .tellme-headline { font-size: var(--text-lg); font-weight: 500; letter-spacing: -0.01em; margin: var(--space-3) 0 var(--space-2); }
 .tellme-summary { color: var(--color-text-subtle); max-width: 68ch; }

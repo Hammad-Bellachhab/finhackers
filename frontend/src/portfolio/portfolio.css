@@ -82,3 +82,45 @@
 .row-main td { font-weight: 500; color: var(--color-accent-text); }
 .tall { max-height: 17rem; overflow-y: auto; }
 .figure { width: 100%; height: auto; border-radius: var(--radius-sm); background: #fff; }
+
+/* Botón para expandir TellMe en cada fila de la tabla */
+.btn-expand-tellme {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  margin-right: var(--space-2);
+  vertical-align: middle;
+  transition: background-color 150ms ease, transform 150ms ease;
+  color: var(--color-text-muted);
+}
+.btn-expand-tellme:hover {
+  background-color: var(--color-surface-hover);
+}
+.btn-expand-tellme.expanded {
+  transform: rotate(90deg);
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent-text);
+}
+
+/* Fila de expansión de TellMe en la tabla */
+.row-tellme-expansion {
+  background-color: var(--color-bg-subtle);
+  cursor: default !important;
+}
+.row-tellme-expansion:hover {
+  background-color: var(--color-bg-subtle) !important;
+}
+.row-tellme-expansion td {
+  padding: var(--space-4) var(--space-5) !important;
+  border-bottom: 1px solid var(--color-border);
+  white-space: normal !important; /* Permitir saltos de línea para el reporte de IA */
+}
+.portfolio-tellme-card {
+  max-width: 900px;
+  margin: 0 auto;
+}
