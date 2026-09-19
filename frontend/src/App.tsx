@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import { DEFAULT_COMPANY } from './api'
 import { CompanyView } from './company/CompanyView'
 import { EvidenceView } from './portfolio/EvidenceView'
 import { PortfolioView } from './portfolio/PortfolioView'
@@ -14,7 +15,7 @@ const TABS: { id: Vista; label: string }[] = [
 
 export default function App() {
   const [vista, setVista] = useState<Vista>('cartera')
-  const [companyId, setCompanyId] = useState('c-0001')
+  const [companyId, setCompanyId] = useState(DEFAULT_COMPANY)
 
   const abrirEmpresa = (id: string) => {
     setCompanyId(id)

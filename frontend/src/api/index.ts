@@ -10,6 +10,9 @@ import type {
 
 const USE_MOCK = import.meta.env.MODE === 'test' || import.meta.env.VITE_MOCK === '1'
 
+/** Empresa que abre la pestaña Empresa si no se ha elegido ninguna desde la cartera. */
+export const DEFAULT_COMPANY = USE_MOCK ? 'c-0001' : 'COMP_0001'
+
 function find(id: string): MockCompany {
   const hit = buildDataset().find((c) => c.score.companyId === id)
   if (!hit) throw new Error('Empresa no encontrada')
