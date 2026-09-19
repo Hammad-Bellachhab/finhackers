@@ -43,3 +43,6 @@ pipeline/reports/test_companies/work/
 # Cloudflare (wrangler dev)
 .wrangler/
 assets para cursor/
+
+# Secretos locales del Worker
+.dev.vars

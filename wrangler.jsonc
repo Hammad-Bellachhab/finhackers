@@ -1,7 +1,14 @@
-// Pulso en Cloudflare: solo estáticos. Los datos son JSON precalculados por el motor (python -m src.pulso).
+// Front en Cloudflare: estáticos precalculados por el motor (python -m src.pulso) + /api/ask (chat con TellMe).
+// La key: `npx wrangler secret put GEMINI_API_KEY` (en local, fichero .dev.vars fuera de git).
 {
   "name": "finhackers",
+  "main": "worker/index.js",
   "compatibility_date": "2026-09-18",
   "build": { "command": "cd frontend && npm ci && npm run build" },
-  "assets": { "directory": "frontend/dist", "not_found_handling": "single-page-application" }
+  "assets": {
+    "directory": "frontend/dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  }
 }

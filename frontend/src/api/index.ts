@@ -6,7 +6,7 @@ import { buildDataset, type MockCompany } from './mock/dataset'
 import { companyName } from './mock/names'
 import type {
   Alert, CompanyProfile, CompanyScore, Decision, Evidence, Forecast, MetricId, ModelReport,
-  Portfolio, Simulation, TellMe,
+  AskResponse, ChatTurn, Portfolio, Simulation, TellMe,
 } from './types'
 
 const USE_MOCK = import.meta.env.MODE === 'test' || import.meta.env.VITE_MOCK === '1'
@@ -63,6 +63,28 @@ export function getModelReport(): Promise<ModelReport> {
   return get('/data/model.json', SIN_MOCK)
 }
 
+/** TellMe escribe IDs (COMP_1065): en pantalla van los mismos nombres que en el resto de la web. */
+const withCompanyNames = <T,>(x: T): T =>
+  JSON.parse(JSON.stringify(x).replace(/COMP_\d{4}/g, (id) => companyName(id)))
+
+/** Pregunta a TellMe sobre una empresa (o sobre la cartera si no hay id). La IA vive en el Worker. */
+export async function askTellMe(question: string, companyId?: string, history: ChatTurn[] = []): Promise<AskResponse> {
+  if (USE_MOCK) {
+    return {
+      answer: 'Respuesta de ejemplo (mock). En modo real responde TellMe con los datos del motor.',
+      bullets: [], evidence: [], followUps: ['¿Qué hago primero?'], model: 'mock',
+    }
+  }
+  const res = await fetch('/api/ask', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question, companyId: companyId ?? null, history }),
+  })
+  const data = await res.json().catch(() => null)
+  if (!res.ok || !data || data.error) throw new Error(data?.error?.message ?? 'TellMe no está disponible ahora mismo.')
+  return withCompanyNames(data as AskResponse)
+}
+
 /** Análisis de TellMe (la IA de Embat). Sin id: el de la cartera. null = aún no generado (404). */
 export function getTellMe(companyId?: string): Promise<TellMe | null> {
   const path = companyId ? `/data/companies/${companyId}/tellme.json` : '/data/tellme/portfolio.json'
@@ -83,8 +105,7 @@ export function getTellMe(companyId?: string): Promise<TellMe | null> {
     generatedAt: '2026-09-19T00:00:00Z',
     model: 'mock',
   }))
-    // TellMe escribe IDs (COMP_1065): en pantalla van los mismos nombres que en el resto de la web.
-    .then((t) => t && JSON.parse(JSON.stringify(t).replace(/COMP_\d{4}/g, (id) => companyName(id))))
+    .then((t) => t && withCompanyNames(t))
     .catch((e: Error) => {
       if (e.cause === 404) return null
       throw e

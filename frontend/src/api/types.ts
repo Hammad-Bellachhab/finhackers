@@ -239,3 +239,15 @@ export type TellMe = {
   generatedAt: string
   model: string
 }
+
+// ---------- Chat con TellMe (POST /api/ask, worker/index.js) ----------
+
+export type ChatTurn = { role: 'user' | 'model'; text: string }
+
+export type AskResponse = {
+  answer: string
+  bullets: string[]
+  evidence: { label: string; value: string }[]
+  followUps: string[]
+  model: string
+}

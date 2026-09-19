@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { DEFAULT_COMPANY } from './api'
 import { CompanyView } from './company/CompanyView'
+import { AskTellMe } from './shared/AskTellMe'
 import { AlertsView } from './portfolio/AlertsView'
 import { EvidenceView } from './portfolio/EvidenceView'
 import { ModelView } from './portfolio/ModelView'
@@ -53,6 +54,9 @@ export default function App() {
         {vista === 'evidencia' && <EvidenceView />}
         {vista === 'modelo' && <ModelView />}
       </main>
+
+      {/* key: cambiar de empresa (o volver a la cartera) empieza otra conversación */}
+      <AskTellMe key={vista === 'empresa' ? companyId : 'cartera'} companyId={vista === 'empresa' ? companyId : undefined} />
     </div>
   )
 }
