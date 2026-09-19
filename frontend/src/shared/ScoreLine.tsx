@@ -19,7 +19,7 @@ export function yDomain(points: ScorePoint[]): [number, number] {
   ]
 }
 
-type Row = { month: string; score?: number; proj?: number; low?: number; high?: number }
+type Row = { month: string; score?: number; proj?: number; low?: number; high?: number; ghost?: number }
 
 export type ScoreLineProps = {
   series: ScorePoint[]
@@ -28,10 +28,14 @@ export type ScoreLineProps = {
   bandHigh?: ScorePoint[]
   markers?: { month: string; label: string; color?: string }[]
   height?: number
+  /** Puntos que fijan la escala vertical (por defecto, todos los que se pintan). */
+  domainFrom?: ScorePoint[]
+  /** Previsión de referencia en fantasma (p. ej. sin el plan del simulador). */
+  ghost?: ScorePoint[]
 }
 
 export function ScoreLine({
-  series, projection = [], bandLow = [], bandHigh = [], markers = [], height = 260,
+  series, projection = [], bandLow = [], bandHigh = [], markers = [], height = 260, domainFrom, ghost = [],
 }: ScoreLineProps) {
   const rows: Row[] = series.map((p) => ({ month: p.month, score: p.score }))
 
@@ -42,17 +46,19 @@ export function ScoreLine({
     rows[rows.length - 1].proj = ultimo
     rows[rows.length - 1].low = ultimo
     rows[rows.length - 1].high = ultimo
+    if (ghost.length > 0) rows[rows.length - 1].ghost = ultimo
     projection.forEach((p, i) => {
       rows.push({
         month: p.month,
         proj: p.score,
         low: bandLow[i]?.score,
         high: bandHigh[i]?.score,
+        ghost: ghost[i]?.score,
       })
     })
   }
 
-  const domain = yDomain([...series, ...projection, ...bandLow, ...bandHigh])
+  const domain = yDomain(domainFrom ?? [...series, ...projection, ...bandLow, ...bandHigh])
 
   return (
     <div className="score-line">
@@ -81,6 +87,12 @@ export function ScoreLine({
             dataKey="score" name="Score" stroke="var(--chart-1)" strokeWidth={2}
             dot={false} isAnimationActive={false} connectNulls
           />
+          {ghost.length > 0 && (
+            <Line
+              dataKey="ghost" name="Sin el plan" stroke="var(--color-text-muted)" strokeWidth={1.5}
+              strokeDasharray="2 4" strokeOpacity={0.7} dot={false} isAnimationActive={false} connectNulls
+            />
+          )}
           <Line
             dataKey="proj" name="Previsión" stroke="var(--chart-2)" strokeWidth={2}
             strokeDasharray="5 4" dot={false} isAnimationActive={false} connectNulls

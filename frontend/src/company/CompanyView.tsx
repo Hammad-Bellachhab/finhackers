@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useCallback, useState } from 'react'
 import { getCompanyScore, getDecisions, getForecast, getPortfolio } from '../api'
 import { useAsync } from '../shared/useAsync'
 import { ErrorNotice, Skeleton } from '../shared/States'
@@ -36,11 +36,10 @@ export function CompanyView({ companyId, onSelect }: { companyId: string; onSele
   const score = useAsync(() => getCompanyScore(companyId), [companyId])
   const forecast = useAsync(() => getForecast(companyId), [companyId])
   const decisions = useAsync(() => getDecisions(companyId), [companyId])
-  const [simulatedDelta, setSimulatedDelta] = useState(0)
-
-  useEffect(() => {
-    setSimulatedDelta(0)
-  }, [companyId])
+  // El delta del simulador es de una empresa: al cambiar de empresa vale 0 sin esperar a un efecto.
+  const [sim, setSim] = useState({ companyId, delta: 0 })
+  const simulatedDelta = sim.companyId === companyId ? sim.delta : 0
+  const onDeltaChange = useCallback((delta: number) => setSim({ companyId, delta }), [companyId])
 
   return (
     <>
@@ -67,7 +66,7 @@ export function CompanyView({ companyId, onSelect }: { companyId: string; onSele
               companyId={companyId}
               decisions={decisions.data}
               metrics={score.data.metrics}
-              onDeltaChange={setSimulatedDelta}
+              onDeltaChange={onDeltaChange}
             />
           )}
         </>

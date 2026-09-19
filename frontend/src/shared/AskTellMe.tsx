@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { askTellMe } from '../api'
 import type { AskResponse, ChatTurn } from '../api/types'
-import { TellMeLogo } from './TellMeLogo'
+import { TellMeLogo, TellMeWordmark } from './TellMeLogo'
 import './ask-tellme.css'
 
 type Msg = { role: 'user'; text: string } | { role: 'model'; text: string; data: AskResponse } | { role: 'error'; text: string }
@@ -45,14 +45,15 @@ export function AskTellMe({ companyId }: { companyId?: string }) {
   const sugerencias = last?.role === 'model' ? last.data.followUps : SUGERENCIAS[companyId ? 'empresa' : 'cartera']
 
   return (
-    <div className={`ask ${open ? 'ask-open' : ''} ${busy ? 'ask-thinking' : ''}`} onKeyDown={(e) => { if (e.key === 'Escape') setOpen(false) }}>
+    <div className={`ask ${open ? 'ask-open' : ''} ${busy ? 'ask-thinking tellme-spin' : ''}`} onKeyDown={(e) => { if (e.key === 'Escape') setOpen(false) }}>
       {open && (
         <section id={panelId} className="ask-panel" aria-label="Chat con TellMe">
           <header className="ask-head">
             <span className="tellme-mark" aria-hidden="true">
               <TellMeLogo size={20} />
             </span>
-            <strong>TellMe</strong>
+            <TellMeWordmark />
+            <span className="ask-sub">tu analista financiero</span>
             <button type="button" className="ask-close" aria-label="Cerrar el chat" onClick={() => setOpen(false)}>×</button>
           </header>
 
@@ -95,9 +96,9 @@ export function AskTellMe({ companyId }: { companyId?: string }) {
         onClick={() => setOpen((v) => !v)}
       >
         <span className="tellme-mark" aria-hidden="true">
-          <TellMeLogo size={24} />
+          <TellMeLogo size={22} />
         </span>
-        TellMe
+        <TellMeWordmark />
       </button>
     </div>
   )

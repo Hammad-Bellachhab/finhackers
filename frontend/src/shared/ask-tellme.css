@@ -1,5 +1,10 @@
-/* Notch del chat: fijo abajo en el centro, se despliega hacia arriba. */
+/* Chat con TellMe: notch fijo abajo en el centro que se despliega hacia arriba.
+   Caja azul noche con cristal, como la imagen de marca de TellMe: igual en claro y en oscuro. */
 .ask {
+  --ask-bg: rgb(8 14 48 / 92%);
+  --ask-line: rgb(255 255 255 / 10%);
+  --ask-text: #eef1ff;
+  --ask-muted: #a9b0d6;
   position: fixed; left: 50%; bottom: var(--space-4); transform: translateX(-50%); z-index: 50;
   display: flex; flex-direction: column; align-items: center; gap: var(--space-3);
   width: min(40rem, calc(100vw - 2 * var(--space-4)));
@@ -8,85 +13,88 @@
 .ask > * { pointer-events: auto; }
 
 .ask-notch {
-  display: inline-flex; align-items: center; gap: var(--space-3);
-  padding: 14px var(--space-6); border-radius: 999px; font: inherit; font-size: var(--text-md); font-weight: 500;
-  background: var(--color-bg); color: var(--color-text); cursor: pointer;
-  border: 1px solid var(--color-accent-border, var(--color-border)); box-shadow: var(--shadow-lg);
-  transition: transform 160ms ease, box-shadow 160ms ease;
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: 12px var(--space-5); border-radius: 999px; font: inherit; font-size: var(--text-md);
+  background: var(--ask-bg); color: var(--ask-text); cursor: pointer;
+  border: 1px solid rgb(139 92 246 / 45%);
+  box-shadow: 0 10px 30px rgb(5 11 44 / 30%), inset 0 1px 0 rgb(255 255 255 / 8%);
+  backdrop-filter: blur(12px);
+  transition: transform 200ms var(--ease), box-shadow 200ms var(--ease);
 }
-.ask-notch:hover { transform: translateY(-1px); background: var(--color-accent-soft); }
-.ask-notch:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.ask-notch:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgb(79 123 255 / 35%), inset 0 1px 0 rgb(255 255 255 / 10%); }
+.ask-notch:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+.ask-thinking .ask-notch { box-shadow: 0 0 0 4px rgb(139 92 246 / 25%), 0 10px 30px rgb(5 11 44 / 30%); }
 
 .ask-panel {
-  width: 100%; max-height: min(34rem, 70vh); display: flex; flex-direction: column;
-  background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-lg, 12px);
-  box-shadow: var(--shadow-lg); overflow: hidden;
-  animation: ask-in 180ms ease-out;
+  width: 100%; max-height: min(36rem, 72vh); display: flex; flex-direction: column;
+  color: var(--ask-text);
+  background:
+    radial-gradient(90% 60% at 0% 0%, rgb(79 123 255 / 22%) 0%, transparent 60%),
+    radial-gradient(80% 60% at 100% 0%, rgb(195 87 236 / 18%) 0%, transparent 55%),
+    var(--ask-bg);
+  border: 1px solid rgb(139 92 246 / 35%); border-radius: 16px;
+  box-shadow: 0 24px 60px rgb(5 11 44 / 40%);
+  backdrop-filter: blur(14px); overflow: hidden;
+  animation: ask-in 240ms var(--ease);
+  transform-origin: 50% 100%;
 }
-@keyframes ask-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes ask-in { from { opacity: 0; transform: translateY(10px) scale(0.98); } }
 
 .ask-head {
   display: flex; align-items: center; gap: var(--space-2); padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--color-border); font-size: var(--text-sm);
-  background: linear-gradient(180deg, var(--color-ai-wash) 0, var(--color-bg) 100%);
+  border-bottom: 1px solid var(--ask-line); font-size: var(--text-md);
 }
+.ask-sub { font-size: var(--text-xs); color: var(--ask-muted); }
 .ask-close {
   margin-left: auto; border: 0; background: transparent; font-size: 1.25rem; line-height: 1;
-  color: var(--color-text-muted); cursor: pointer; padding: var(--space-1) var(--space-2); border-radius: var(--radius-sm);
+  color: var(--ask-muted); cursor: pointer; padding: var(--space-1) var(--space-2); border-radius: var(--radius-sm);
 }
-.ask-close:hover { background: var(--color-surface); }
+.ask-close:hover { background: rgb(255 255 255 / 8%); color: var(--ask-text); }
 
 .ask-list { flex: 1; overflow-y: auto; padding: var(--space-4); display: grid; gap: var(--space-3); align-content: start; }
-.ask-empty { margin: 0; color: var(--color-text-muted); font-size: var(--text-sm); }
-.ask-msg { max-width: 88%; padding: var(--space-3) var(--space-4); border-radius: var(--radius-lg, 12px); font-size: var(--text-sm); }
+.ask-empty { margin: 0; color: var(--ask-muted); font-size: var(--text-sm); }
+.ask-msg {
+  max-width: 88%; padding: var(--space-3) var(--space-4); border-radius: 14px; font-size: var(--text-sm);
+  animation: ask-msg-in 220ms var(--ease);
+}
+@keyframes ask-msg-in { from { opacity: 0; transform: translateY(4px); } }
 .ask-msg p { margin: 0; }
 .ask-msg ul { margin: var(--space-2) 0 0; padding-left: 1.1rem; }
-.ask-user { justify-self: end; background: var(--color-accent-soft); color: var(--color-text); }
-.ask-model { justify-self: start; background: var(--color-surface); }
-.ask-error { justify-self: start; background: var(--color-warning-soft); color: var(--color-warning-strong); }
+.ask-msg li + li { margin-top: 2px; }
+.ask-user { justify-self: end; background: linear-gradient(135deg, #4f7bff, #8b5cf6); color: #fff; border-bottom-right-radius: 4px; }
+.ask-model { justify-self: start; background: rgb(255 255 255 / 7%); border: 1px solid var(--ask-line); border-bottom-left-radius: 4px; }
+.ask-error { justify-self: start; background: rgb(223 182 49 / 15%); color: #ffe7a3; }
 
-.ask-typing { display: inline-flex; gap: 4px; }
-.ask-typing span {
-  width: 6px; height: 6px; border-radius: 50%; background: var(--color-text-muted);
-  animation: ask-dot 1s infinite ease-in-out;
-}
+.ask-typing { display: inline-flex; gap: 5px; }
+.ask-typing span { width: 6px; height: 6px; border-radius: 50%; background: #c4b5fd; animation: ask-dot 1s infinite ease-in-out; }
 .ask-typing span:nth-child(2) { animation-delay: 0.15s; }
 .ask-typing span:nth-child(3) { animation-delay: 0.3s; }
-@keyframes ask-dot { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
+@keyframes ask-dot { 0%, 80%, 100% { opacity: 0.3; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-2px); } }
 
 .ask-suggest { display: flex; gap: var(--space-2); flex-wrap: wrap; padding: 0 var(--space-4) var(--space-3); }
-.ask-suggest .chip { font-size: var(--text-xs); }
+.ask-suggest .chip {
+  font-size: var(--text-xs); background: rgb(255 255 255 / 6%); color: var(--ask-text);
+  border: 1px solid rgb(255 255 255 / 14%); transition: background-color 150ms var(--ease), border-color 150ms var(--ease);
+}
+.ask-suggest .chip:hover { background: rgb(139 92 246 / 22%); border-color: rgb(139 92 246 / 55%); }
 
-.ask-form { display: flex; gap: var(--space-2); padding: var(--space-3) var(--space-4); border-top: 1px solid var(--color-border); }
+.ask-form { display: flex; gap: var(--space-2); padding: var(--space-3) var(--space-4) var(--space-4); border-top: 1px solid var(--ask-line); }
 .ask-form input {
-  flex: 1; font: inherit; font-size: var(--text-sm); padding: 9px var(--space-3);
-  border: 1px solid var(--color-border-control, var(--color-border)); border-radius: var(--radius-sm);
-  background: var(--color-bg); color: var(--color-text);
+  flex: 1; font: inherit; font-size: var(--text-sm); padding: 10px var(--space-3); border-radius: 10px;
+  border: 1px solid rgb(255 255 255 / 16%); background: rgb(255 255 255 / 6%); color: var(--ask-text);
 }
-.ask-form input:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 1px; }
+.ask-form input::placeholder { color: var(--ask-muted); }
+.ask-form input:focus-visible { outline: 2px solid #8b5cf6; outline-offset: 1px; }
 .ask-send {
-  font: inherit; font-size: var(--text-sm); padding: 0 var(--space-4); border: 0; border-radius: var(--radius-sm);
-  background: var(--color-accent); color: var(--color-text-on-accent); cursor: pointer;
+  font: inherit; font-size: var(--text-sm); font-weight: 600; padding: 0 var(--space-4); border: 0; border-radius: 10px;
+  background: var(--tellme-gradient); color: #fff; cursor: pointer; transition: opacity 150ms var(--ease);
 }
-.ask-send:disabled { opacity: 0.45; cursor: default; }
+.ask-send:disabled { opacity: 0.4; cursor: default; }
 
 /* Deja sitio al final de la página para que el notch no tape contenido. */
-.page { padding-bottom: 6rem; }
-
-/* El destello "piensa" (gira y late, como el logo de Claude) al pasar el ratón y mientras responde. */
-.ask-notch .tellme-mark, .ask-head .tellme-mark { transition: transform 300ms var(--ease); }
-.ask-notch:hover .tellme-mark,
-.ask-thinking .tellme-mark { animation: tellme-think 1.6s var(--ease) infinite; }
-@keyframes tellme-think {
-  0%   { transform: rotate(0deg) scale(1); }
-  25%  { transform: rotate(90deg) scale(0.78); }
-  50%  { transform: rotate(180deg) scale(1.08); }
-  75%  { transform: rotate(270deg) scale(0.82); }
-  100% { transform: rotate(360deg) scale(1); }
-}
-.ask-thinking .ask-notch { box-shadow: var(--shadow-lg), 0 0 0 3px var(--color-accent-soft); }
+.page { padding-bottom: 7rem; }
 
 @media (prefers-reduced-motion: reduce) {
-  .ask-panel, .ask-typing span, .ask-notch .tellme-mark, .ask-thinking .tellme-mark { animation: none; }
+  .ask-panel, .ask-msg, .ask-typing span { animation: none; }
   .ask-notch { transition: none; }
 }

@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react'
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import type { Contribution } from '../api/types'
 import { formatMonth } from './format'
@@ -53,11 +54,37 @@ export function ContributionBars({ items }: { items: Contribution[] }) {
 
 /** Tarjeta con título para cada gráfica. */
 export function Panel({ title, note, children }: { title: string; note?: string; children: React.ReactNode }) {
+  const dialog = useRef<HTMLDialogElement>(null)
+  // El contenido ampliado solo se monta mientras el diálogo está abierto (la gráfica se redibuja a su tamaño).
+  const [open, setOpen] = useState(false)
+  const show = () => { setOpen(true); dialog.current?.showModal() }
+  const hide = () => dialog.current?.close()
   return (
     <div className="panel">
-      <h3>{title}</h3>
-      {children}
+      <h3>
+        {title}
+        <button type="button" className="panel-zoom" aria-label={`Ampliar: ${title}`} onClick={show}>⤢</button>
+      </h3>
+      {/* Clic en la propia gráfica o imagen también amplía; el resto (chips, desplegables) sigue funcionando. */}
+      <div
+        className="panel-body"
+        onClick={(e) => { if ((e.target as Element).closest('.recharts-wrapper, img')) show() }}
+      >
+        {children}
+      </div>
       {note && <p className="panel-note">{note}</p>}
+      <dialog
+        ref={dialog} className="zoom-dialog" aria-label={title}
+        onClose={() => setOpen(false)}
+        onClick={(e) => { if (e.target === e.currentTarget) hide() }}
+      >
+        <header>
+          <h3>{title}</h3>
+          <button type="button" className="panel-zoom" aria-label="Cerrar" onClick={hide}>×</button>
+        </header>
+        <div className="zoom-body">{open && children}</div>
+        {note && <p className="panel-note">{note}</p>}
+      </dialog>
     </div>
   )
 }
