@@ -20,3 +20,7 @@ __pycache__/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Dataset del reto (646 MB descomprimido, fuera de git).
+# Ver docs/reto-embat.md para su procedencia.
+data/
