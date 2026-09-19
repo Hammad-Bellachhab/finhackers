@@ -1,155 +1,155 @@
 feature,mean_abs_shap,block,label
-cash_min_w6_norm,0.3821264286159476,C,Saldo mínimo de caja (6 m) sobre gasto mensual
-main_bank,0.34333279516624615,E,Banco principal
-erp_any,0.2628660613281868,A,ERP
-inv_n_counterparties_w3,0.2252665804924822,F,Contrapartidas distintas en facturas (3 m)
-cash_balance_T_log,0.19200554697554575,A,Saldo de caja reconstruido a fin de mes
-days_of_cash,0.1589211231581104,C,Días de caja
-tenure_months,0.14198285680872447,A,Antigüedad en la plataforma
-pay_bad_share_w12,0.1254343753008963,B,% facturas a pagar con más de 30 días de retraso (12 m)
-n_tx_w1,0.123722011900244,C,Transacciones en el último mes
-n_tx_w3_vs_w12,0.11693940162412826,C,Actividad transaccional 3 m frente a 12 m
-salary_day_mean_w3,0.10941103688337805,B,Día del mes en que se pagan las nóminas (3 m)
-main_bank_share,0.09380387866288568,A,Peso del banco principal
-discarded_share_w3,0.08375751149776782,F,Movimientos descartados en conciliación (3 m)
-sib_stress_rate_w6,0.08303173856766262,E,Términos de estrés en empresas hermanas del grupo (6 m)
-bank_peer_cash_neg_months_w6,0.08088304691507822,E,Meses en descubierto de empresas del mismo banco (6 m)
-cash_vol6,0.08055105932701258,C,Volatilidad del saldo de caja (6 m)
-rec_open_overdue_share_w6,0.08028526012682792,B,% facturas a cobrar vencidas y abiertas (6 m)
-no_counterparty_share_w3,0.07711923783846607,F,Movimientos sin contrapartida resuelta (3 m)
-sib_cash_neg_months_w6,0.07496161452415524,E,Meses en descubierto de las empresas hermanas (6 m)
-pay_dpd_mean_w3,0.07050260963142646,B,Retraso medio de pago a proveedores (3 m)
-inflow_w3_vs_w12,0.06803873277990741,C,Cobros últimos 3 m frente a media 12 m
-bank_peer_interest_n_w6,0.06704865925279364,E,Liquidaciones de intereses de empresas del mismo banco (6 m)
-sib_pay_open_overdue_w6,0.06617486596102135,E,% facturas vencidas abiertas de las empresas hermanas del grupo
-pay_open_overdue_share_w3,0.06451864422208566,B,% facturas a pagar vencidas y abiertas (3 m)
-resolved_inflow_share_w6,0.06409432565345075,D,Cobros con contrapartida identificada (6 m)
-pay_dpd_trend6,0.06100278778662624,B,Tendencia del retraso de pago (6 m)
-pay_open_overdue_share_w12,0.05742236473802276,B,% facturas a pagar vencidas y abiertas (12 m)
-inflow_vol6,0.05677713925190478,C,Volatilidad de cobros (6 m)
-fee_amt_ratio_w6,0.05617861670131747,C,Comisiones sobre pagos (6 m)
-interest_amt_ratio_w6,0.056106742298259966,C,Intereses/comisiones de descubierto sobre pagos (6 m)
-pay_bad_share_w6,0.05599970161644067,B,% facturas a pagar con más de 30 días de retraso (6 m)
-pay_dpd_mean_w6,0.05470319169784969,B,Retraso medio de pago a proveedores (6 m)
-inflow_w6_log,0.05373125539420856,C,Cobros (6 m)
-cash_months_of_outflow,0.05357648614907589,A,Meses de gasto operativo cubiertos por la caja
-sib_interest_n_w6,0.05179293445763718,E,Liquidaciones de intereses de las empresas hermanas (6 m)
-pay_amt_open_overdue_ratio_w6,0.051429025123807,B,Importe vencido abierto sobre facturado a pagar (6 m)
-tax_amt_ratio_w3_w12,0.04957224737888271,B,Impuestos pagados 3 m frente a media 12 m
-bank_peer_pay_open_overdue_w6,0.048043706083526615,E,% facturas vencidas de empresas del mismo banco principal
-io_ratio_w12,0.04762036745526252,C,Ratio cobros/pagos (12 m)
-cash_neg_months_w12,0.04732379647327282,C,Meses en descubierto (12 m)
-reconciled_delta_w3_w12,0.04670865010599077,F,Cambio en la tasa de conciliación (3 m vs 12 m)
-io_ratio_w1,0.04597967696819904,C,Ratio cobros/pagos (último mes)
-n_counterparties_w3_mean,0.04236426368060797,D,Contrapartidas bancarias distintas por mes (3 m)
-io_ratio_w6,0.04092424512497341,C,Ratio cobros/pagos (6 m)
-sib_io_ratio_w3,0.03891195866740247,E,Ratio cobros/pagos de las empresas hermanas (3 m)
-tax_share_of_outflow_w6,0.03875292042226105,B,Impuestos sobre pagos (6 m)
-group_size,0.03630447744981579,A,Tamaño del grupo empresarial
-ss_day_mean_w3,0.03432829968844914,B,Día del mes de pago de Seg. Social (3 m)
-inv_issued_w3_log,0.03386366508593125,F,Facturas emitidas (3 m)
-tax_months_share_w6,0.03325938107257781,B,Meses con pago de impuestos (6 m)
-cash_neg_months_w3,0.03305348028493345,C,Meses en descubierto (3 m)
-n_bank_accounts,0.03251585115818162,A,Cuentas corrientes
-inv_issued_ratio_w3_w12,0.03177443952427702,F,Facturas emitidas 3 m frente a media 12 m
-pay_open_overdue_cv12,0.03177082989023505,B,Estacionalidad del impago (12 m)
-n_tx_trend6,0.03160953627720962,C,Tendencia de actividad transaccional (6 m)
-hhi_in_delta3,0.030762086455986482,D,Cambio en concentración de clientes (3 m)
-n_banks,0.030756215935348614,A,Número de bancos
-active_days_w3,0.030545244862177322,C,Días con actividad bancaria (3 m)
-months_in_panel,0.03046859377870967,A,Meses de historial disponible
-no_counterparty_delta_w3_w12,0.030307294248010794,F,Cambio en movimientos sin contrapartida (3 m vs 12 m)
-pay_dpd_mean_w12,0.028785327062153657,B,Retraso medio de pago a proveedores (12 m)
-pay_term_days_w6,0.028689391184126133,B,Plazo medio de pago pactado (6 m)
-inv_stress_rate_w6,0.02868460539006095,F,Facturas con términos de estrés (6 m)
-outflow_trend6,0.028194354239500327,C,Tendencia de pagos (6 m)
-n_products_total,0.027254676062779676,A,Productos bancarios conectados
-top1_out_share,0.02721867718256329,D,Peso del mayor proveedor en los pagos
-io_ratio_trend6,0.026393469899892236,C,Tendencia del ratio cobros/pagos (6 m)
-stress_terms_rate_w12,0.025961942773611812,F,Movimientos con términos de estrés (12 m)
-ss_amt_ratio_w3_w12,0.025041353789884188,B,Seg. Social 3 m frente a media 12 m
-uncategorized_share_w3,0.024365495431920806,F,Movimientos sin categoría (3 m)
-outflow_w6_log,0.02435843176221981,C,Pagos (6 m)
-debt_service_ratio_w6,0.024225793126760944,A,Servicio de la deuda sobre cobros (6 m)
-inactive_months_w6,0.02418360514590364,C,Meses sin transacciones (6 m)
-n_tx_w3_log,0.02330072850230955,C,Transacciones en 3 meses
-n_siblings_active,0.02301365934473814,E,Empresas hermanas activas en el grupo
-salary_amt_ratio_w3_w12,0.022907250016627405,B,Nóminas 3 m frente a media 12 m
-net_flow_norm_w3,0.022671798648546824,C,Flujo neto sobre pagos (3 m)
-turnover_out_w12_log,0.02237763918906942,A,Pagos operativos anuales
-credit_util_max_w6,0.022287355491238003,C,Utilización máxima de líneas de crédito (6 m)
-outflow_w1_log,0.021976081330394425,C,Pagos del último mes
-n_cp_out_log,0.020436646845225413,D,Proveedores con pagos identificados (6 m)
-salary_day_delta,0.02039193777248112,B,Cambio en el día de pago de nóminas (3 m vs 12 m)
-pay_open_overdue_share_w6,0.01990759323103986,B,% facturas a pagar vencidas y abiertas (6 m)
-io_ratio_w3,0.019771971183606307,C,Ratio cobros/pagos (3 m)
-pay_amt_open_overdue_ratio_w12,0.019217771220082655,B,Importe vencido abierto sobre facturado a pagar (12 m)
-rec_open_overdue_trend6,0.018362202896847816,B,Tendencia del % de facturas a cobrar vencidas (6 m)
-pay_max_open_dpd_w12,0.018203757670312865,B,Factura a pagar más antigua sin pagar
-cash_trend6,0.017815448195241855,C,Tendencia del saldo de caja (6 m)
-no_accounting_delta_w3_w12,0.017748983259336052,F,Cambio en movimientos sin estado contable
-pay_dpd_p90_w6,0.017290369309264,B,Retraso p90 de pago a proveedores (6 m)
-rec_bad_share_w6,0.017256964034223533,B,% facturas a cobrar con más de 30 días de retraso (6 m)
-stress_terms_rate_w6,0.017210098271892495,F,"Movimientos con términos de estrés (devolución, impagado…) (6 m)"
-cash_withdrawal_share_w6,0.016530468361688037,C,Retiradas de efectivo sobre movimientos (6 m)
-rec_dpd_mean_w3,0.016406541605504064,B,Retraso medio de cobro de clientes (3 m)
-no_accounting_share_w3,0.016182313364526548,F,Movimientos sin estado contable (3 m)
-pay_bad_share_delta3,0.016164933900911,B,Cambio en % facturas con >30 d (3 m)
-rec_open_overdue_share_w3,0.015935513153045675,B,% facturas a cobrar vencidas y abiertas (3 m)
-inflow_w1_log,0.01591136483908925,C,Cobros del último mes
-rec_amt_open_overdue_ratio_w6,0.015460791123678801,B,Importe a cobrar vencido sobre facturado (6 m)
-months_since_last_invoice,0.015224115523358481,F,Meses desde la última factura sincronizada del ERP
-loan_granted_total,0.014560863146800726,A,Préstamos concedidos
-pay_bad_share_w3,0.01439577962588317,B,% facturas a pagar con más de 30 días de retraso (3 m)
-interest_n_w12,0.014269488757960889,C,Liquidaciones de intereses/descubierto (12 m)
-inflow_w3_log,0.014261702201217486,C,Cobros (3 m)
-cash_conversion_days_w6,0.014111649744698807,C,Ciclo de cobro aproximado (emisión → cobro)
-top1_in_delta3,0.013732993260942012,D,Cambio en peso del mayor cliente (3 m)
-pay_n_w6_log,0.013560823696536415,B,Facturas a pagar vencidas en 6 m
-country,0.013264296038077371,A,País
-refund_share_w6,0.01319710458878055,C,Devoluciones sobre movimientos (6 m)
-total_periods_mean,0.012692241675298714,A,Plazo medio de los préstamos
-hhi_out,0.012642349663172101,D,Concentración de pagos por proveedor (HHI)
-turnover_in_w12_log,0.012621430426181184,A,Cobros operativos anuales
-rec_dpd_mean_w6,0.01225121292982747,B,Retraso medio de cobro de clientes (6 m)
-debt_granted_total,0.01182390860320087,A,Financiación concedida total
-inflow_trend6,0.011713652778256044,C,Tendencia de cobros (6 m)
-interest_n_w6,0.011580180804076641,C,Liquidaciones de intereses/descubierto (6 m)
-cash_neg_months_w6,0.011300843133282404,C,Meses en descubierto (6 m)
-hhi_in,0.011256850052392785,D,Concentración de cobros por cliente (HHI)
-outflow_w3_log,0.010876603519261726,C,Pagos (3 m)
-ss_months_share_w6,0.010778752014687037,B,Meses con pago de Seguridad Social (6 m)
-currency,0.010631194579766926,A,Divisa
-interest_n_w3,0.01058418827928454,C,Liquidaciones de intereses/descubierto (3 m)
-credit_util_T,0.009309052859157695,A,Utilización de líneas de crédito
-inv_no_cp_share_w6,0.009036767764410931,F,Facturas sin contrapartida (6 m)
-n_cash_accounts_neg_T,0.008897512216820018,C,Cuentas en negativo a fin de mes
-card_drawn_T_log,0.00880323572689683,A,Saldo de tarjetas
-pay_open_overdue_trend6,0.008517432590270714,B,Tendencia del % de facturas vencidas abiertas (6 m)
-n_cp_in_log,0.008326976841219816,D,Clientes con cobros identificados (6 m)
-credit_util_trend6,0.008105295781999027,C,Tendencia de utilización de líneas (6 m)
-stress_terms_n_w3,0.007115376367242768,F,Movimientos con términos de estrés (3 m)
-rec_n_w6_log,0.006893623133122719,B,Facturas a cobrar vencidas en 6 m
-salary_months_share_w6,0.006300687029314321,B,Meses con pago de nóminas (6 m)
-erp_missing,0.006270130351999371,F,Sin ERP conectado
-top1_in_share,0.006229327639389756,D,Peso del mayor cliente en los cobros
-stress_trend6,0.006084973935592663,F,Tendencia de términos de estrés (6 m)
-credit_drawn_T_log,0.00598736898638638,A,Crédito dispuesto
-stress_terms_rate_w3,0.0046027600740967305,F,Movimientos con términos de estrés (3 m)
-n_eff_clients,0.004060629536486394,D,Número efectivo de clientes
-debt_repayment_trend6,0.004041273401178535,C,Tendencia de amortización de deuda (6 m)
-n_loans,0.0032258588416820854,A,Préstamos
-interest_trend6,0.002906350881392621,C,Tendencia de liquidaciones de intereses (6 m)
-reconciled_share_w3,0.002889014312188983,F,Movimientos conciliados (3 m)
-country_missing,0.0026024452389785345,F,País no informado
-cp_in_churn,0.002566667676996368,D,Clientes perdidos frente al semestre anterior
-n_confirming_factoring,0.002246596599315196,A,Confirming / factoring
-n_debt_products,0.002146377985600316,A,Número de productos de financiación
-n_credit_lines,0.001118684021616982,A,Líneas de crédito
-n_cards,0.0006953511897547156,A,Tarjetas
+cash_min_w6_norm,0.38360725120803646,C,Saldo mínimo de caja (6 m) sobre gasto mensual
+main_bank,0.3438970147896676,E,Banco principal
+erp_any,0.2632969663120311,A,ERP
+inv_n_counterparties_w3,0.21971176583028063,F,Contrapartidas distintas en facturas (3 m)
+cash_balance_T_log,0.1877643054940448,A,Saldo de caja reconstruido a fin de mes
+days_of_cash,0.16049788092942135,C,Días de caja
+tenure_months,0.14159381284082037,A,Antigüedad en la plataforma
+pay_bad_share_w12,0.1285933309121983,B,% facturas a pagar con más de 30 días de retraso (12 m)
+n_tx_w1,0.12139133628219416,C,Transacciones en el último mes
+n_tx_w3_vs_w12,0.11630420292431375,C,Actividad transaccional 3 m frente a 12 m
+salary_day_mean_w3,0.10611948083917465,B,Día del mes en que se pagan las nóminas (3 m)
+main_bank_share,0.0910604975532373,A,Peso del banco principal
+cash_vol6,0.08357729486896963,C,Volatilidad del saldo de caja (6 m)
+bank_peer_cash_neg_months_w6,0.08206313289973605,E,Meses en descubierto de empresas del mismo banco (6 m)
+discarded_share_w3,0.08169827547250225,F,Movimientos descartados en conciliación (3 m)
+rec_open_overdue_share_w6,0.08028618719502029,B,% facturas a cobrar vencidas y abiertas (6 m)
+no_counterparty_share_w3,0.08021955411100391,F,Movimientos sin contrapartida resuelta (3 m)
+sib_stress_rate_w6,0.08020059532373992,E,Términos de estrés en empresas hermanas del grupo (6 m)
+sib_cash_neg_months_w6,0.07427766409072076,E,Meses en descubierto de las empresas hermanas (6 m)
+sib_pay_open_overdue_w6,0.06743576092515027,E,% facturas vencidas abiertas de las empresas hermanas del grupo
+pay_dpd_mean_w3,0.06589485780226263,B,Retraso medio de pago a proveedores (3 m)
+pay_open_overdue_share_w3,0.06510433619610127,B,% facturas a pagar vencidas y abiertas (3 m)
+inflow_w3_vs_w12,0.06487072027100275,C,Cobros últimos 3 m frente a media 12 m
+bank_peer_interest_n_w6,0.06474232439155322,E,Liquidaciones de intereses de empresas del mismo banco (6 m)
+pay_dpd_trend6,0.06299128596814908,B,Tendencia del retraso de pago (6 m)
+resolved_inflow_share_w6,0.06273661923367066,D,Cobros con contrapartida identificada (6 m)
+inflow_vol6,0.05980812663955775,C,Volatilidad de cobros (6 m)
+interest_amt_ratio_w6,0.0587143682880588,C,Intereses/comisiones de descubierto sobre pagos (6 m)
+fee_amt_ratio_w6,0.05773953834784572,C,Comisiones sobre pagos (6 m)
+pay_open_overdue_share_w12,0.05654421929280266,B,% facturas a pagar vencidas y abiertas (12 m)
+pay_dpd_mean_w6,0.05634314794448571,B,Retraso medio de pago a proveedores (6 m)
+pay_bad_share_w6,0.05543720684684538,B,% facturas a pagar con más de 30 días de retraso (6 m)
+inflow_w6_log,0.05259291039142109,C,Cobros (6 m)
+tax_amt_ratio_w3_w12,0.05226081540203335,B,Impuestos pagados 3 m frente a media 12 m
+pay_amt_open_overdue_ratio_w6,0.051635444428365956,B,Importe vencido abierto sobre facturado a pagar (6 m)
+cash_months_of_outflow,0.05099169771544477,A,Meses de gasto operativo cubiertos por la caja
+bank_peer_pay_open_overdue_w6,0.04955415860444473,E,% facturas vencidas de empresas del mismo banco principal
+cash_neg_months_w12,0.0486249352355008,C,Meses en descubierto (12 m)
+sib_interest_n_w6,0.04798399295524914,E,Liquidaciones de intereses de las empresas hermanas (6 m)
+io_ratio_w1,0.046835072372595536,C,Ratio cobros/pagos (último mes)
+io_ratio_w12,0.04658027003636528,C,Ratio cobros/pagos (12 m)
+reconciled_delta_w3_w12,0.04438658252074285,F,Cambio en la tasa de conciliación (3 m vs 12 m)
+io_ratio_w6,0.04289594563119853,C,Ratio cobros/pagos (6 m)
+n_counterparties_w3_mean,0.04184134465948318,D,Contrapartidas bancarias distintas por mes (3 m)
+sib_io_ratio_w3,0.04110490283892401,E,Ratio cobros/pagos de las empresas hermanas (3 m)
+inv_issued_w3_log,0.0378234003314018,F,Facturas emitidas (3 m)
+group_size,0.03578517390514058,A,Tamaño del grupo empresarial
+tax_share_of_outflow_w6,0.03542931977378119,B,Impuestos sobre pagos (6 m)
+pay_open_overdue_cv12,0.035418319756507236,B,Estacionalidad del impago (12 m)
+tax_months_share_w6,0.03455471097731795,B,Meses con pago de impuestos (6 m)
+ss_day_mean_w3,0.03346897181919764,B,Día del mes de pago de Seg. Social (3 m)
+n_bank_accounts,0.033247358170266084,A,Cuentas corrientes
+months_in_panel,0.03288186927791354,A,Meses de historial disponible
+cash_neg_months_w3,0.03274577272122317,C,Meses en descubierto (3 m)
+n_tx_trend6,0.03182438154713918,C,Tendencia de actividad transaccional (6 m)
+n_banks,0.030755935434692336,A,Número de bancos
+inv_issued_ratio_w3_w12,0.030081183815610504,F,Facturas emitidas 3 m frente a media 12 m
+active_days_w3,0.029566830575164165,C,Días con actividad bancaria (3 m)
+hhi_in_delta3,0.0294838505483402,D,Cambio en concentración de clientes (3 m)
+pay_dpd_mean_w12,0.029367471021325885,B,Retraso medio de pago a proveedores (12 m)
+outflow_trend6,0.029323843702646884,C,Tendencia de pagos (6 m)
+no_counterparty_delta_w3_w12,0.028935625046128906,F,Cambio en movimientos sin contrapartida (3 m vs 12 m)
+io_ratio_trend6,0.02775684235419051,C,Tendencia del ratio cobros/pagos (6 m)
+debt_service_ratio_w6,0.02713466234173245,A,Servicio de la deuda sobre cobros (6 m)
+turnover_out_w12_log,0.026519454022641286,A,Pagos operativos anuales
+pay_term_days_w6,0.026388682019219713,B,Plazo medio de pago pactado (6 m)
+outflow_w6_log,0.025034871345947313,C,Pagos (6 m)
+salary_amt_ratio_w3_w12,0.024428089554709577,B,Nóminas 3 m frente a media 12 m
+inactive_months_w6,0.02440055203742174,C,Meses sin transacciones (6 m)
+uncategorized_share_w3,0.024336489164446272,F,Movimientos sin categoría (3 m)
+ss_amt_ratio_w3_w12,0.023590966821258733,B,Seg. Social 3 m frente a media 12 m
+n_products_total,0.023577807621647188,A,Productos bancarios conectados
+top1_out_share,0.0232671989530996,D,Peso del mayor proveedor en los pagos
+credit_util_max_w6,0.022779893730185678,C,Utilización máxima de líneas de crédito (6 m)
+inv_stress_rate_w6,0.022428831464607387,F,Facturas con términos de estrés (6 m)
+outflow_w1_log,0.022283141495054004,C,Pagos del último mes
+n_tx_w3_log,0.02223655992988434,C,Transacciones en 3 meses
+n_siblings_active,0.02200441831240908,E,Empresas hermanas activas en el grupo
+net_flow_norm_w3,0.021870763028688987,C,Flujo neto sobre pagos (3 m)
+stress_terms_rate_w12,0.020539766091196867,F,Movimientos con términos de estrés (12 m)
+io_ratio_w3,0.020412823792890215,C,Ratio cobros/pagos (3 m)
+salary_day_delta,0.02003306627096105,B,Cambio en el día de pago de nóminas (3 m vs 12 m)
+pay_open_overdue_share_w6,0.01973049772564746,B,% facturas a pagar vencidas y abiertas (6 m)
+no_accounting_delta_w3_w12,0.01858825597445821,F,Cambio en movimientos sin estado contable
+cash_trend6,0.018156144241554803,C,Tendencia del saldo de caja (6 m)
+pay_amt_open_overdue_ratio_w12,0.018045169201264723,B,Importe vencido abierto sobre facturado a pagar (12 m)
+n_cp_out_log,0.01769463068415001,D,Proveedores con pagos identificados (6 m)
+rec_open_overdue_trend6,0.01768849400991098,B,Tendencia del % de facturas a cobrar vencidas (6 m)
+pay_dpd_p90_w6,0.017388385937273373,B,Retraso p90 de pago a proveedores (6 m)
+pay_max_open_dpd_w12,0.017345891898740223,B,Factura a pagar más antigua sin pagar
+rec_bad_share_w6,0.0172885293535364,B,% facturas a cobrar con más de 30 días de retraso (6 m)
+cash_withdrawal_share_w6,0.016520685820515968,C,Retiradas de efectivo sobre movimientos (6 m)
+inflow_w1_log,0.016457629326457092,C,Cobros del último mes
+rec_open_overdue_share_w3,0.016382647927070414,B,% facturas a cobrar vencidas y abiertas (3 m)
+no_accounting_share_w3,0.016113021820603375,F,Movimientos sin estado contable (3 m)
+cash_conversion_days_w6,0.015789551495231795,C,Ciclo de cobro aproximado (emisión → cobro)
+months_since_last_invoice,0.015597912987885139,F,Meses desde la última factura sincronizada del ERP
+pay_n_w6_log,0.015035389250967708,B,Facturas a pagar vencidas en 6 m
+rec_dpd_mean_w3,0.014965211013928077,B,Retraso medio de cobro de clientes (3 m)
+pay_bad_share_delta3,0.014743193134473184,B,Cambio en % facturas con >30 d (3 m)
+loan_granted_total,0.014692722940349923,A,Préstamos concedidos
+pay_bad_share_w3,0.014575977941964025,B,% facturas a pagar con más de 30 días de retraso (3 m)
+refund_share_w6,0.014238647829460783,C,Devoluciones sobre movimientos (6 m)
+top1_in_delta3,0.014118504738699125,D,Cambio en peso del mayor cliente (3 m)
+stress_terms_rate_w6,0.013974553043210972,F,"Movimientos con términos de estrés (devolución, impagado…) (6 m)"
+rec_amt_open_overdue_ratio_w6,0.013865793077507719,B,Importe a cobrar vencido sobre facturado (6 m)
+total_periods_mean,0.013398071089513597,A,Plazo medio de los préstamos
+turnover_in_w12_log,0.013346878751956923,A,Cobros operativos anuales
+country,0.013267680342772887,A,País
+interest_n_w12,0.01320654655383033,C,Liquidaciones de intereses/descubierto (12 m)
+inflow_w3_log,0.013089446339896865,C,Cobros (3 m)
+debt_granted_total,0.01297115852109968,A,Financiación concedida total
+inv_no_cp_share_w6,0.012720576700714654,F,Facturas sin contrapartida (6 m)
+interest_n_w6,0.012382690178332524,C,Liquidaciones de intereses/descubierto (6 m)
+hhi_out,0.012123212450906005,D,Concentración de pagos por proveedor (HHI)
+rec_dpd_mean_w6,0.011535024372116051,B,Retraso medio de cobro de clientes (6 m)
+ss_months_share_w6,0.011395867350545211,B,Meses con pago de Seguridad Social (6 m)
+hhi_in,0.011314404907566022,D,Concentración de cobros por cliente (HHI)
+cash_neg_months_w6,0.01129338078600275,C,Meses en descubierto (6 m)
+currency,0.010858459261428166,A,Divisa
+n_cp_in_log,0.010525456378948138,D,Clientes con cobros identificados (6 m)
+outflow_w3_log,0.010344982226609054,C,Pagos (3 m)
+n_cash_accounts_neg_T,0.009435553826940182,C,Cuentas en negativo a fin de mes
+interest_n_w3,0.009413229676577081,C,Liquidaciones de intereses/descubierto (3 m)
+salary_months_share_w6,0.009068263051788124,B,Meses con pago de nóminas (6 m)
+inflow_trend6,0.008954888507199426,C,Tendencia de cobros (6 m)
+stress_terms_n_w3,0.00889747392216765,F,Movimientos con términos de estrés (3 m)
+card_drawn_T_log,0.008851405955112331,A,Saldo de tarjetas
+credit_util_T,0.008804283652195419,A,Utilización de líneas de crédito
+pay_open_overdue_trend6,0.008491015118381254,B,Tendencia del % de facturas vencidas abiertas (6 m)
+credit_util_trend6,0.008132150199873744,C,Tendencia de utilización de líneas (6 m)
+stress_trend6,0.006937627601852225,F,Tendencia de términos de estrés (6 m)
+top1_in_share,0.006480699676399884,D,Peso del mayor cliente en los cobros
+erp_missing,0.006270122581864942,F,Sin ERP conectado
+credit_drawn_T_log,0.005852974758011739,A,Crédito dispuesto
+rec_n_w6_log,0.0054825522146082425,B,Facturas a cobrar vencidas en 6 m
+reconciled_share_w3,0.005308813784556524,F,Movimientos conciliados (3 m)
+stress_terms_rate_w3,0.005202786525618117,F,Movimientos con términos de estrés (3 m)
+n_eff_clients,0.005042261155938874,D,Número efectivo de clientes
+debt_repayment_trend6,0.004175966816316039,C,Tendencia de amortización de deuda (6 m)
+interest_trend6,0.003396538660874715,C,Tendencia de liquidaciones de intereses (6 m)
+country_missing,0.0025956093871362124,F,País no informado
+cp_in_churn,0.002566669227191876,D,Clientes perdidos frente al semestre anterior
+n_loans,0.002286389060798867,A,Préstamos
+n_debt_products,0.0021613761811444133,A,Número de productos de financiación
+n_confirming_factoring,0.001629068719612218,A,Confirming / factoring
+n_credit_lines,0.0011185110546252032,A,Líneas de crédito
+n_cards,0.0010264419464860609,A,Tarjetas
 n_leasing,0.0001741032229714274,A,Leasings
-wavg_interest_rate,4.777034546220855e-05,A,Tipo de interés medio
+wavg_interest_rate,0.0,A,Tipo de interés medio
 share_variable_rate,0.0,A,Deuda a tipo variable
-n_guarantees,0.0,A,Avales
 pending_status_share_w3,0.0,F,Movimientos pendientes de contabilizar (3 m)
 has_invoices,0.0,F,Facturación sincronizada desde ERP
+n_guarantees,0.0,A,Avales

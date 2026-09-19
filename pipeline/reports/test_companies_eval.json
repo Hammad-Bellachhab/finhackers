@@ -10,51 +10,51 @@
   "model_B": {
     "n": 707,
     "positives": 77,
-    "auc_pr": 0.444956170167787,
-    "auc_roc": 0.8204596990311276,
-    "brier": 0.08602101968882603,
+    "auc_pr": 0.42959177073045274,
+    "auc_roc": 0.8165945165945165,
+    "brier": 0.08684429359264498,
     "base_rate": 0.10891089108910891,
-    "p@50": 0.12024229002438916,
-    "r@50": 0.9915966386554622,
-    "r@top10pct": 0.4248132586367881
+    "p@50": 0.11906581943615387,
+    "r@50": 0.9719887955182074,
+    "r@top10pct": 0.4199112978524744
   },
   "model_A": {
     "n": 707,
     "positives": 77,
-    "auc_pr": 0.28080507762130397,
-    "auc_roc": 0.7895794681508966,
-    "brier": 0.14003586646393212,
+    "auc_pr": 0.27415592267237704,
+    "auc_roc": 0.7822613894042466,
+    "brier": 0.14418139534653465,
     "base_rate": 0.10891089108910891,
     "p@50": 0.12141876061262445,
     "r@50": 1.0,
-    "r@top10pct": 0.2234360410830999
+    "r@top10pct": 0.21690009337068158
   },
   "lift_B_vs_A": {
     "auc_pr_A_ci": [
-      0.2099726867478246,
-      0.38042624262924485
+      0.2057704174417737,
+      0.37699644731010756
     ],
     "auc_pr_B_ci": [
-      0.34000123963258316,
-      0.5673021151193814
+      0.32613051174950386,
+      0.5470748612153061
     ],
     "lift_ci": [
-      0.0720011713158016,
-      0.25000011053988885
+      0.06295814418960302,
+      0.24759723281500245
     ],
-    "lift_mean": 0.16097757542761662,
+    "lift_mean": 0.15254736248048306,
     "p_lift_le_0": 0.002
   },
   "health_as_score": {
-    "auc_roc": 0.8195114409400124,
-    "auc_pr": 0.47049649032737584
+    "auc_roc": 0.8142444856730571,
+    "auc_pr": 0.45181825732545783
   },
   "by_month": {
     "2024-09": {
       "n": 24,
       "positives": 3,
-      "auc_roc": 0.9047619047619049,
-      "auc_pr": 0.5
+      "auc_roc": 0.9206349206349207,
+      "auc_pr": 0.5555555555555556
     },
     "2024-10": {
       "n": 24,
@@ -71,14 +71,14 @@
     "2024-12": {
       "n": 25,
       "positives": 4,
-      "auc_roc": 0.7976190476190476,
-      "auc_pr": 0.6567982456140351
+      "auc_roc": 0.8095238095238095,
+      "auc_pr": 0.7055555555555556
     },
     "2025-01": {
       "n": 31,
       "positives": 4,
-      "auc_roc": 0.7962962962962963,
-      "auc_pr": 0.5526315789473684
+      "auc_roc": 0.7870370370370371,
+      "auc_pr": 0.55
     },
     "2025-02": {
       "n": 34,
@@ -89,8 +89,8 @@
     "2025-03": {
       "n": 36,
       "positives": 5,
-      "auc_roc": 0.9161290322580645,
-      "auc_pr": 0.6301587301587301
+      "auc_roc": 0.9225806451612903,
+      "auc_pr": 0.6444444444444444
     },
     "2025-04": {
       "n": 35,
@@ -101,20 +101,20 @@
     "2025-05": {
       "n": 42,
       "positives": 3,
-      "auc_roc": 0.923076923076923,
+      "auc_roc": 0.9230769230769231,
       "auc_pr": 0.75
     },
     "2025-06": {
       "n": 42,
       "positives": 2,
-      "auc_roc": 0.9500000000000001,
-      "auc_pr": 0.45
+      "auc_roc": 0.95,
+      "auc_pr": 0.6666666666666666
     },
     "2025-07": {
       "n": 46,
       "positives": 3,
-      "auc_roc": 0.5271317829457365,
-      "auc_pr": 0.16522366522366522
+      "auc_roc": 0.4883720930232558,
+      "auc_pr": 0.1183794466403162
     },
     "2025-08": {
       "n": 52,
@@ -126,89 +126,89 @@
       "n": 53,
       "positives": 3,
       "auc_roc": 0.5266666666666666,
-      "auc_pr": 0.37897435897435894
+      "auc_pr": 0.3796078431372549
     },
     "2025-10": {
       "n": 53,
       "positives": 5,
-      "auc_roc": 0.7083333333333334,
-      "auc_pr": 0.4058354192740926
+      "auc_roc": 0.7000000000000001,
+      "auc_pr": 0.38134439359267736
     },
     "2025-11": {
       "n": 55,
       "positives": 7,
-      "auc_roc": 0.7529761904761905,
-      "auc_pr": 0.49517118915615155
+      "auc_roc": 0.7589285714285715,
+      "auc_pr": 0.46885865457294024
     },
     "2025-12": {
       "n": 60,
       "positives": 8,
-      "auc_roc": 0.908653846153846,
-      "auc_pr": 0.6159248737373737
+      "auc_roc": 0.90625,
+      "auc_pr": 0.4964804292929293
     },
     "2026-01": {
       "n": 71,
       "positives": 9,
-      "auc_roc": 0.878136200716846,
-      "auc_pr": 0.5169301712779975
+      "auc_roc": 0.8763440860215054,
+      "auc_pr": 0.4721957671957673
     }
   },
   "deterioration_rate_by_band": {
     "riesgo": {
-      "share_deteriorate": 0.5319148936170213,
-      "n": 47
+      "share_deteriorate": 0.4716981132075472,
+      "n": 53
     },
     "sana": {
-      "share_deteriorate": 0.047619047619047616,
-      "n": 336
+      "share_deteriorate": 0.04361370716510903,
+      "n": 321
     },
-    "sólida": {
-      "share_deteriorate": 0.029556650246305417,
-      "n": 203
+    "sÃ³lida": {
+      "share_deteriorate": 0.037037037037037035,
+      "n": 216
     },
     "vigilar": {
-      "share_deteriorate": 0.24793388429752067,
-      "n": 121
+      "share_deteriorate": 0.2564102564102564,
+      "n": 117
     }
   },
   "deterioration_rate_by_trajectory": {
-    "deteriorándose": {
-      "share_deteriorate": 0.2830188679245283,
+    "deteriorÃ¡ndose": {
+      "share_deteriorate": 0.2641509433962264,
       "n": 53
     },
     "estable": {
-      "share_deteriorate": 0.08717105263157894,
-      "n": 608
+      "share_deteriorate": 0.09060955518945635,
+      "n": 607
     },
     "mejorando": {
-      "share_deteriorate": 0.1956521739130435,
-      "n": 46
+      "share_deteriorate": 0.1702127659574468,
+      "n": 47
     }
   },
   "exceptional_companies": {
-    "n_rows": 55,
-    "share_deteriorate": 0.09090909090909091
+    "n_rows": 68,
+    "share_deteriorate": 0.07352941176470588
   },
   "anticipation": {
-    "definition": "evento = primer mes con >=2 meses seguidos malos (caja<0 | >=50% facturas a pagar con >30d | sin transacciones) tras >=3 buenos; alerta = salud suavizada < 75.0 o trayectoria 'deteriorándose' en los 12 meses previos; scores del modelo congelado en el holdout (fuera de muestra desde 2024-09)",
+    "definition": "evento = primer mes con >=2 meses seguidos malos (caja<0 | >=50% facturas a pagar con >30d | sin transacciones) tras >=3 buenos; alerta = salud suavizada < 75.0 o trayectoria 'deteriorÃ¡ndose' en los 12 meses previos; scores del modelo congelado en el holdout (fuera de muestra desde 2024-09)",
     "out_of_sample_from": "2024-09",
     "n_events": 21,
     "n_anticipated": 5,
-    "share_anticipated": 0.8333333333333334,
-    "share_detected_by_event": 0.2857142857142857,
-    "lead_months_median": 2.5,
-    "lead_months_mean": 3.8333333333333335,
+    "share_anticipated": 0.7142857142857143,
+    "share_detected_by_event": 0.3333333333333333,
+    "lead_months_median": 1.0,
+    "lead_months_mean": 3.142857142857143,
     "lead_distribution": {
-      "0": 1,
+      "0": 2,
       "1": 2,
       "4": 1,
-      "6": 1,
+      "5": 1,
       "11": 1
     },
-    "false_alert_rate": 0.14285714285714285,
-    "n_alert_windows": 21,
-    "band_flip_rate": 0.14285714285714285,
-    "n_band_changes": 140,
-    "health_drop_before_event_mean": -10.220225
+    "false_alert_rate": 0.18181818181818182,
+    "n_alert_windows": 22,
+    "band_flip_rate": 0.13286713286713286,
+    "n_band_changes": 143,
+    "health_drop_before_event_mean": -10.033725000000002
   }
 }

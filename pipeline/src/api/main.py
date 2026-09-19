@@ -20,7 +20,7 @@ from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
 
 from src import config as C
-from src.api import db
+from src.api import db, pulso
 from src.api.inference import SCENARIOS, InferenceService
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -34,7 +34,7 @@ STATE: dict[str, Any] = {}
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     t0 = time.time()
-    STATE["svc"] = InferenceService()               # pipeline cargado UNA vez
+    STATE["svc"] = pulso.STATE["svc"] = InferenceService()   # pipeline cargado UNA vez
     log.info("modelo %s cargado en %.1fs", STATE["svc"].version, time.time() - t0)
     yield
     STATE.clear()
@@ -43,6 +43,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Embat X-Ray — scoring de salud financiera de PYMEs", version="1.0.0", lifespan=lifespan,
               description="Probabilidad calibrada de deterioro financiero a 6 meses a partir de la actividad de tesorería.")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+app.include_router(pulso.router)                    # contrato del front (Pulso) bajo /api
 
 
 def svc() -> InferenceService:

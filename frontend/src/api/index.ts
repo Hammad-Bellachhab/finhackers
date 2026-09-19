@@ -1,13 +1,14 @@
-/** Fachada de datos. Hoy resuelve contra el mock; cuando el motor este listo,
- *  se pone USE_MOCK en false y cada funcion llama a su ruta. Los componentes
- *  no cambian: solo conocen estas firmas. */
+/** Fachada de datos. Llama al motor (pipeline/src/api/pulso.py) salvo en los tests
+ *  o con VITE_MOCK=1, que resuelven contra el mock. Los componentes no cambian:
+ *  solo conocen estas firmas. */
 
 import { buildDataset, type MockCompany } from './mock/dataset'
+import { companyName } from './mock/names'
 import type {
   Alert, CompanyScore, Decision, Evidence, Forecast, MetricId, Portfolio, Simulation,
 } from './types'
 
-export const USE_MOCK = true
+export const USE_MOCK = import.meta.env.MODE === 'test' || import.meta.env.VITE_MOCK === '1'
 
 function find(id: string): MockCompany {
   const hit = buildDataset().find((c) => c.score.companyId === id)
@@ -15,11 +16,22 @@ function find(id: string): MockCompany {
   return hit
 }
 
-async function get<T>(path: string, mock: () => T): Promise<T> {
+/** El dataset solo trae IDs: cada objeto con companyId recibe su nombre legible. */
+function withNames(_key: string, v: unknown): unknown {
+  if (v && typeof v === 'object' && 'companyId' in v) {
+    const o = v as Record<string, unknown>
+    const name = companyName(String(o.companyId))
+    if ('name' in o) o.name = name
+    if ('companyName' in o) o.companyName = name
+  }
+  return v
+}
+
+async function get<T>(path: string, mock: () => T, init?: RequestInit): Promise<T> {
   if (USE_MOCK) return mock()
-  const res = await fetch(path)
+  const res = await fetch(path, init)
   if (!res.ok) throw new Error(`La API respondió ${res.status}`)
-  return (await res.json()) as T
+  return JSON.parse(await res.text(), withNames) as T
 }
 
 export function getCompanyScore(id: string): Promise<CompanyScore> {
@@ -118,5 +130,9 @@ export function simulate(id: string, metricId: MetricId, value: number): Promise
     }))
     const cashDelta = metricId === 'dso' ? Math.round((metric.value - value) * 4200) : 0
     return { metricId, value, projected, scoreDelta, cashDelta }
+  }, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ metricId, value }),
   })
 }
