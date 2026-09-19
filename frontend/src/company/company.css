@@ -105,3 +105,30 @@
 .simulator label { display: block; font-size: 0.88rem; margin-bottom: 0.6rem; }
 .simulator input[type='range'] { width: 100%; accent-color: var(--color-accent); }
 .simulator-out { margin: 0.6rem 0 0; font-size: 0.9rem; }
+
+.facts { font-size: 0.84rem; margin: 0.25rem 0 0; }
+.changes { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.4rem; font-size: 0.88rem; }
+.changes li { padding: 0.5rem 0.8rem; border-radius: var(--radius); background: var(--color-surface); }
+.change-down { border-left: 3px solid var(--color-danger); }
+.change-up { border-left: 3px solid var(--color-success); }
+
+.bench { background: var(--color-surface); border-radius: var(--radius); padding: 0.75rem 0.9rem; }
+.bench-head { display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.84rem; margin-bottom: 0.5rem; }
+.bench-track { position: relative; height: 1.1rem; margin-bottom: 0.35rem; }
+.bench-track::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px solid var(--color-border-strong); }
+.bench-iqr { position: absolute; top: 25%; height: 50%; background: var(--color-border-strong); border-radius: 3px; opacity: 0.55; }
+.bench-median { position: absolute; top: 5%; height: 90%; width: 2px; background: var(--color-text-subtle); }
+.bench-own { position: absolute; top: 50%; width: 0.8rem; height: 0.8rem; border-radius: 50%; transform: translate(-50%, -50%); background: var(--color-warning); border: 2px solid var(--color-bg); }
+.bench-bad { color: var(--color-danger-strong); }
+.bench-good { color: var(--color-success-strong); }
+.bench-own.bench-bad { background: var(--color-danger); }
+.bench-own.bench-good { background: var(--color-success); }
+.bench-own.bench-mid { background: var(--color-warning); }
+
+.scenario-changes { font-size: 0.8rem; margin: 0.5rem 0 0; padding-left: 1rem; color: var(--color-text-muted); }
+.company-picker { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1.25rem; }
+.company-picker input {
+  flex: 1; max-width: 26rem; font: inherit; font-size: 0.9rem; padding: 0.45rem 0.75rem;
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  background: var(--color-bg); color: var(--color-text);
+}

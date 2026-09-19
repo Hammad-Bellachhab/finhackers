@@ -91,6 +91,24 @@ export type PortfolioRow = {
   delta3m: number
   heldOut: boolean
   topDriver: string
+  // Detalle del motor (vista Cartera de Diego). Opcionales: el mock no los trae.
+  healthBand?: HealthBand
+  trajectory?: string
+  signal?: string
+  delta1m?: number
+  pDeterioration?: number
+  group?: string
+  sizeCohort?: string
+  country?: string
+  erp?: string
+  bank?: string
+}
+
+/** Las cuatro bandas finas del motor (Band las agrupa en tres). */
+export type HealthBand = 'sólida' | 'sana' | 'vigilar' | 'riesgo'
+
+export type PortfolioMonth = {
+  month: string; solid: number; healthy: number; watch: number; risk: number; meanHealth: number
 }
 
 export type Portfolio = {
@@ -99,6 +117,8 @@ export type Portfolio = {
     healthy: number; stable: number; risk: number
     improving: number; slipping: number; heldOut: number
   }
+  month?: string
+  history?: PortfolioMonth[]
 }
 
 export type Alert = {
@@ -111,6 +131,10 @@ export type Alert = {
   monthsAhead: number | null
   message: string
   createdAt: string
+  signal?: string // los 5 tipos del monitor del motor
+  severity?: number
+  delta1m?: number
+  why?: string
 }
 
 export type Evidence = {
@@ -118,4 +142,74 @@ export type Evidence = {
   anticipation: { medianMonths: number; p25: number; p75: number; detected: number }
   bothDirections: { improvingRecall: number; slippingRecall: number }
   stability: { dipsCorrectlyIgnored: number; structuralCaught: number }
+}
+
+// ---------- Ficha completa y modelo (lo que enseñaba el dashboard de Diego) ----------
+
+export type Contribution = { text: string; shap: number; block: string }
+
+export type BenchmarkRow = { kpi: string; n: number; p25: number; p50: number; p75: number }
+
+export type Scenario = {
+  id: string
+  label: string
+  before: number // salud del mes, sin suavizar
+  after: number
+  changes: Record<string, number | null>
+  explanation: Contribution[]
+}
+
+export type CompanyProfile = {
+  companyId: string
+  name: string
+  facts: {
+    group: string; groupSize: number; country: string; erp: string; bank: string
+    accounts: number; debtProducts: number; months: number; sizeCohort: string
+  }
+  now: {
+    month: string; health: number; healthBand: HealthBand; trajectory: string; signal: string
+    p: number; pDelta1m: number | null; pModelA: number | null
+  }
+  history: { month: string; health: number; smooth: number; modelA: number | null; deteriorated: boolean }[]
+  treasury: {
+    month: string; cash: number | null; inflow: number | null; outflow: number | null
+    payDelay: number | null; collectDelay: number | null; overdueShare: number | null; interestCharges: number | null
+  }[]
+  shap: Contribution[]
+  changes: { after: string; before: string; direction: 'empeora' | 'mejora' }[]
+  benchmark: {
+    cohort: { size_cohort: string; country_group: string; group_bucket: string; fallback_to_size_only: boolean } | null
+    rows: BenchmarkRow[]
+    own: Record<string, number | null> | null
+  }
+  scenarios: Scenario[]
+}
+
+type Metrics = { auc_pr: number; auc_roc: number; brier: number; base_rate: number; n: number; 'p@50': number; r_top10pct?: number }
+
+export type ModelReport = {
+  version: string
+  main_model: string
+  n_features: number
+  feature_blocks: Record<string, number>
+  label: { embargo_months?: number; [k: string]: unknown }
+  holdout: Record<string, Metrics & { 'r@top10pct': number }>
+  lift: Record<string, { lift_mean: number; lift_ci: [number, number] }>
+  ablation: Record<string, { delta_holdout: number; reference: string }>
+  calibration: { brier_raw: number; brier_cal: number }
+  shap_block_importance: { by_block_share: Record<string, number>; behavioural_share: number }
+  top_features: { feature: string; label: string; block: string; mean_abs_shap: number }[]
+  error_analysis: { confusion_top15pct?: Record<string, number>; fn_dominant_component?: unknown; reading?: string }
+  cv: Record<string, { auc_pr_mean: number; auc_pr_std: number }>
+  anticipation: {
+    definition: string; out_of_sample_from: string; n_events: number; share_anticipated: number
+    lead_months_median: number; lead_distribution: Record<string, number>; false_alert_rate: number; band_flip_rate: number
+  }
+  holdout_unseen_companies: {
+    n_unseen_companies: number
+    lgbm_A: { unseen: Metrics }
+    lgbm_B: { unseen: Metrics; seen_same_model: Metrics }
+    lift_lgbm: { lift_mean: number; lift_ci: [number, number] }
+  }
+  figures: string[]
 }

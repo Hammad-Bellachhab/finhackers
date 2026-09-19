@@ -16,7 +16,11 @@ export function Monitor({ onSelect }: { onSelect: (id: string) => void }) {
 
   return (
     <div className="monitor">
-      {data.slice(0, 8).map((a) => (
+      {[
+        // Las dos caras con el mismo peso: cuatro que caen y cuatro que mejoran.
+        ...data.filter((a) => a.kind === 'slipping').slice(0, 4),
+        ...data.filter((a) => a.kind === 'improving' && a.signal !== 'excepcionalmente sólida').slice(0, 4),
+      ].map((a) => (
         <div
           key={a.id} className={`alert alert-${a.kind}`} onClick={() => onSelect(a.companyId)}
           role="button" tabIndex={0}

@@ -68,3 +68,26 @@
 }
 
 .score-line { width: 100%; }
+
+.panel {
+  background: var(--color-surface); border-radius: var(--radius);
+  padding: 0.9rem 1rem 0.75rem; min-width: 0;
+}
+.panel h3 { margin: 0 0 0.6rem; font-size: 0.88rem; font-weight: 600; }
+.panel-note { margin: 0.5rem 0 0; font-size: 0.78rem; color: var(--color-text-muted); }
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); gap: 0.75rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 0.75rem; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+.data-table th {
+  text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--color-text-muted); padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--color-border);
+}
+.data-table td { padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--color-border); font-variant-numeric: tabular-nums; }
+.table-scroll { overflow-x: auto; }
+.pill {
+  display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; font-size: 0.74rem;
+  background: var(--color-surface-pressed); color: var(--color-text-subtle); white-space: nowrap;
+}
+.pill-sólida, .pill-sana, .pill-mejorando, .pill-mejora-progresiva, .pill-excepcionalmente-sólida { background: var(--color-success-soft); color: var(--color-success-strong); }
+.pill-vigilar, .pill-deterioro-incipiente { background: var(--color-warning-soft); color: var(--color-warning-strong); }
+.pill-riesgo, .pill-deteriorándose, .pill-caída-estructural, .pill-caída-brusca-este-mes { background: var(--color-danger-soft); color: var(--color-danger-strong); }

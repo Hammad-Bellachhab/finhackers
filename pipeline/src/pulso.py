@@ -18,6 +18,7 @@ import pandas as pd
 
 from src import config as C
 from src.api import db
+from src.api.inference import SCENARIOS, InferenceService
 from src.evaluate import score_main
 from src.features import CATEGORICAL
 
@@ -298,17 +299,34 @@ def sim_grid(cid: str) -> dict:
 # --------------------------------------------------------------------------------------
 def portfolio():
     T = db.latest_month()
-    r = db.q('SELECT company_id, health_smooth, health_band, trajectory, health_delta_3m FROM risk_score WHERE "T" = :T', T=T)
+    r = db.q('SELECT r.company_id, r.health_smooth, r.health_band, r.trajectory, r.health_delta_3m, r.health_delta_1m, r.alert, r.score AS p, '
+             'c.group_id, c.size_cohort, c.country, c.erp, c.main_bank '
+             'FROM risk_score r JOIN company c USING(company_id) WHERE r."T" = :T', T=T)
     ex = actionable(db.q('SELECT company_id, rank, feature, text FROM score_explanation WHERE "T" = :T ORDER BY rank', T=T))
     r["top"] = r["company_id"].map(ex.groupby("company_id")["text"].first())
     held = held_out()
     rows = [{"companyId": x.company_id, "name": x.company_id, "score": round(float(x.health_smooth), 1),
              "band": BAND[x.health_band], "trend": trend(x.trajectory), "delta3m": round(num(x.health_delta_3m, 0), 1),
-             "heldOut": x.company_id in held, "topDriver": x.top if isinstance(x.top, str) else "—"} for x in r.itertuples()]
+             "heldOut": x.company_id in held, "topDriver": x.top if isinstance(x.top, str) else "—",
+             "healthBand": x.health_band, "trajectory": x.trajectory, "signal": x.alert or "", "delta1m": round(num(x.health_delta_1m, 0), 1),
+             "pDeterioration": round(float(x.p), 4), "group": x.group_id, "sizeCohort": x.size_cohort, "country": x.country,
+             "erp": x.erp, "bank": x.main_bank} for x in r.itertuples()]
     count = lambda k, v: sum(1 for x in rows if x[k] == v)
     return {"rows": rows, "counts": {"healthy": count("band", "healthy"), "stable": count("band", "stable"), "risk": count("band", "risk"),
                                      "improving": count("trend", "up"), "slipping": count("trend", "down"),
-                                     "heldOut": count("heldOut", True)}}
+                                     "heldOut": count("heldOut", True)},
+            "month": T, "history": history_by_month()}
+
+
+def history_by_month() -> list[dict]:
+    """Evolución de la cartera: empresas por banda de salud y salud media, mes a mes."""
+    h = db.q('SELECT "T", health_band, count(*) AS n, avg(health_smooth) AS mean FROM risk_score GROUP BY "T", health_band')
+    out = []
+    for T, g in h.groupby("T"):
+        n = dict(zip(g["health_band"], g["n"].astype(int)))
+        out.append({"month": T, "solid": n.get("sólida", 0), "healthy": n.get("sana", 0), "watch": n.get("vigilar", 0),
+                    "risk": n.get("riesgo", 0), "meanHealth": round(float((g["mean"] * g["n"]).sum() / g["n"].sum()), 1)})
+    return out
 
 
 def alerts():
@@ -316,15 +334,14 @@ def alerts():
     ev = pd.read_csv(C.REPORTS_DIR / "anticipation_events.csv").dropna(subset=["alert_month"]).groupby("company_id")["lead_months"].last()
     out = []
     for a in al.itertuples():
-        if a.alert == "excepcionalmente sólida":
-            continue
-        kind = "improving" if a.alert == "mejora progresiva" else "slipping"
+        kind = "improving" if a.alert in ("mejora progresiva", "excepcionalmente sólida") else "slipping"
         lead = ev.get(a.company_id)
         out.append({"id": f"{a.company_id}-{a.T}", "companyId": a.company_id, "companyName": a.company_id, "kind": kind,
                     "score": round(float(a.health_smooth), 1), "delta": round(num(a.health_delta_3m, 0), 1),
                     "monthsAhead": None if lead is None or pd.isna(lead) else int(lead),
                     "message": f"{a.alert.capitalize()}: {a.why}" if a.why else a.alert.capitalize(),
-                    "createdAt": f"{a.T}-01T08:00:00Z"})
+                    "createdAt": f"{a.T}-01T08:00:00Z", "signal": a.alert, "severity": int(a.severity),
+                    "delta1m": round(num(a.health_delta_1m, 0), 1), "why": a.why or ""})
     return out
 
 
@@ -348,18 +365,66 @@ def evidence():
             "stability": {"dipsCorrectlyIgnored": int(s["blips"] or 0), "structuralCaught": int(s["structural"] or 0)}}
 
 
+def profile(cid: str) -> dict:
+    """Ficha de empresa del dashboard de Diego: perfil, SHAP, cambios, trayectoria, tesorería, benchmark y escenarios."""
+    c = db.company(cid)
+    ss = pd.DataFrame(c.pop("score_series"))
+    k = pd.DataFrame(c.pop("kpi_series"))
+    T = ss["T"].iloc[-1]
+    last = ss.iloc[-1]
+    scoreA = db.q('SELECT "T", score_A FROM risk_score WHERE company_id = :cid ORDER BY "T"', cid=cid).set_index("T")["score_A"]
+    shap = db.q('SELECT feature, block, shap, text FROM score_explanation WHERE company_id = :cid AND "T" = :T ORDER BY rank', cid=cid, T=T)
+    rnd = lambda v, d=2: None if v is None or pd.isna(v) else round(float(v), d)
+    base = db.company_features(cid)
+    svc = STATE["svc"]
+    scen = []
+    for sid, sc in SCENARIOS.items():
+        r = svc.simulate(base, None, sid)
+        scen.append({"id": sid, "label": sc["label"], "before": rnd(100 * (1 - r["before"]["score"]), 1),
+                     "after": rnd(100 * (1 - r["after"]["score"]), 1), "changes": r["applied_changes"],
+                     "explanation": [{"text": e["text"], "shap": rnd(e["shap"], 3), "block": e["block"]} for e in r["explanation_after"]]})
+    return {
+        "companyId": cid, "name": cid,
+        "facts": {"group": c["group_id"], "groupSize": int(c["group_size"] or 1), "country": c["country"], "erp": c["erp"],
+                  "bank": c["main_bank"], "accounts": int(c["n_bank_accounts"] or 0), "debtProducts": int(c["n_debt_products"] or 0),
+                  "months": int(c["months_in_panel"] or 0), "sizeCohort": c["size_cohort"]},
+        "now": {"month": T, "health": rnd(last["health_smooth"], 1), "healthBand": last["health_band"], "trajectory": last["trajectory"],
+                "signal": last["alert"] or ("bache puntual, recuperado" if last["is_blip"] else ""),
+                "p": rnd(last["score"], 4), "pDelta1m": rnd(last["delta_1m"], 4), "pModelA": rnd(scoreA.get(T), 4)},
+        "history": [{"month": r.T, "health": rnd(r.health, 1), "smooth": rnd(r.health_smooth, 1),
+                     "modelA": rnd(100 * (1 - scoreA.get(r.T)), 1) if scoreA.get(r.T) is not None else None,
+                     "deteriorated": r.realized_label == 1} for r in ss.itertuples()],
+        "treasury": [{"month": r.T, "cash": rnd(r.cash_balance, 0), "inflow": rnd(r.inflow_oper, 0), "outflow": rnd(r.outflow_oper, 0),
+                      "payDelay": rnd(r.pay_dpd_mean_w3, 1), "collectDelay": rnd(r.rec_dpd_mean_w3, 1),
+                      "overdueShare": rnd(r.pay_open_overdue_share_w3, 3), "interestCharges": rnd(r.interest_n_w3, 0)} for r in k.itertuples()],
+        "shap": [{"text": r.text, "shap": rnd(r.shap, 3), "block": r.block} for r in shap.itertuples()],
+        "changes": [{"after": r["after"], "before": r["before"], "direction": r["direction"]} for r in db.company_changes(cid, T)[:5]],
+        "benchmark": db.benchmarks(cid, T, None, None, None),
+        "scenarios": scen,
+    }
+
+
+def model_report() -> dict:
+    """Rendimiento del modelo (vista de Diego): evaluación completa + datos del modelo servido."""
+    ev = json.loads((C.REPORTS_DIR / "evaluation_summary.json").read_bytes().decode("utf-8", errors="replace"))
+    info = STATE["svc"].info()
+    return {**ev, "n_features": info["n_features"], "feature_blocks": info["feature_blocks"], "label": info["label"],
+            "cv": ev["cv"], "figures": sorted(p.name for p in (C.REPORTS_DIR / "figures").glob("*.png"))}
+
+
 def write(path: Path, data) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":"), default=float), encoding="utf-8")
 
 
 def export() -> None:
-    from src.api.inference import InferenceService
     STATE["svc"] = InferenceService()
     shutil.rmtree(OUT, ignore_errors=True)
     write(OUT / "portfolio.json", portfolio())
     write(OUT / "alerts.json", alerts())
     write(OUT / "evidence.json", evidence())
+    write(OUT / "model.json", model_report())
+    shutil.copytree(C.REPORTS_DIR / "figures", OUT / "figures")
     ids = db.q('SELECT DISTINCT company_id FROM risk_score ORDER BY company_id')["company_id"]
     for i, cid in enumerate(ids):
         d = OUT / "companies" / cid
@@ -367,6 +432,7 @@ def export() -> None:
         write(d / "forecast.json", forecast(cid))
         write(d / "decisions.json", decisions(cid))
         write(d / "simulate.json", sim_grid(cid))
+        write(d / "profile.json", profile(cid))
         if i % 100 == 0:
             print(f"[pulso] {i}/{len(ids)}", flush=True)
     print(f"[pulso] {len(ids)} empresas en {OUT}")

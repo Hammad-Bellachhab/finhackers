@@ -2,15 +2,19 @@ import { useState } from 'react'
 import './App.css'
 import { DEFAULT_COMPANY } from './api'
 import { CompanyView } from './company/CompanyView'
+import { AlertsView } from './portfolio/AlertsView'
 import { EvidenceView } from './portfolio/EvidenceView'
+import { ModelView } from './portfolio/ModelView'
 import { PortfolioView } from './portfolio/PortfolioView'
 
-type Vista = 'cartera' | 'empresa' | 'evidencia'
+type Vista = 'cartera' | 'alertas' | 'empresa' | 'evidencia' | 'modelo'
 
 const TABS: { id: Vista; label: string }[] = [
   { id: 'cartera', label: 'Cartera' },
+  { id: 'alertas', label: 'Alertas' },
   { id: 'empresa', label: 'Empresa' },
   { id: 'evidencia', label: 'Evidencia' },
+  { id: 'modelo', label: 'Modelo' },
 ]
 
 export default function App() {
@@ -42,8 +46,10 @@ export default function App() {
 
       <main className="page">
         {vista === 'cartera' && <PortfolioView onSelect={abrirEmpresa} />}
-        {vista === 'empresa' && <CompanyView companyId={companyId} />}
+        {vista === 'alertas' && <AlertsView onSelect={abrirEmpresa} />}
+        {vista === 'empresa' && <CompanyView companyId={companyId} onSelect={setCompanyId} />}
         {vista === 'evidencia' && <EvidenceView />}
+        {vista === 'modelo' && <ModelView />}
       </main>
     </div>
   )

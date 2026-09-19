@@ -32,7 +32,7 @@ el front con esos archivos (`wrangler.jsonc`). Se despliega solo en cada push a 
 ```bash
 cd pipeline
 python -m src.pipeline all   # si cambian datos o modelo
-python -m src.pulso          # → frontend/public/data/ (≈ 1 min); commit + push y Cloudflare publica
+python -m src.pulso          # → frontend/public/data/ (≈ 4 min); commit + push y Cloudflare publica
 ```
 
 ## Frontend (puerto 5173)

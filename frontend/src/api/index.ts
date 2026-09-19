@@ -5,7 +5,8 @@
 import { buildDataset, type MockCompany } from './mock/dataset'
 import { companyName } from './mock/names'
 import type {
-  Alert, CompanyScore, Decision, Evidence, Forecast, MetricId, Portfolio, Simulation,
+  Alert, CompanyProfile, CompanyScore, Decision, Evidence, Forecast, MetricId, ModelReport,
+  Portfolio, Simulation,
 } from './types'
 
 const USE_MOCK = import.meta.env.MODE === 'test' || import.meta.env.VITE_MOCK === '1'
@@ -47,6 +48,16 @@ export function getForecast(id: string): Promise<Forecast> {
 
 export function getDecisions(id: string): Promise<Decision[]> {
   return get(`/data/companies/${id}/decisions.json`, () => find(id).decisions)
+}
+
+const SIN_MOCK = (): never => { throw new Error('Solo disponible con los datos del motor') }
+
+export function getProfile(id: string): Promise<CompanyProfile> {
+  return get(`/data/companies/${id}/profile.json`, SIN_MOCK)
+}
+
+export function getModelReport(): Promise<ModelReport> {
+  return get('/data/model.json', SIN_MOCK)
 }
 
 export function getPortfolio(): Promise<Portfolio> {
