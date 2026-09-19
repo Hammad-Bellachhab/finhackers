@@ -13,7 +13,7 @@ const ERP_NAME: Record<string, string> = {
 // useGrouping 'always': en es-ES los números de 4 cifras no llevan punto por defecto (1286 → 1.286).
 const nf = (n: number) => n.toLocaleString('es-ES', { useGrouping: 'always' })
 
-function TopNav() {
+function TopNav({ showXrayCta = true }: { showXrayCta?: boolean }) {
   return (
     <header className="lp-nav">
       <a href="#/" className="logo-link lp-logo" aria-label="Embat, inicio"><span className="logo" /></a>
@@ -21,7 +21,7 @@ function TopNav() {
         <a href="#/xray">X-Ray</a>
         <a href="#/app">Demo</a>
       </nav>
-      <a href="#/xray" className="lp-btn lp-btn-primary lp-btn-sm">Descubre X-Ray</a>
+      {showXrayCta && <a href="#/xray" className="lp-btn lp-btn-primary lp-btn-sm">Descubre X-Ray</a>}
     </header>
   )
 }
@@ -41,7 +41,7 @@ export function EmbatHome() {
 
   return (
     <div className="lp">
-      <TopNav />
+      <TopNav showXrayCta={false} />
 
       <section className="lp-hero">
         <div className="lp-hero-in">
@@ -135,7 +135,7 @@ export function XRayLanding() {
 
   return (
     <div className="lp">
-      <TopNav />
+      <TopNav showXrayCta={false} />
       <section className="lp-hero lp-hero-xray">
         <div className="lp-hero-in">
           <p className="lp-eyebrow reveal">Embat · Nuevo</p>
