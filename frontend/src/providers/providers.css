@@ -24,8 +24,9 @@
   background: var(--color-border);
 }
 .bandbar > span { display: block; height: 100%; }
-.provider-bands { display: flex; flex-direction: column; gap: 3px; }
-.provider-bands .muted { font-size: var(--text-xs); }
+/* Apilado con display:block, no flex: en un <td> el flex rompe la celda de la tabla. */
+.provider-bands .bandbar { margin-bottom: 3px; }
+.provider-bands .muted { display: block; font-size: var(--text-xs); }
 
 .provider-detail > td { background: var(--color-surface); padding: var(--space-3) var(--space-4) var(--space-4); }
 .provider-detail p { margin: 0 0 var(--space-3); font-size: var(--text-xs); }
