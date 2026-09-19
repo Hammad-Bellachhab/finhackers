@@ -4,8 +4,8 @@
 
 ```
 frontend/   SPA React + Vite + TypeScript
-docs/       reto de Embat, diccionario de datos, paleta, diagrama ER
-db/         esquema SQL + ETL para cargar el dataset en SQLite
+docs/       reto de Embat, diccionario de datos, paleta, diseño de Pulso
+data/raw/   los 9 CSV del reto (invoices y transactions en Git LFS)
 pipeline/   motor de scoring: datos → etiqueta → features → modelos → SHAP → BD → API (puerto 8000) → dashboard
 ```
 
@@ -24,15 +24,11 @@ python -m streamlit run src/frontend/app.py       # dashboard de referencia en h
 python -m src.predict --raw <csv> --out <salida>  # puntuar empresas nuevas
 ```
 
-## Base de datos relacional
+## Despliegue
 
-Los 9 CSV del dataset se normalizan y se cargan en SQLite (esquema, ETL y
-diagrama ER en [`db/README.md`](db/README.md) y
-[`docs/er_diagram.md`](docs/er_diagram.md)):
-
-```bash
-python3 db/build_db.py --force   # requiere data/raw/ (ver docs/reto-embat.md)
-```
+- **Motor** en Fly.io: `cd pipeline && python -m src.pipeline all && fly deploy` (la imagen lleva `serve.db`, modelo e informes).
+- **Front** en Cloudflare Workers: `wrangler.jsonc` compila `frontend/` y reenvía `/api/*` al motor (`API_ORIGIN`).
+  Cloudflare lo despliega solo en cada push.
 
 ## Frontend (puerto 5173)
 

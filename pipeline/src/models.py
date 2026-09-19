@@ -43,8 +43,7 @@ class CategoryEncoder(BaseEstimator, TransformerMixin):
         return np.asarray(self.columns_)
 
 
-def make_pipeline(model: str, num_cols: list[str], cat_cols: list[str], seed: int = C.SEED,
-                  pos_rate: float = 0.15) -> Pipeline:
+def make_pipeline(model: str, num_cols: list[str], cat_cols: list[str], seed: int = C.SEED) -> Pipeline:
     if model == "lr":
         pre = ColumnTransformer([
             ("num", Pipeline([("imp", SimpleImputer(strategy="median", add_indicator=False)),

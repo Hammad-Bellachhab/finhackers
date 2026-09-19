@@ -143,7 +143,6 @@ FEATURE_TEXT = {
     "total_periods_mean": ("Plazo medio de los préstamos", "n"), "share_variable_rate": ("Deuda a tipo variable", "%"), "n_leasing": ("Leasings", "n"),
     "n_guarantees": ("Avales", "n"), "n_confirming_factoring": ("Confirming / factoring", "n"),
 }
-PCT_FEATURES = {k for k, (_, u) in FEATURE_TEXT.items() if u == "%"}
 
 
 def load_registry(version: str | None = None) -> tuple[dict, dict, str]:

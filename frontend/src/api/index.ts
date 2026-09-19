@@ -8,7 +8,7 @@ import type {
   Alert, CompanyScore, Decision, Evidence, Forecast, MetricId, Portfolio, Simulation,
 } from './types'
 
-export const USE_MOCK = import.meta.env.MODE === 'test' || import.meta.env.VITE_MOCK === '1'
+const USE_MOCK = import.meta.env.MODE === 'test' || import.meta.env.VITE_MOCK === '1'
 
 function find(id: string): MockCompany {
   const hit = buildDataset().find((c) => c.score.companyId === id)

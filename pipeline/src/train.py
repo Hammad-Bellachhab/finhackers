@@ -147,7 +147,7 @@ def split(df: pd.DataFrame, fold: dict) -> tuple[pd.DataFrame, pd.DataFrame]:
 def fit_predict(model: str, feats: list[str], tr: pd.DataFrame, ev: pd.DataFrame, seed: int = C.SEED):
     num = [c for c in feats if c not in CATEGORICAL]
     cat = [c for c in feats if c in CATEGORICAL]
-    pipe = make_pipeline(model, num, cat, seed=seed, pos_rate=float(tr["y"].mean()))
+    pipe = make_pipeline(model, num, cat, seed=seed)
     pipe.fit(tr[feats], tr["y"])
     return pipe, pipe.predict_proba(ev[feats])[:, 1]
 

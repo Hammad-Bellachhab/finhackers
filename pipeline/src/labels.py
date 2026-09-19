@@ -29,10 +29,6 @@ from src.schema import load_cm
 LABELS_PATH = C.PARQUET_DIR / "labels.parquet"
 
 
-def month_index(months: list[str]) -> dict[str, int]:
-    return {m: i for i, m in enumerate(months)}
-
-
 def _pivot(df: pd.DataFrame, col: str, months: list[str], companies: pd.Index, fill=np.nan) -> pd.DataFrame:
     """Matriz empresa × mes de una columna (filas = companies, columnas = months)."""
     p = df.pivot(index="company_id", columns="T", values=col)

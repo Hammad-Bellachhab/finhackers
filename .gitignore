@@ -25,11 +25,8 @@ Thumbs.db
 
 # Dataset del reto (646 MB descomprimido, fuera de git; invoices.csv y transactions.csv van por Git LFS).
 # Ver docs/reto-embat.md para su procedencia. Solo la carpeta data/ de la raíz: pipeline/data/ tiene sus propias reglas.
-/data/
-
-# Base de datos generada (~1.2 GB, se reconstruye con db/build_db.py)
-db/*.db
-db/*.sqlite
+/data/*
+!/data/raw/
 
 # ---- pipeline/ (motor de scoring: datos derivados, modelos y artefactos pesados no se suben) ----
 pipeline/data/parquet/
@@ -42,3 +39,6 @@ pipeline/models/registry/v*/*
 pipeline/reports/*.parquet
 pipeline/reports/*_log.txt
 pipeline/reports/test_companies/work/
+
+# Cloudflare (wrangler dev)
+.wrangler/

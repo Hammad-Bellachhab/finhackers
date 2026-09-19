@@ -66,17 +66,12 @@ SNAPSHOT_DATE = os.environ.get("SNAPSHOT_DATE", "2026-09-01")  # fecha de la fot
 FIRST_MONTH = os.environ.get("FIRST_MONTH", "2024-09")         # primer mes del panel
 LAST_MONTH = os.environ.get("LAST_MONTH", "2026-08")           # último mes completo del panel (T máximo para scoring)
 
-OBS_MONTHS = 12                  # ventana de observación (features)
 GAP_MONTHS = int(os.environ.get("GAP_MONTHS", 1))          # gap anti-contaminación
 OUTCOME_MONTHS = int(os.environ.get("OUTCOME_MONTHS", 6))  # ventana de resultado (decisión abierta: 3 ó 6)
 TARGET_PERCENTILE = float(os.environ.get("TARGET_PERCENTILE", 0.85))  # decisión abierta: 0.85 ó 0.90
 
 # DPD a partir del cual una factura a pagar se considera "morosa"
 DPD_BAD_DAYS = 30
-# Caída de cobros (ventana de resultado vs. 6 meses previos) que se considera colapso
-COLLECTION_DROP = 0.40
-# Meses seguidos sin transacciones que se consideran cese de actividad
-INACTIVITY_MONTHS = 2
 
 # Pesos del índice compuesto de deterioro D = sum_k w_k z_ik (se renormalizan si falta algún componente)
 LABEL_WEIGHTS = {
@@ -90,9 +85,6 @@ LABEL_WEIGHTS = {
 # --------------------------------------------------------------------------------------
 # Validación temporal (Capa 5)
 # --------------------------------------------------------------------------------------
-# Embargo entre el último T de entrenamiento y el primer T de evaluación: T_eval >= T_train + GAP + OUTCOME,
-# es decir, para evaluar T solo se usan etiquetas que ya se conocerían en T (ver src/train.py).
-EMBARGO_MONTHS = GAP_MONTHS + OUTCOME_MONTHS
 HOLDOUT_MONTHS = int(os.environ.get("HOLDOUT_MONTHS", 2))   # últimos meses etiquetados reservados
 N_CV_FOLDS = 3
 

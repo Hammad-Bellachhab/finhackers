@@ -6,7 +6,6 @@
 - [x] Brief del reto documentado en `docs/reto-embat.md`
 - [x] Dataset completo (9 CSV, 646 MB) en `data/raw/`, fuera de git
 - [x] Paleta de Embat -> `frontend/src/styles/tokens.css` y `docs/paleta-embat.md`
-- [x] Dataset normalizado a esquema relacional (SQLite) -> `db/schema.sql`, `db/build_db.py`, `docs/er_diagram.md`
 
 ## Siguiente
 
