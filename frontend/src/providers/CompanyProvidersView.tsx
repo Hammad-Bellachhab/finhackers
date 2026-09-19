@@ -1,15 +1,12 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { getProviders } from '../api'
-import type { Provider, ProviderCompany, Providers } from '../api/types'
+import type { Provider, Providers } from '../api/types'
 import { formatMoney } from '../shared/format'
 import { Gauge } from '../shared/Gauge'
 import { ErrorNotice, Skeleton } from '../shared/States'
 import { useAsync } from '../shared/useAsync'
-import { BandBar, CompanyCard, tipos } from './parts'
+import { KindBadge, tipos } from './parts'
 import './providers.css'
-
-/** Cuántas empresas del banco se enseñan antes de pedir el resto. */
-const PRIMERAS = 12
 
 /** Empresas que aparecen en el selector, con su nombre. Solo salen las que tienen
  *  algún producto conectado: sin banco no hay nada que enseñar. */
@@ -19,29 +16,16 @@ export function companyIndex(data: Providers): { id: string; name: string }[] {
   return [...nombres].map(([id, name]) => ({ id, name })).sort((a, b) => a.name.localeCompare(b.name, 'es'))
 }
 
-/** Posición de la empresa dentro de la cartera de su banco, en percentil de salud.
- *  0 % = la peor del banco. Sirve para responder "¿soy yo el problema o lo es el sector?". */
-export function percentile(rows: ProviderCompany[], companyId: string): number {
-  const yo = rows.find((r) => r.companyId === companyId)
-  if (!yo || rows.length < 2) return 0
-  const peores = rows.filter((r) => r.score < yo.score).length
-  return Math.round((100 * peores) / (rows.length - 1))
-}
-
-function ProviderCard({
-  p, companyId, onSelect,
-}: { p: Provider; companyId: string; onSelect: (id: string) => void }) {
-  const [todas, setTodas] = useState(false)
+/** La relación va en un solo sentido: esta empresa y lo que tiene con este proveedor.
+ *  Las demás empresas del proveedor son cosa de la vista global. */
+function ProviderCard({ p, companyId }: { p: Provider; companyId: string }) {
   const yo = p.rows.find((r) => r.companyId === companyId)!
-  const otras = p.rows.filter((r) => r.companyId !== companyId)
-  const visibles = todas ? otras : otras.slice(0, PRIMERAS)
-  const pct = percentile(p.rows, companyId)
 
   return (
     <section className="panel provider-card">
       <header className="provider-card-head">
         <div>
-          <h3>{p.name}</h3>
+          <h3>{p.name} <KindBadge kind={p.kind} /></h3>
           <p className="provider-services">{p.services.join(' · ')}</p>
         </div>
         <Gauge score={yo.score} band={yo.healthBand} size="md" label={`banda ${yo.healthBand}`} />
@@ -51,36 +35,7 @@ function ProviderCard({
         <div><dt>Tiene contratado</dt><dd>{tipos(yo.types, 4)}</dd></div>
         <div><dt>Saldo vivo</dt><dd>{yo.outstanding > 0 ? formatMoney(yo.outstanding, true) : '—'}</dd></div>
         <div><dt>Concedido</dt><dd>{yo.granted > 0 ? formatMoney(yo.granted, true) : '—'}</dd></div>
-        <div>
-          <dt>Su sitio en este banco</dt>
-          <dd>
-            {otras.length === 0
-              ? 'única empresa conectada'
-              : `mejor que el ${pct} % de sus ${p.companies.toLocaleString('es-ES')} empresas`}
-          </dd>
-        </div>
       </dl>
-
-      {otras.length > 0 && (
-        <>
-          <p className="provider-card-bands">
-            <BandBar bands={p.bands} total={p.companies} />
-            <span className="muted">
-              Cartera del banco: {p.bands.riesgo} en riesgo · {p.bands.vigilar} a vigilar ·
-              {' '}{p.bands.sana + p.bands['sólida']} sanas o sólidas · salud media {p.meanHealth}
-            </span>
-          </p>
-          <p className="muted">Otras empresas conectadas por este banco, de menos a más salud:</p>
-          <div className="provider-companies">
-            {visibles.map((r) => <CompanyCard key={r.companyId} row={r} onSelect={onSelect} />)}
-          </div>
-          {otras.length > PRIMERAS && (
-            <button type="button" className="chip" onClick={() => setTodas((v) => !v)}>
-              {todas ? 'Ver solo las primeras' : `Ver las ${otras.length.toLocaleString('es-ES')}`}
-            </button>
-          )}
-        </>
-      )}
     </section>
   )
 }
@@ -124,12 +79,10 @@ export function CompanyProvidersView({
             {yo && <div className="count"><strong>{yo.score}</strong><span>Su salud</span></div>}
           </div>
           <p className="muted legend-line">
-            Con quién trabaja y qué tiene con cada uno. Debajo de cada banco, las demás empresas que ese
-            mismo banco tiene conectadas: el retrato de la cartera en la que la pyme está metida.
+            Con quién trabaja y qué tiene con cada uno: bancos, pero también pasarelas de pago, plataformas
+            de gastos o tarjetas. La cartera de cada proveedor se mira en Global › Proveedores.
           </p>
-          {mios.map((p) => (
-            <ProviderCard key={p.name} p={p} companyId={companyId} onSelect={onSelect} />
-          ))}
+          {mios.map((p) => <ProviderCard key={p.name} p={p} companyId={companyId} />)}
         </>
       )}
     </>

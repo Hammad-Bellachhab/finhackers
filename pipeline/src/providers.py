@@ -13,6 +13,43 @@ from src import config as C
 
 BAND_ORDER = ["riesgo", "vigilar", "sana", "sólida"]
 
+# No todo lo que está conectado es un banco. El dataset modela PayPal, Stripe o Payhawk como
+# "cuenta corriente", así que por tipo de producto pasarían por banco: esta lista, por conector,
+# los separa. Lo que no esté aquí se clasifica por los productos que tiene colocados.
+NO_BANCARIOS = {
+    "paypal": "pagos", "stripe": "pagos", "redsys": "pagos", "adyen": "pagos", "sumup": "pagos",
+    "gocardless": "pagos", "mollie": "pagos", "embat": "pagos", "embatpayments": "pagos",
+    "payhawk": "gastos", "pleo": "gastos", "spendesk": "gastos", "soldo": "gastos",
+    "amex": "tarjetas", "iberiacards": "tarjetas",
+    "revolut": "fintech", "transferwise": "fintech", "qonto": "fintech", "mercury": "fintech",
+    "n26": "fintech", "ebury": "fintech",
+    "inhousebanking": "interno",   # la tesorería interna del grupo, no un tercero
+}
+
+
+# Productos que solo puede dar un banco: si hay alguno, es un banco aunque además venda monedero.
+BANCARIOS = {"checking", "loan", "lineofcredit", "confirming", "leasing", "guarantee",
+             "mortgage", "renting", "factoring", "lineofcomex", "risk"}
+
+
+def provider_kind(services, types) -> str:
+    """Qué es el proveedor: banco, fintech, pagos, gastos, tarjetas, inversión o interno."""
+    for s in services:
+        if (raiz := s.lstrip("_").split("_")[0]) in NO_BANCARIOS:
+            return NO_BANCARIOS[raiz]
+    t = set(types)
+    if t & BANCARIOS:
+        return "banco"
+    if t & {"tpv", "wallet"}:
+        return "pagos"
+    if "expensesPlatform" in t:
+        return "gastos"
+    if "card" in t:
+        return "tarjetas"
+    if t & {"investment", "saving"}:
+        return "inversión"
+    return "banco"
+
 
 def bank_products() -> pd.DataFrame:
     """Productos (bancarios y de financiación) de cada empresa con su banco y conector.
@@ -50,7 +87,8 @@ def providers(rows: list[dict], T: str) -> dict:
         companies.sort(key=lambda c: c["score"])
         bands = {b: sum(1 for c in companies if c["healthBand"] == b) for b in BAND_ORDER}
         n = len(companies)
-        out.append({"name": bank, "services": sorted(g["service"].unique()), "companies": n,
+        services = sorted(g["service"].unique())
+        out.append({"name": bank, "services": services, "kind": provider_kind(services, g["type"]), "companies": n,
                     "products": int(len(g)), "types": types(g), "bands": bands,
                     "meanHealth": round(sum(c["score"] for c in companies) / n, 1),
                     "riskShare": round(bands["riesgo"] / n, 4),

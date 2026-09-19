@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { getPlan } from '../api'
-import type { Decision, Metric, MetricId, Plan } from '../api/types'
+import type { Decision, Drag, Metric, MetricId, Plan } from '../api/types'
 import { Empty } from '../shared/States'
 import { formatMoney } from '../shared/format'
 import { useAsync } from '../shared/useAsync'
@@ -89,16 +89,26 @@ export function ImproveSection({
 
   // Se serializa porque useAsync compara dependencias por identidad y el objetivo es un objeto nuevo
   // en cada render; ademas asi el debounce se aplica al contenido, no a la referencia.
-  const key = useSettled(JSON.stringify(targets))
+  const targetsKey = JSON.stringify(targets)
+  const key = useSettled(targetsKey)
   const plan = useAsync(() => getPlan(companyId, JSON.parse(key)), [companyId, key])
 
-  // useAsync vacia `data` en cada recarga (shared/useAsync.ts), asi que sin esto el diagnostico
-  // y el resumen se desmontan en cada movimiento del slider: el documento encoge unos 340 px y
-  // la pagina pega un salto bajo el cursor. Se pinta el ultimo plan hasta que llega el siguiente.
-  const ultimo = useRef<Plan | null>(null)
-  if (plan.data) ultimo.current = plan.data
-  const vista = plan.data ?? ultimo.current
-  const recalculando = plan.loading && vista !== null
+  // useAsync vacia `data` en cada recarga (shared/useAsync.ts), asi que sin esto el resumen se
+  // desmonta en cada movimiento del slider, el documento encoge y la pagina salta bajo el cursor.
+  // Se guarda con que objetivos se pidio, para saber si lo que se enseña sigue valiendo.
+  const ultimo = useRef<{ plan: Plan; key: string } | null>(null)
+  if (plan.data) ultimo.current = { plan: plan.data, key }
+  const vista = plan.data ?? ultimo.current?.plan ?? null
+
+  // El diagnostico es de la empresa, no del plan: no cambia porque se muevan las palancas. Se fija
+  // con la primera respuesta y no se vuelve a tocar, porque ademas el motor devuelve 6 y la rejilla
+  // precalculada entre 0 y 5; repintarlo en mitad de un arrastre movia la pagina 200-300 px.
+  const drags = useRef<Drag[]>([])
+  if (vista && drags.current.length === 0) drags.current = vista.drags
+
+  // Desfasado mientras lo que se ve no corresponde a donde estan los sliders: cubre el debounce
+  // (aun sin peticion en vuelo), la peticion en curso y el fallo que deja el plan anterior.
+  const desfasado = !vista || ultimo.current?.key !== targetsKey
 
   if (levers.length === 0) {
     return (
@@ -112,18 +122,17 @@ export function ImproveSection({
   const toggle = (id: MetricId) =>
     setDiscarded((v) => (v.includes(id) ? v.filter((x) => x !== id) : [...v, id]))
 
-  const drags = vista?.drags ?? []
   const deltaOf = (id: MetricId) => vista?.levers.find((l) => l.metricId === id)?.scoreDelta
 
   return (
     <section className="section improve">
       <h2>Cómo subir tu score</h2>
 
-      {drags.length > 0 && (
+      {drags.current.length > 0 && (
         <>
           <h3>Qué se lo está bajando</h3>
           <ul className="drags">
-            {drags.map((d) => {
+            {drags.current.map((d) => {
               const lever = levers.find((l) => l.metric.id === d.metricId)
               return (
                 <li key={d.id}>
@@ -202,7 +211,7 @@ export function ImproveSection({
         })}
       </ul>
 
-      <div className={recalculando ? 'plan-total plan-total-stale' : 'plan-total'}>
+      <div className={desfasado ? 'plan-total plan-total-stale' : 'plan-total'}>
         {vista ? (
           <>
             <p>
@@ -213,9 +222,13 @@ export function ImproveSection({
               </span>
             </p>
             <small className="muted">
-              {vista.exact
-                ? 'Repuntuado con el modelo, aplicando todas las palancas a la vez.'
-                : 'Estimación: suma el efecto de cada palanca por separado, sin tener en cuenta cómo se solapan.'}
+              {plan.error
+                ? 'No se ha podido actualizar: este es el último plan que sí se calculó.'
+                : desfasado
+                  ? 'Recalculando con el modelo…'
+                  : vista.exact
+                    ? 'Repuntuado con el modelo, aplicando todas las palancas a la vez.'
+                    : 'Estimación: suma el efecto de cada palanca por separado, sin tener en cuenta cómo se solapan.'}
             </small>
           </>
         ) : (

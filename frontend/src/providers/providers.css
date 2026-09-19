@@ -66,3 +66,11 @@
 .provider-card .provider-company { background: var(--color-surface); }
 .provider-card .provider-company:hover { background: var(--color-surface-hover); }
 .filters-form label { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+/* Tipo de proveedor: neutro para los bancos, resaltado para todo lo demás. */
+.kind {
+  display: inline-block; font-size: var(--text-xs); font-weight: 500;
+  padding: 1px var(--space-2); border-radius: 999px; vertical-align: 2px;
+  background: var(--color-surface-pressed); color: var(--color-text-muted); white-space: nowrap;
+}
+.kind-alt { background: var(--color-accent-soft); color: var(--color-accent-text); }

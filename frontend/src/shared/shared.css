@@ -110,8 +110,7 @@
 .tellme-eyebrow strong { color: var(--color-text); font-weight: 500; }
 /* Único sitio de la app con el gradiente: igual que en embat.io, gradiente = TellMe. */
 .tellme-mark {
-  width: 20px; height: 20px; border-radius: 6px; background: var(--embat-gradient);
-  color: var(--color-text-on-accent); font-size: 12px; display: inline-grid; place-items: center; flex: none;
+  width: 20px; height: 20px; display: inline-grid; place-items: center; flex: none;
 }
 .tellme .tellme-headline { font-size: var(--text-lg); font-weight: 500; letter-spacing: -0.01em; margin: var(--space-3) 0 var(--space-2); }
 .tellme-summary { color: var(--color-text-subtle); max-width: 68ch; }
@@ -166,6 +165,13 @@
 .tellme-error { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); margin-top: var(--space-3); }
 .tellme-error span { color: var(--color-text-muted); }
 @media (max-width: 640px) { .tellme { padding: var(--space-4); } }
+
+/* Velocímetro de salud (shared/Gauge.tsx). El color lo pone el componente con tokens. */
+.gauge { display: block; overflow: visible; }
+.gauge-sm { width: 56px; }
+.gauge-md { width: 92px; }
+.gauge-value { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; }
+.gauge-sm .gauge-value { font-size: 22px; }
 
 /* El análisis de TellMe se despliega solo si el usuario quiere. */
 .tellme-more > summary {
