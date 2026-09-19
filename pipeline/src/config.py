@@ -13,14 +13,15 @@ from pathlib import Path
 # --------------------------------------------------------------------------------------
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = Path(os.environ.get("DATA_DIR", ROOT / "data"))
-# Los CSV originales pueden estar en ../output/ (repo finhackers), data/raw/, la raíz de pipeline/ o donde diga RAW_DIR.
+# Los CSV originales pueden estar en ../data/raw/ (repo finhackers, ver docs/reto-embat.md), ../output/,
+# pipeline/data/raw/, la raíz de pipeline/ o donde diga RAW_DIR.
 def _find_raw_dir() -> Path:
     if os.environ.get("RAW_DIR"):
         return Path(os.environ["RAW_DIR"])
-    for cand in (ROOT.parent / "output", ROOT / "data" / "raw", ROOT):
+    for cand in (ROOT.parent / "data" / "raw", ROOT.parent / "output", ROOT / "data" / "raw", ROOT):
         if (cand / "companies.csv").exists():
             return cand
-    return ROOT.parent / "output"
+    return ROOT.parent / "data" / "raw"
 
 
 RAW_DIR = _find_raw_dir()
