@@ -1,10 +1,46 @@
+import { useMemo } from 'react'
 import type { CompanyScore, Forecast } from '../api/types'
 import { ScoreLine } from '../shared/ScoreLine'
 import { formatMonth } from '../shared/format'
 import './company.css'
 
-export function ForecastSection({ score, forecast }: { score: CompanyScore; forecast: Forecast }) {
+export function ForecastSection({
+  score,
+  forecast,
+  simulatedDelta = 0,
+}: {
+  score: CompanyScore
+  forecast: Forecast
+  simulatedDelta?: number
+}) {
   const d = forecast.detection
+
+  // Desplazar dinámicamente la previsión del score con el delta simulado
+  const shiftedHorizon = useMemo(() => {
+    if (simulatedDelta === 0) return forecast.horizon
+    return forecast.horizon.map((p) => ({
+      ...p,
+      score: Math.max(0, Math.min(100, Number((p.score + simulatedDelta).toFixed(1)))),
+    }))
+  }, [forecast.horizon, simulatedDelta])
+
+  // Desplazar dinámicamente la banda inferior de Montecarlo
+  const shiftedBandLow = useMemo(() => {
+    if (simulatedDelta === 0) return forecast.bandLow
+    return forecast.bandLow.map((p) => ({
+      ...p,
+      score: Math.max(0, Math.min(100, Number((p.score + simulatedDelta).toFixed(1)))),
+    }))
+  }, [forecast.bandLow, simulatedDelta])
+
+  // Desplazar dinámicamente la banda superior de Montecarlo
+  const shiftedBandHigh = useMemo(() => {
+    if (simulatedDelta === 0) return forecast.bandHigh
+    return forecast.bandHigh.map((p) => ({
+      ...p,
+      score: Math.max(0, Math.min(100, Number((p.score + simulatedDelta).toFixed(1)))),
+    }))
+  }, [forecast.bandHigh, simulatedDelta])
 
   return (
     <section className="section">
@@ -12,9 +48,9 @@ export function ForecastSection({ score, forecast }: { score: CompanyScore; fore
 
       <ScoreLine
         series={score.series}
-        projection={forecast.horizon}
-        bandLow={forecast.bandLow}
-        bandHigh={forecast.bandHigh}
+        projection={shiftedHorizon}
+        bandLow={shiftedBandLow}
+        bandHigh={shiftedBandHigh}
         markers={d ? [{ month: d.detectedAt, label: 'Detectado' }] : []}
       />
 

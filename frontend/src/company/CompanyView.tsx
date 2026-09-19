@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { getCompanyScore, getDecisions, getForecast, getPortfolio } from '../api'
 import { useAsync } from '../shared/useAsync'
 import { ErrorNotice, Skeleton } from '../shared/States'
 import { TellMeCard } from '../shared/TellMeCard'
 import { ForecastSection } from './ForecastSection'
-import { ImproveSection } from './ImproveSection'
 import { ProfileSections } from './ProfileSections'
 import { PulseSection } from './PulseSection'
+import { ImproveSection } from './ImproveSection'
 
 /** Buscador nativo (datalist): nombre o ID, sin librerías. */
 function CompanyPicker({ onSelect }: { onSelect: (id: string) => void }) {
@@ -36,6 +36,11 @@ export function CompanyView({ companyId, onSelect }: { companyId: string; onSele
   const score = useAsync(() => getCompanyScore(companyId), [companyId])
   const forecast = useAsync(() => getForecast(companyId), [companyId])
   const decisions = useAsync(() => getDecisions(companyId), [companyId])
+  const [simulatedDelta, setSimulatedDelta] = useState(0)
+
+  useEffect(() => {
+    setSimulatedDelta(0)
+  }, [companyId])
 
   return (
     <>
@@ -49,7 +54,9 @@ export function CompanyView({ companyId, onSelect }: { companyId: string; onSele
           <ProfileSections companyId={companyId} />
           {forecast.loading && <Skeleton />}
           {forecast.error && <ErrorNotice error={forecast.error} />}
-          {forecast.data && <ForecastSection score={score.data} forecast={forecast.data} />}
+          {forecast.data && (
+            <ForecastSection score={score.data} forecast={forecast.data} simulatedDelta={simulatedDelta} />
+          )}
           {decisions.loading && <Skeleton height="8rem" />}
           {decisions.error && <ErrorNotice error={decisions.error} />}
           {/* key: el simulador guarda estado propio (sliders y palancas descartadas); sin esto
@@ -57,7 +64,10 @@ export function CompanyView({ companyId, onSelect }: { companyId: string; onSele
           {decisions.data && (
             <ImproveSection
               key={companyId}
-              companyId={companyId} decisions={decisions.data} metrics={score.data.metrics}
+              companyId={companyId}
+              decisions={decisions.data}
+              metrics={score.data.metrics}
+              onDeltaChange={setSimulatedDelta}
             />
           )}
         </>
