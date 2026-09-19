@@ -24,15 +24,23 @@ python -m streamlit run src/frontend/app.py       # dashboard de referencia en h
 python -m src.predict --raw <csv> --out <salida>  # puntuar empresas nuevas
 ```
 
-## Base de datos relacional
+## Bases de datos: hay dos, con propósitos distintos
 
-Los 9 CSV del dataset se normalizan y se cargan en SQLite (esquema, ETL y
-diagrama ER en [`db/README.md`](db/README.md) y
-[`docs/er_diagram.md`](docs/er_diagram.md)):
+- **`db/finhackers.db`** — catálogo relacional 1:1 de los 9 CSV crudos (groups,
+  companies, products, transactions, invoices, balances...), normalizado con
+  PK/FK. Sirve para explorar el dataset con SQL tal cual viene, sin lógica de
+  negocio encima. Esquema, ETL y diagrama ER en [`db/README.md`](db/README.md)
+  y [`docs/er_diagram.md`](docs/er_diagram.md):
 
-```bash
-python3 db/build_db.py --force   # requiere data/raw/ (ver docs/reto-embat.md)
-```
+  ```bash
+  python3 db/build_db.py --force   # requiere data/raw/ (ver docs/reto-embat.md)
+  ```
+
+- **`pipeline/data/serve.db`** — la base que sirve el motor de scoring en
+  producción (API + dashboard): panel empresa×mes, features, `risk_score`,
+  explicaciones SHAP, alertas y benchmarks ya calculados. Se genera con
+  `python -m src.pipeline all` dentro de `pipeline/` (ver abajo). No es el
+  mismo dato que `db/finhackers.db`: aquí ya hay modelo aplicado.
 
 ## Frontend (puerto 5173)
 
