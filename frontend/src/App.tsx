@@ -8,15 +8,33 @@ import { AlertsView } from './portfolio/AlertsView'
 import { EvidenceView } from './portfolio/EvidenceView'
 import { ModelView } from './portfolio/ModelView'
 import { PortfolioView } from './portfolio/PortfolioView'
+import { CompanyProvidersView } from './providers/CompanyProvidersView'
+import { ProvidersView } from './providers/ProvidersView'
 
-type Vista = 'cartera' | 'alertas' | 'empresa' | 'evidencia' | 'modelo'
+type Vista =
+  | 'cartera' | 'alertas' | 'proveedores' | 'evidencia' | 'modelo'
+  | 'empresa' | 'empresa-proveedores'
 
-const TABS: { id: Vista; label: string }[] = [
-  { id: 'cartera', label: 'Cartera' },
-  { id: 'alertas', label: 'Alertas' },
-  { id: 'empresa', label: 'Empresa' },
-  { id: 'evidencia', label: 'Evidencia' },
-  { id: 'modelo', label: 'Modelo' },
+/** Dos planos distintos: lo que se ve de toda la cartera y lo que se ve de una empresa.
+ *  Separarlos en la barra evita la pregunta "¿esto de quién es?" en mitad de la demo. */
+const GRUPOS: { id: string; label: string; tabs: { id: Vista; label: string }[] }[] = [
+  {
+    id: 'global', label: 'Global',
+    tabs: [
+      { id: 'cartera', label: 'Cartera' },
+      { id: 'alertas', label: 'Alertas' },
+      { id: 'proveedores', label: 'Proveedores' },
+      { id: 'evidencia', label: 'Evidencia' },
+      { id: 'modelo', label: 'Modelo' },
+    ],
+  },
+  {
+    id: 'cliente', label: 'Cliente',
+    tabs: [
+      { id: 'empresa', label: 'Empresa' },
+      { id: 'empresa-proveedores', label: 'Proveedores' },
+    ],
+  },
 ]
 
 export default function App() {
@@ -42,15 +60,22 @@ export default function App() {
         <span className="topbar-sep" aria-hidden="true" />
         <span className="product">X-Ray</span>
         <nav>
-          {TABS.map((t) => (
-            <button
-              key={t.id} type="button"
-              className={vista === t.id ? 'on' : ''}
-              aria-current={vista === t.id ? 'page' : undefined}
-              onClick={() => setVista(t.id)}
-            >
-              {t.label}
-            </button>
+          {GRUPOS.map((g) => (
+            <div className="navgroup" key={g.id} role="group" aria-label={g.label}>
+              <span className="navgroup-label" aria-hidden="true">{g.label}</span>
+              <div className="navgroup-tabs">
+                {g.tabs.map((t) => (
+                  <button
+                    key={t.id} type="button"
+                    className={vista === t.id ? 'on' : ''}
+                    aria-current={vista === t.id ? 'page' : undefined}
+                    onClick={() => setVista(t.id)}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           ))}
         </nav>
         <button
@@ -65,9 +90,13 @@ export default function App() {
       <main className="page">
         {vista === 'cartera' && <PortfolioView onSelect={abrirEmpresa} />}
         {vista === 'alertas' && <AlertsView onSelect={abrirEmpresa} />}
-        {vista === 'empresa' && <CompanyView companyId={companyId} onSelect={setCompanyId} />}
+        {vista === 'proveedores' && <ProvidersView onSelect={abrirEmpresa} />}
         {vista === 'evidencia' && <EvidenceView />}
         {vista === 'modelo' && <ModelView />}
+        {vista === 'empresa' && <CompanyView companyId={companyId} onSelect={setCompanyId} />}
+        {vista === 'empresa-proveedores' && (
+          <CompanyProvidersView companyId={companyId} onSelect={setCompanyId} />
+        )}
       </main>
 
       {/* key: cambiar de empresa (o volver a la cartera) empieza otra conversación */}

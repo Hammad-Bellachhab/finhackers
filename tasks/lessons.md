@@ -48,3 +48,22 @@ habla de los datos o del sistema que los lee.
 
 **Cómo aplicarlo**: los datos mock imitan la realidad; las métricas demuestran el modelo. No
 se maquillan los datos para que las métricas salgan bonitas.
+
+## 2026-09-19 — Un componente que recarga por interacción no puede vaciarse mientras recarga
+
+**Corrección**: al arrastrar el slider del simulador de palancas, la página saltaba arriba y
+abajo. Lo había probado clic a clic y en tests, pero no arrastrando, que es como se usa.
+
+**Causa**: `frontend/src/shared/useAsync.ts` hace `setState({data: null, loading: true})` en cada
+recarga. Eso está bien cuando la recarga viene de cambiar de pantalla, pero cuando la dispara el
+propio usuario desde un control, el contenido se desmonta, el documento encoge —medido: 338 px— y
+todo lo de debajo salta bajo el cursor.
+
+**Regla**: si un componente recarga datos por una interacción *dentro de la propia pantalla*
+(slider, filtro, chip, select), tiene que conservar el último valor mientras llega el siguiente,
+o reservar la altura. Cambiar el contenido por un "Cargando…" es aceptable al entrar en una
+pantalla, nunca mientras el usuario manipula un control.
+
+**Cómo verificarlo**: medir `document.documentElement.scrollHeight` durante la interacción, no
+mirar la pantalla. Un arrastre continuo (20+ pasos) revela lo que un clic suelto no enseña.
+
