@@ -7,7 +7,12 @@ Esqueleto minimo: API FastAPI + SPA React (Vite + TypeScript).
 ```
 backend/    API FastAPI (app/main.py)
 frontend/   SPA React + Vite + TypeScript
+analysis/   auditoria de datos (audit.py)
+docs/plan/  plan operativo del scoring: inventario, features, relaciones, modelo, tickets
 ```
+
+Plan del modelo y reparto de tickets: [docs/plan/00-plan-operativo.md](docs/plan/00-plan-operativo.md).
+Informe de calidad de datos: `python analysis/audit.py data/raw > docs/plan/08-data-quality-report.md` (requiere pandas).
 
 ## Arranque
 
