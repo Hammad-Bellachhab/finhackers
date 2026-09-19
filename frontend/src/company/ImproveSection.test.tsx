@@ -122,6 +122,53 @@ describe('ImproveSection', () => {
     expect(screen.queryByText('Calculando el plan…')).toBeNull()
   })
 
+  it('si la peticion falla despues de un exito, lo dice en vez de dar por bueno el plan viejo', async () => {
+    render1()
+    await waitFor(() => expect(screen.getByTestId('plan-score')).toBeInTheDocument())
+    const llamadas = vi.mocked(getPlan).mock.calls.length
+
+    vi.mocked(getPlan).mockRejectedValueOnce(new Error('el motor no responde'))
+    fireEvent.change(screen.getByLabelText(/mover días en cobrar/i), { target: { value: '20' } })
+    await waitFor(() =>
+      expect(vi.mocked(getPlan).mock.calls.length).toBeGreaterThan(llamadas),
+    )
+
+    // Se sigue viendo el ultimo plan bueno (no se vacia, no hay salto), pero se avisa de que no
+    // corresponde a donde estan los sliders.
+    await waitFor(() => expect(screen.getByText(/no se ha podido actualizar/i)).toBeInTheDocument())
+    expect(screen.getByTestId('plan-score')).toBeInTheDocument()
+  })
+
+  it('mientras el resumen no corresponde a los sliders, se marca como desfasado', async () => {
+    render1()
+    await waitFor(() => expect(screen.getByTestId('plan-score')).toBeInTheDocument())
+    await waitFor(() =>
+      expect(document.querySelector('.plan-total')?.className).not.toContain('plan-total-stale'),
+    )
+
+    // Nada mas mover, y aun dentro del debounce (sin peticion en vuelo todavia), los numeros que
+    // se ven son los de la posicion anterior: hay que decirlo.
+    fireEvent.change(screen.getByLabelText(/mover días en cobrar/i), { target: { value: '20' } })
+    expect(document.querySelector('.plan-total')?.className).toContain('plan-total-stale')
+  })
+
+  it('el diagnostico no cambia de tamaño aunque cambie el plan', async () => {
+    render1()
+    await waitFor(() => expect(screen.getByTestId('plan-score')).toBeInTheDocument())
+    const antes = document.querySelectorAll('.drags li').length
+
+    // El motor devuelve 6 drags y la rejilla precalculada entre 0 y 5: si el bloque siguiera al
+    // plan, alternar de camino repintaria otra lista y la pagina daria un salto de 200-300 px.
+    vi.mocked(getPlan).mockResolvedValueOnce({
+      companyId: 'c-0001', baseHealth: 60, planHealth: 70, scoreDelta: 10,
+      levers: [], drags: [], exact: true,
+    })
+    fireEvent.change(screen.getByLabelText(/mover días en cobrar/i), { target: { value: '20' } })
+    await waitFor(() => expect(screen.getByTestId('plan-score').textContent).toBe('70'))
+
+    expect(document.querySelectorAll('.drags li').length).toBe(antes)
+  })
+
   it('avisa cuando no hay nada que corregir', () => {
     render(<ImproveSection companyId="c-0001" decisions={[]} metrics={[metrics[2]]} />)
     expect(screen.getByText(/no hay nada que corregir/i)).toBeInTheDocument()

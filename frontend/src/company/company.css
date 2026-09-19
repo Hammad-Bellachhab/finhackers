@@ -180,4 +180,7 @@
 /* Mientras llega el plan nuevo se atenua el anterior en vez de vaciarlo: cualquier cambio de
    contenido aqui mueve la altura del documento y la pagina salta mientras se arrastra el slider. */
 .plan-total-stale { opacity: 0.55; }
+/* El pie cambia de texto segun el estado (recalculando, estimacion, fallo) y esos textos ocupan
+   distinto: se le reserva el alto para que cambiar de uno a otro no mueva la pagina. */
+.plan-total small { display: block; min-height: 2.6em; margin-top: var(--space-2); }
 .plan-total strong { font-size: var(--text-lg); }
