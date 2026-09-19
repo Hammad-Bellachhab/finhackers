@@ -11,6 +11,15 @@
         ],
         "createdAt": "2026-09-19T20:42:58.959Z",
         "reason": "user requested: degradado de marca en los textos TellMe y X-Ray (chat 2026-09-19)"
+      },
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "frontend/src/App.css"
+        ],
+        "createdAt": "2026-09-19T22:07:56.197Z",
+        "reason": "user confirmed: el wordmark X-Ray lleva el degradado de TellMe como identidad del producto (tasks/progress-agente-ia.md, iteracion 3); embat.io usa el mismo degradado en su CTA"
       }
     ]
   }

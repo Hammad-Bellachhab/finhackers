@@ -6,7 +6,7 @@
   gap: 0.35rem;
   padding: 2px 10px;
   border-radius: 999px;
-  font-size: 0.8125rem;
+  font-size: var(--text-sm);
   font-weight: 500;
   white-space: nowrap;
 }
@@ -129,12 +129,15 @@
   -webkit-mask: url(/tellme-logo.png) center / contain no-repeat;
   mask: url(/tellme-logo.png) center / contain no-repeat;
 }
-/* Logo: respira siempre y gira al pasar el ratón o mientras TellMe piensa. */
+/* Logo: quieto. Gira solo mientras TellMe piensa o al pasar el ratón por encima.
+   El latido permanente se quitó: el logo sale en cada fila de la tabla y un elemento
+   animándose sin parar en toda la pantalla distrae sin decir nada. */
 .tellme-mark { width: 20px; height: 20px; display: inline-grid; place-items: center; flex: none; }
-.tellme-logo-svg { transform-origin: 50% 52%; animation: tellme-breathe 3.2s var(--ease) infinite; }
-@keyframes tellme-breathe { 50% { transform: scale(1.08) rotate(8deg); } }
-.tellme-spin .tellme-logo-svg,
-:hover > .tellme-mark .tellme-logo-svg { animation: tellme-think 1.4s var(--ease) infinite; }
+.tellme-logo-svg { transform-origin: 50% 52%; }
+.tellme-spin .tellme-logo-svg { animation: tellme-think 1.4s var(--ease) infinite; }
+@media (hover: hover) and (pointer: fine) {
+  :hover > .tellme-mark .tellme-logo-svg { animation: tellme-think 1.4s var(--ease) infinite; }
+}
 @keyframes tellme-think {
   0% { transform: rotate(0) scale(1); }
   30% { transform: rotate(120deg) scale(0.82); }
@@ -150,7 +153,7 @@
 }
 .tellme-icon {
   width: 28px; height: 28px; border-radius: 999px; display: inline-grid; place-items: center; flex: none;
-  background: var(--color-accent-soft); color: var(--color-accent-text); font-size: 13px;
+  background: var(--color-accent-soft); color: var(--color-accent-text); font-size: var(--text-xs);
 }
 .tellme-icon-watch { background: var(--color-warning-soft); color: var(--color-warning-strong); }
 .tellme-icon-alert { background: var(--color-danger-soft); color: var(--color-danger-strong); }
@@ -202,10 +205,12 @@
 .tellme-more > summary:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 @media (max-width: 640px) { .tellme { padding: var(--space-4); } }
 @media (prefers-reduced-motion: reduce) {
-  .tellme, .tellme-logo-svg, .tellme-spin .tellme-logo-svg, :hover > .tellme-mark .tellme-logo-svg { animation: none; }
+  .tellme, .tellme-spin .tellme-logo-svg, :hover > .tellme-mark .tellme-logo-svg { animation: none; }
 }
 
-/* Velocímetro de salud (shared/Gauge.tsx). El color lo pone el componente con tokens. */
+/* Velocímetro de salud (shared/Gauge.tsx). El color lo pone el componente con tokens.
+   Ojo: gauge-value es un <text> dentro de viewBox="0 0 100 74", así que estos tamaños son
+   unidades del SVG (escalan con el ancho), no píxeles CSS. Aquí los tokens no aplican. */
 .gauge { display: block; overflow: visible; }
 .gauge-sm { width: 56px; }
 .gauge-md { width: 92px; }
@@ -216,7 +221,7 @@
 .panel h3 { display: flex; align-items: center; gap: var(--space-2); }
 .panel-zoom {
   margin-left: auto; border: 1px solid var(--color-border); background: var(--color-bg); color: var(--color-text-muted);
-  width: 28px; height: 28px; border-radius: var(--radius-sm); cursor: pointer; font-size: 14px; line-height: 1;
+  width: 28px; height: 28px; border-radius: var(--radius-sm); cursor: pointer; font-size: var(--text-sm); line-height: 1;
   opacity: 0; transition: opacity 160ms var(--ease), color 160ms var(--ease);
 }
 .panel:hover .panel-zoom, .panel-zoom:focus-visible, .zoom-dialog .panel-zoom { opacity: 1; }
