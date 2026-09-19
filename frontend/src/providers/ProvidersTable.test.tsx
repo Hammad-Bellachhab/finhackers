@@ -38,6 +38,19 @@ const march: Provider = {
   rows: [empresa(4, 30), empresa(5, 50)],
 }
 
+/** 30 empresas: por encima de PRIMERAS (24), para que aparezca el buscador dentro del banco. */
+const bbva: Provider = {
+  name: 'BBVA', services: ['bbva'], companies: 30, products: 30,
+  types: [{ type: 'checking', n: 30 }],
+  bands: { 'sólida': 0, sana: 30, vigilar: 0, riesgo: 0 },
+  meanHealth: 80, riskShare: 0, slipping: 0, improving: 0,
+  granted: 0, outstanding: 0,
+  rows: [
+    ...Array.from({ length: 29 }, (_, i) => empresa(100 + i, 80)),
+    { ...empresa(999, 80), companyId: 'c-999', name: 'Acería del Norte' },
+  ],
+}
+
 const pintar = (onSelect = () => {}) =>
   render(<ProvidersTable providers={[santander, paypal, march]} onSelect={onSelect} />)
 
@@ -126,5 +139,30 @@ describe('ProvidersTable', () => {
       await userEvent.selectOptions(screen.getByLabelText('Ordenar por'), orden)
       expect(primero()).toContain('Banca March')
     }
+  })
+
+  it('no ofrece buscar empresas en un banco con pocas', async () => {
+    pintar()
+    await userEvent.click(screen.getByRole('button', { name: /Banco Santander Empresas/ }))
+    expect(screen.queryByLabelText('Buscar empresa en Banco Santander Empresas')).not.toBeInTheDocument()
+  })
+
+  it('busca una empresa dentro de un banco con muchas, sin esperar al "ver todas"', async () => {
+    render(<ProvidersTable providers={[bbva]} onSelect={() => {}} />)
+    await userEvent.click(screen.getByRole('button', { name: /BBVA/ }))
+
+    // Con 30 empresas y PRIMERAS=24, "Acería del Norte" no sale todavía.
+    expect(screen.queryByText('Acería del Norte')).not.toBeInTheDocument()
+
+    const buscador = screen.getByLabelText('Buscar empresa en BBVA')
+    await userEvent.type(buscador, 'acería')
+    expect(screen.getByText('Acería del Norte')).toBeInTheDocument()
+    expect(screen.getByText('1 de 30')).toBeInTheDocument()
+    // El resto deja de pintarse: solo el resultado de la búsqueda.
+    expect(screen.queryByText('Empresa 100')).not.toBeInTheDocument()
+
+    await userEvent.clear(buscador)
+    await userEvent.type(buscador, 'no existe ninguna')
+    expect(screen.getByText('Ninguna empresa de BBVA coincide con la búsqueda.')).toBeInTheDocument()
   })
 })

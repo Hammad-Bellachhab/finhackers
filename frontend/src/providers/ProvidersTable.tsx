@@ -27,7 +27,16 @@ const RELEVANTE = 10
 function ProviderRow({ p, onSelect }: { p: Provider; onSelect: (id: string) => void }) {
   const [abierto, setAbierto] = useState(false)
   const [todas, setTodas] = useState(false)
-  const visibles = todas ? p.rows : p.rows.slice(0, PRIMERAS)
+  const [q, setQ] = useState('')
+
+  const buscando = q.trim().length > 0
+  const encontradas = useMemo(() => {
+    if (!buscando) return p.rows
+    const t = q.trim().toLowerCase()
+    return p.rows.filter((r) => r.name.toLowerCase().includes(t) || r.companyId.toLowerCase().includes(t))
+  }, [p.rows, q, buscando])
+  // Buscando, se enseñan todos los resultados: es lo que se busca, no tiene sentido recortarlos a 24.
+  const visibles = buscando ? encontradas : (todas ? p.rows : p.rows.slice(0, PRIMERAS))
 
   return (
     <>
@@ -61,10 +70,27 @@ function ProviderRow({ p, onSelect }: { p: Provider; onSelect: (id: string) => v
             <p className="muted">
               Las {p.companies.toLocaleString('es-ES')} empresas conectadas por {p.name}, de menos a más salud.
             </p>
-            <div className="provider-companies">
-              {visibles.map((r) => <CompanyCard key={r.companyId} row={r} onSelect={onSelect} />)}
-            </div>
             {p.rows.length > PRIMERAS && (
+              <div className="filters filters-form">
+                <input
+                  type="search" aria-label={`Buscar empresa en ${p.name}`} placeholder="Buscar empresa…"
+                  value={q} onChange={(e) => setQ(e.target.value)}
+                />
+                {buscando && (
+                  <span className="muted">
+                    {encontradas.length.toLocaleString('es-ES')} de {p.rows.length.toLocaleString('es-ES')}
+                  </span>
+                )}
+              </div>
+            )}
+            {buscando && encontradas.length === 0 ? (
+              <p className="muted">Ninguna empresa de {p.name} coincide con la búsqueda.</p>
+            ) : (
+              <div className="provider-companies">
+                {visibles.map((r) => <CompanyCard key={r.companyId} row={r} onSelect={onSelect} />)}
+              </div>
+            )}
+            {!buscando && p.rows.length > PRIMERAS && (
               <button type="button" className="chip" onClick={() => setTodas((v) => !v)}>
                 {todas ? 'Ver solo las primeras' : `Ver las ${p.rows.length.toLocaleString('es-ES')}`}
               </button>
