@@ -3,8 +3,8 @@ import { getCompanyScore, getDecisions, getForecast, getPortfolio } from '../api
 import { useAsync } from '../shared/useAsync'
 import { ErrorNotice, Skeleton } from '../shared/States'
 import { TellMeCard } from '../shared/TellMeCard'
-import { DecisionsSection } from './DecisionsSection'
 import { ForecastSection } from './ForecastSection'
+import { ImproveSection } from './ImproveSection'
 import { ProfileSections } from './ProfileSections'
 import { PulseSection } from './PulseSection'
 
@@ -52,8 +52,11 @@ export function CompanyView({ companyId, onSelect }: { companyId: string; onSele
           {forecast.data && <ForecastSection score={score.data} forecast={forecast.data} />}
           {decisions.loading && <Skeleton height="8rem" />}
           {decisions.error && <ErrorNotice error={decisions.error} />}
+          {/* key: el simulador guarda estado propio (sliders y palancas descartadas); sin esto
+              al cambiar de empresa arrastraría las decisiones de la anterior. */}
           {decisions.data && (
-            <DecisionsSection
+            <ImproveSection
+              key={companyId}
               companyId={companyId} decisions={decisions.data} metrics={score.data.metrics}
             />
           )}

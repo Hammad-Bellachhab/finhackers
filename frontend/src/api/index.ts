@@ -5,8 +5,8 @@
 import { buildDataset, type MockCompany } from './mock/dataset'
 import { companyName } from './mock/names'
 import type {
-  Alert, CompanyProfile, CompanyScore, Decision, Evidence, Forecast, MetricId, ModelReport,
-  AskResponse, ChatTurn, Portfolio, Simulation, TellMe,
+  Alert, AskResponse, ChatTurn, CompanyProfile, CompanyScore, Decision, Drag, Evidence, Forecast,
+  MetricId, ModelReport, Plan, PlanLever, Portfolio, Providers, Simulation, TellMe,
 } from './types'
 
 const USE_MOCK = import.meta.env.MODE === 'test' || import.meta.env.VITE_MOCK === '1'
@@ -138,6 +138,12 @@ export function getPortfolio(): Promise<Portfolio> {
   })
 }
 
+/** Proveedores financieros (bancos y conectores) con las empresas de cada uno.
+ *  Sale del cruce de los productos contratados con la salud que sirve el motor. */
+export function getProviders(): Promise<Providers> {
+  return get('/data/providers.json', SIN_MOCK)
+}
+
 export function getAlerts(): Promise<Alert[]> {
   return get('/data/alerts.json', () =>
     buildDataset()
@@ -223,4 +229,73 @@ export async function simulate(id: string, metricId: MetricId, value: number): P
   }))
   const cashDelta = metricId === 'dso' ? Math.round((metric.value - value) * 4200) : 0
   return { metricId, value, projected, scoreDelta, cashDelta }
+}
+
+// --------------------------------------------------------------------------------------
+// Plan de mejora: qué le baja el score y hasta dónde lo suben las palancas que sigan activas.
+// --------------------------------------------------------------------------------------
+
+/** El motor de scoring, si está levantado. Sin él la app sigue funcionando (ver getPlan). */
+const API = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
+
+/** Qué palanca corrige cada feature. Espejo de FEATURE_METRIC en pipeline/src/metrics.py; solo
+ *  se usa en el camino degradado, porque cuando el motor responde ya lo manda resuelto. */
+const METRIC_OF: Record<string, MetricId> = {
+  cash_conversion_days_w6: 'dso', rec_dpd_mean_w3: 'dso', rec_dpd_mean_w6: 'dso',
+  pay_dpd_mean_w3: 'dpo', pay_dpd_mean_w6: 'dpo', pay_term_days_w6: 'dpo',
+  debt_service_ratio_w6: 'dscr',
+  days_of_cash: 'cash_days', cash_months_of_outflow: 'cash_days',
+  credit_util_T: 'credit_usage', credit_util_max_w6: 'credit_usage',
+  top1_in_share: 'concentration',
+}
+
+/** Plan con el score exacto: el motor aplica todas las palancas a la vez y repuntúa una vez.
+ *  Si no contesta (no levantado, caído, demo sin servidor) se cae al plan aproximado y lo marca. */
+export async function getPlan(id: string, targets: Partial<Record<MetricId, number>>): Promise<Plan> {
+  if (!USE_MOCK) {
+    try {
+      const res = await fetch(`${API}/companies/${id}/plan`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ targets }),
+        signal: AbortSignal.timeout(5000),
+      })
+      if (res.ok) return { ...(await res.json()), companyId: id, exact: true } as Plan
+    } catch {
+      // El motor no está: no es un error de la app, se sigue con la rejilla precalculada.
+    }
+  }
+  return approximatePlan(id, targets)
+}
+
+/** Camino degradado: suma los efectos por separado de la rejilla que ya precalcula el motor.
+ *  Ignora el solape entre palancas, así que se marca exact:false y la UI lo advierte. */
+async function approximatePlan(id: string, targets: Partial<Record<MetricId, number>>): Promise<Plan> {
+  const score = await getCompanyScore(id)
+  const entries = Object.entries(targets) as [MetricId, number][]
+  const sims = await Promise.all(
+    entries.map(([m, v]) => simulate(id, m, v).then((s) => s).catch(() => null)),
+  )
+
+  const levers: PlanLever[] = entries.flatMap(([m, to], i) => {
+    const sim = sims[i]
+    const metric = score.metrics.find((x) => x.id === m)
+    if (!sim || !metric) return []
+    return [{ metricId: m, label: metric.label, unit: metric.unit, from: metric.value, to, scoreDelta: sim.scoreDelta }]
+  })
+
+  const scoreDelta = Number(levers.reduce((a, l) => a + l.scoreDelta, 0).toFixed(1))
+  const drags: Drag[] = score.drivers
+    .filter((d) => d.impact < 0)
+    .map((d) => ({ id: d.id, label: d.label, impact: d.impact, block: '', metricId: METRIC_OF[d.id] ?? null }))
+
+  return {
+    companyId: id,
+    baseHealth: score.score,
+    planHealth: Math.max(0, Math.min(100, Number((score.score + scoreDelta).toFixed(1)))),
+    scoreDelta,
+    levers,
+    drags,
+    exact: false,
+  }
 }

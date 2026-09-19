@@ -21,6 +21,8 @@ from src.api import db
 from src.api.inference import SCENARIOS, InferenceService
 from src.evaluate import score_main
 from src.features import CATEGORICAL
+from src.metrics import metric_values, metrics, num, overrides_for
+from src.providers import providers
 
 STATE: dict = {}          # export() deja aquí el InferenceService
 OUT = C.ROOT.parent / "frontend" / "public" / "data"
@@ -41,69 +43,6 @@ def add_months(month: str, n: int) -> str:
     y, m = map(int, month.split("-"))
     k = y * 12 + m - 1 + n
     return f"{k // 12}-{k % 12 + 1:02d}"
-
-
-def num(v, default=np.nan) -> float:
-    return default if v is None or pd.isna(v) else float(v)
-
-
-# --------------------------------------------------------------------------------------
-# Métricas: cada una sale de features del modelo, así el simulador mueve el modelo real.
-# --------------------------------------------------------------------------------------
-def metric_values(f: dict) -> dict[str, float]:
-    dso = num(f.get("cash_conversion_days_w6"))
-    dpo = num(f.get("pay_term_days_w6")) + num(f.get("pay_dpd_mean_w6"), 0)
-    dsr = num(f.get("debt_service_ratio_w6"), 0)
-    return {"dso": dso, "dpo": dpo, "ccc": dso - dpo,
-            "dscr": 1 / dsr if dsr > 0 else np.nan,              # sin deuda que servir no hay DSCR
-            "cash_days": num(f.get("days_of_cash")), "credit_usage": num(f.get("credit_util_T")),
-            "concentration": num(f.get("top1_in_share"))}
-
-
-def overrides_for(metric_id: str, f: dict, value: float) -> dict[str, float]:
-    """Qué features cambian si la métrica pasa a `value`."""
-    d = value - metric_values(f)[metric_id]
-    shift = lambda *ks: {k: num(f.get(k), 0) + d for k in ks}
-    if metric_id in ("dso", "ccc"):
-        return shift("cash_conversion_days_w6", "rec_dpd_mean_w3", "rec_dpd_mean_w6")
-    if metric_id == "dpo":
-        return shift("pay_dpd_mean_w3", "pay_dpd_mean_w6")
-    if metric_id == "dscr":
-        return {"debt_service_ratio_w6": 1 / max(value, 0.05)}
-    if metric_id == "cash_days":
-        return {"days_of_cash": value, "cash_months_of_outflow": value / 30}
-    if metric_id == "credit_usage":
-        return {"credit_util_T": value, "credit_util_max_w6": max(value, num(f.get("credit_util_max_w6"), 0))}
-    if metric_id == "concentration":
-        return {"top1_in_share": value}
-    raise ValueError(f"métrica desconocida: {metric_id}")
-
-
-METRIC_META = {   # label, unit, dirección buena (+1 = más es mejor), umbral fijo (None = mediana propia 12 m)
-    "dso": ("Días en cobrar", "days", -1, None),
-    "dpo": ("Días en pagar", "days", 0, None),              # 0: alejarse de su mediana en cualquier sentido es malo
-    "ccc": ("Ciclo de caja", "days", -1, None),
-    "dscr": ("Cobertura del servicio de deuda", "ratio", +1, 1.25),
-    "cash_days": ("Días de caja", "days", +1, 60.0),
-    "credit_usage": ("Uso de líneas", "pct", -1, 0.8),
-    "concentration": ("Concentración de clientes", "pct", -1, 0.3),
-}
-
-
-def metrics(feats: pd.DataFrame) -> list[dict]:
-    """feats: company_features de la empresa, ordenadas por mes (la última es la actual)."""
-    hist = pd.DataFrame([metric_values(r) for r in feats.to_dict("records")])
-    out = []
-    for mid, (label, unit, good, fixed) in METRIC_META.items():
-        v = hist[mid].iloc[-1]
-        if pd.isna(v):
-            continue
-        ref = fixed if fixed is not None else float(hist[mid].tail(12).median())
-        gap = (v - ref) * good if good else -abs(v - ref)   # < 0 = peor que la referencia
-        tol = {"days": 10, "ratio": 0.1, "pct": 0.1}[unit]
-        status = "ok" if gap >= 0 else ("watch" if gap > -tol else "breach")
-        out.append({"id": mid, "label": label, "value": round(float(v), 3), "unit": unit, "reference": round(ref, 3), "status": status})
-    return out
 
 
 # --------------------------------------------------------------------------------------
@@ -423,7 +362,9 @@ def write(path: Path, data) -> None:
 def export() -> None:
     STATE["svc"] = InferenceService()
     shutil.rmtree(OUT, ignore_errors=True)
-    write(OUT / "portfolio.json", portfolio())
+    pf = portfolio()
+    write(OUT / "portfolio.json", pf)
+    write(OUT / "providers.json", providers(pf["rows"], pf["month"]))
     write(OUT / "alerts.json", alerts())
     write(OUT / "evidence.json", evidence())
     write(OUT / "model.json", model_report())

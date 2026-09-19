@@ -1,0 +1,68 @@
+/* Pestaña Proveedores. Reutiliza .portfolio (tabla), .filters y .counts de Cartera. */
+.providers tbody tr { cursor: default; }
+.providers tbody tr:hover { background: transparent; }
+.providers .provider-row:hover { background: var(--color-surface-hover); }
+.providers td { vertical-align: middle; }
+
+.provider-toggle {
+  display: flex; align-items: center; gap: var(--space-2);
+  border: 0; background: none; font: inherit; color: inherit; text-align: left;
+  cursor: pointer; padding: 0; width: 100%;
+}
+.provider-toggle:focus-visible { box-shadow: var(--focus-ring); border-radius: var(--radius-sm); outline: none; }
+.provider-caret { color: var(--color-text-muted); font-size: 0.7rem; width: 0.8rem; flex: none; }
+.provider-toggle strong { display: block; font-weight: 500; white-space: normal; }
+.provider-services {
+  display: block; font-size: var(--text-xs); color: var(--color-text-muted);
+  font-family: var(--font-mono); white-space: normal;
+}
+.provider-open { background: var(--color-surface); }
+.provider-open > td { border-bottom: 0; }
+
+.bandbar {
+  display: flex; width: 7rem; height: 8px; border-radius: 999px; overflow: hidden;
+  background: var(--color-border);
+}
+.bandbar > span { display: block; height: 100%; }
+.provider-bands { display: flex; flex-direction: column; gap: 3px; }
+.provider-bands .muted { font-size: var(--text-xs); }
+
+.provider-detail > td { background: var(--color-surface); padding: var(--space-3) var(--space-4) var(--space-4); }
+.provider-detail p { margin: 0 0 var(--space-3); font-size: var(--text-xs); }
+.provider-companies {
+  display: grid; gap: var(--space-2); margin-bottom: var(--space-3);
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+}
+.provider-company {
+  display: flex; align-items: center; gap: var(--space-3); text-align: left;
+  background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3); font: inherit; color: inherit; cursor: pointer;
+}
+.provider-company:hover { background: var(--color-surface-hover); border-color: var(--color-border-strong); }
+.provider-company:focus-visible { box-shadow: var(--focus-ring); outline: none; }
+.provider-company .gauge { flex: none; }
+.provider-company-body { display: grid; gap: 1px; min-width: 0; }
+.provider-company-name { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.provider-company-meta { font-size: var(--text-xs); color: var(--color-text-subtle); }
+
+@media (max-width: 860px) {
+  .providers th:nth-child(4), .providers td:nth-child(4),
+  .providers th:nth-child(7), .providers td:nth-child(7) { display: none; }
+}
+
+/* Ficha de un proveedor del cliente (pestaña Cliente › Proveedores). */
+.provider-card { margin-bottom: var(--space-4); }
+.provider-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-4); }
+.provider-card-head h3 { margin: 0; font-size: var(--text-md); font-weight: 500; }
+.provider-card-head .provider-services { margin: 2px 0 0; }
+.provider-card-facts {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--space-3); margin: var(--space-4) 0;
+}
+.provider-card-facts dt { font-size: var(--text-xs); color: var(--color-text-muted); }
+.provider-card-facts dd { margin: 2px 0 0; font-size: var(--text-sm); }
+.provider-card-bands { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; margin: 0 0 var(--space-3); }
+.provider-card-bands .muted { font-size: var(--text-xs); }
+.provider-card .provider-company { background: var(--color-surface); }
+.provider-card .provider-company:hover { background: var(--color-surface-hover); }
+.filters-form label { font-size: var(--text-sm); color: var(--color-text-muted); }
