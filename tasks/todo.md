@@ -11,6 +11,11 @@
 - [x] Demo navegable: frontend React (`frontend/`) + dashboard Streamlit, ambos contra la API real (`pipeline/src/api/pulso.py`)
 - [x] Limpieza de repo: borrados `backend/` y `db/` (nadie los usaba; el motor lee Parquet y sirve `pipeline/data/serve.db`), CI en `.github/workflows/ci.yml`
 - [x] Despliegue: todo estático en Cloudflare (`wrangler.jsonc`); datos precalculados con `python -m src.pulso`
+- [x] Pestaña **Proveedores**: bancos y conectores con los que está conectada cada empresa, y al desplegar cada
+      proveedor, sus empresas con velocímetro y puntuación (`pipeline/src/providers.py` → `providers.json`,
+      `frontend/src/providers/`, velocímetro reutilizable en `frontend/src/shared/Gauge.tsx`).
+      Los proveedores comerciales (facturas) no entran: en el dataset ninguna contraparte se comparte entre dos
+      empresas (124.030 contrapartes, todas de una sola empresa), así que esa relación no existe.
 
 ## Siguiente
 

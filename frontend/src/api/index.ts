@@ -6,7 +6,7 @@ import { buildDataset, type MockCompany } from './mock/dataset'
 import { companyName } from './mock/names'
 import type {
   Alert, CompanyProfile, CompanyScore, Decision, Evidence, Forecast, MetricId, ModelReport,
-  Portfolio, Simulation, TellMe,
+  Portfolio, Providers, Simulation, TellMe,
 } from './types'
 
 const USE_MOCK = import.meta.env.MODE === 'test' || import.meta.env.VITE_MOCK === '1'
@@ -115,6 +115,12 @@ export function getPortfolio(): Promise<Portfolio> {
       },
     }
   })
+}
+
+/** Proveedores financieros (bancos y conectores) con las empresas de cada uno.
+ *  Sale del cruce de los productos contratados con la salud que sirve el motor. */
+export function getProviders(): Promise<Providers> {
+  return get('/data/providers.json', SIN_MOCK)
 }
 
 export function getAlerts(): Promise<Alert[]> {

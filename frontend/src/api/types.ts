@@ -121,6 +121,48 @@ export type Portfolio = {
   history?: PortfolioMonth[]
 }
 
+/** Cuántos productos de un tipo (checking, loan, lineofcredit…) hay contratados. */
+export type ProductCount = { type: string; n: number }
+
+/** Una empresa vista desde su proveedor financiero: lo que tiene con él y cómo respira. */
+export type ProviderCompany = {
+  companyId: string
+  name: string
+  score: number
+  band: Band
+  healthBand: HealthBand
+  trend: Trend
+  delta3m: number
+  products: number
+  types: ProductCount[]
+  granted: number      // concedido en financiación, en positivo
+  outstanding: number  // saldo vivo, en positivo
+}
+
+/** Banco o conector por el que entran los datos de un grupo de empresas.
+ *  Es la cartera vista del lado del prestamista: quién le respira bien y quién no. */
+export type Provider = {
+  name: string
+  services: string[]
+  companies: number
+  products: number
+  types: ProductCount[]
+  bands: Record<HealthBand, number>
+  meanHealth: number
+  riskShare: number
+  slipping: number
+  improving: number
+  granted: number
+  outstanding: number
+  rows: ProviderCompany[]
+}
+
+export type Providers = {
+  providers: Provider[]
+  month: string
+  totals: { providers: number; companies: number; connectors: number; products: number }
+}
+
 export type Alert = {
   id: string
   companyId: string

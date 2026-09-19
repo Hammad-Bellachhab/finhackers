@@ -6,12 +6,14 @@ import { AlertsView } from './portfolio/AlertsView'
 import { EvidenceView } from './portfolio/EvidenceView'
 import { ModelView } from './portfolio/ModelView'
 import { PortfolioView } from './portfolio/PortfolioView'
+import { ProvidersView } from './providers/ProvidersView'
 
-type Vista = 'cartera' | 'alertas' | 'empresa' | 'evidencia' | 'modelo'
+type Vista = 'cartera' | 'alertas' | 'proveedores' | 'empresa' | 'evidencia' | 'modelo'
 
 const TABS: { id: Vista; label: string }[] = [
   { id: 'cartera', label: 'Cartera' },
   { id: 'alertas', label: 'Alertas' },
+  { id: 'proveedores', label: 'Proveedores' },
   { id: 'empresa', label: 'Empresa' },
   { id: 'evidencia', label: 'Evidencia' },
   { id: 'modelo', label: 'Modelo' },
@@ -49,6 +51,7 @@ export default function App() {
       <main className="page">
         {vista === 'cartera' && <PortfolioView onSelect={abrirEmpresa} />}
         {vista === 'alertas' && <AlertsView onSelect={abrirEmpresa} />}
+        {vista === 'proveedores' && <ProvidersView onSelect={abrirEmpresa} />}
         {vista === 'empresa' && <CompanyView companyId={companyId} onSelect={setCompanyId} />}
         {vista === 'evidencia' && <EvidenceView />}
         {vista === 'modelo' && <ModelView />}

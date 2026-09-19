@@ -44,7 +44,8 @@ Cadena `python -m src.pipeline all` (≈ 8 min, reproducible bit a bit: DuckDB e
 | db | `src/serve_db.py` | SQLite `data/serve.db` (Postgres vía DATABASE_URL): risk_score con salud/trayectoria, alerts, explicaciones, benchmarks |
 | test | `src/evaluate_test.py` | `predict.py` sobre las 82 empresas reservadas + comparación con lo que les pasó |
 
-Otros: `src/health.py` (probabilidad → salud 0–100, suavizado EMA, trayectoria, bache vs. estructural, sólidas, alertas;
+Otros: `src/providers.py` (bancos y conectores agregados con la salud de sus empresas → pestaña Proveedores),
+`src/health.py` (probabilidad → salud 0–100, suavizado EMA, trayectoria, bache vs. estructural, sólidas, alertas;
 umbrales en `config.py`), `src/predict.py` (CSV de empresas nuevas → predicciones, sin reentrenar), `src/api/`
 (FastAPI puerto 8000: /companies, /companies/{id}/score, /changes, /alerts, /benchmarks, /simulate…),
 `src/frontend/app.py` (dashboard Streamlit de referencia, 6 vistas), `src/sensitivity.py` (3/6 meses × p85/p90).

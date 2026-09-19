@@ -21,6 +21,7 @@ from src.api import db
 from src.api.inference import SCENARIOS, InferenceService
 from src.evaluate import score_main
 from src.features import CATEGORICAL
+from src.providers import providers
 
 STATE: dict = {}          # export() deja aquí el InferenceService
 OUT = C.ROOT.parent / "frontend" / "public" / "data"
@@ -420,7 +421,9 @@ def write(path: Path, data) -> None:
 def export() -> None:
     STATE["svc"] = InferenceService()
     shutil.rmtree(OUT, ignore_errors=True)
-    write(OUT / "portfolio.json", portfolio())
+    pf = portfolio()
+    write(OUT / "portfolio.json", pf)
+    write(OUT / "providers.json", providers(pf["rows"], pf["month"]))
     write(OUT / "alerts.json", alerts())
     write(OUT / "evidence.json", evidence())
     write(OUT / "model.json", model_report())

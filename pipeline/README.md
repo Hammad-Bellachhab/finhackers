@@ -87,6 +87,7 @@ src/evaluate_test.py  puntúa las empresas reservadas con predict.py y las compa
 src/sensitivity.py    § 16   — 3 vs 6 meses × p85 vs p90
 src/serve_db.py       Capa 8  — BD servida (SQLite / PostgreSQL): company, company_month_kpi, risk_score (+ salud/trayectoria),
                                 score_explanation, score_change_explanation, alerts, benchmark, model_info
+src/providers.py      proveedores financieros: bancos y conectores de cada empresa, agregados con su salud (pestaña Proveedores)
 src/api/              Capas 9-10 — FastAPI: inference.py (modelo cargado una vez, SHAP, escenarios), db.py, main.py (endpoints, auth, rate limit, log)
 src/frontend/app.py   Capa 11 — dashboard Streamlit (6 vistas: Cartera · Alertas · Ficha · Benchmarks · Simulador · Rendimiento) que consume la API; el frontend React del equipo vive en ../frontend
 src/pipeline.py       orquestador (= make all)
