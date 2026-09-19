@@ -6,6 +6,11 @@
   "compatibility_date": "2026-09-18",
   // Sin variables de texto: la key de Gemini es un secreto del panel y los despliegues no la tocan.
   "vars": {},
+  // Logs y trazas activados en el panel de Cloudflare: aquí también, para que un despliegue no los apague.
+  "observability": {
+    "logs": { "enabled": true, "head_sampling_rate": 1, "invocation_logs": true, "persist": true },
+    "traces": { "enabled": true }
+  },
   "build": { "command": "cd frontend && npm ci && npm run build" },
   "assets": {
     "directory": "frontend/dist",

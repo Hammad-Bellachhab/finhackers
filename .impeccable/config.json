@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "frontend/src/shared/shared.css"
+        ],
+        "createdAt": "2026-09-19T20:42:58.959Z",
+        "reason": "user requested: degradado de marca en los textos TellMe y X-Ray (chat 2026-09-19)"
+      }
+    ]
+  }
+}

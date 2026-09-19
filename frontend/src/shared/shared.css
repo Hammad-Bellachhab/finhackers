@@ -126,6 +126,13 @@
   color: transparent; font-weight: 600;
 }
 
+/* Logo oficial como máscara (public/tellme-logo.png): silueta exacta, relleno con el degradado. */
+.tellme-logo {
+  display: inline-block; flex: none; vertical-align: middle;
+  background: linear-gradient(135deg, #4f6bf5 0%, #6a5cf6 55%, #8b5cf6 100%);
+  -webkit-mask: url(/tellme-logo.png) center / contain no-repeat;
+  mask: url(/tellme-logo.png) center / contain no-repeat;
+}
 /* Logo: respira siempre y gira al pasar el ratón o mientras TellMe piensa. */
 .tellme-mark { width: 20px; height: 20px; display: inline-grid; place-items: center; flex: none; }
 .tellme-logo-svg { transform-origin: 50% 52%; animation: tellme-breathe 3.2s var(--ease) infinite; }
