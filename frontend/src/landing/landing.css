@@ -12,7 +12,17 @@
 .lp-nav nav { display: flex; gap: var(--space-4); margin-left: var(--space-4); }
 .lp-nav nav a { color: rgb(255 255 255 / 75%); text-decoration: none; font-size: var(--text-sm); transition: color 150ms var(--ease); }
 .lp-nav nav a:hover { color: #fff; }
-.lp-nav .lp-btn { margin-left: auto; }
+.lp-nav .lp-btn { margin-left: var(--space-3); }
+
+/* Claro/oscuro en la landing: la barra es oscura siempre, así que el botón va en hueco. */
+.lp-theme-toggle {
+  margin-left: auto; flex: none; width: 36px; height: 36px; border-radius: 999px;
+  display: inline-grid; place-items: center; cursor: pointer;
+  background: transparent; color: rgb(255 255 255 / 75%);
+  border: 1px solid rgb(255 255 255 / 30%);
+}
+.lp-theme-toggle:hover { background: rgb(255 255 255 / 8%); color: #fff; }
+.lp-theme-toggle:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
 .lp-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
@@ -20,8 +30,8 @@
   text-decoration: none; border: 1px solid transparent; cursor: pointer;
   transition: transform 180ms var(--ease), box-shadow 180ms var(--ease), background-color 180ms var(--ease);
 }
-.lp-btn:hover { transform: translateY(-1px); }
 .lp-btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.lp-btn:active { transform: scale(0.98); }
 .lp-btn-primary { background: var(--embat-blue); color: #fff; box-shadow: 0 8px 20px rgb(56 120 246 / 30%); }
 .lp-btn-primary:hover { background: #2f68dd; box-shadow: 0 12px 26px rgb(56 120 246 / 38%); }
 .lp-btn-ghost { color: #fff; border-color: rgb(255 255 255 / 30%); }
@@ -43,6 +53,32 @@
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background-image: linear-gradient(rgb(255 255 255 / 4%) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / 4%) 1px, transparent 1px);
   background-size: 56px 56px; mask-image: radial-gradient(70% 70% at 50% 40%, #000 30%, transparent 80%);
+}
+
+/* Onda de luz del héroe, como la de embat.io: dos anillos enormes, casi fuera del lienzo, de los
+   que solo se ve el arco que lo cruza. Mismos azul y violeta que ya usa el fondo del héroe.
+   Se mueven muy despacio y solo con transform, así que la animación va en la GPU. */
+.lp-wave { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.lp-wave i { position: absolute; display: block; border-radius: 50%; will-change: transform; }
+.lp-wave-a {
+  width: 170vw; aspect-ratio: 1; top: -96vw; right: -46vw;
+  background: radial-gradient(closest-side,
+    rgb(56 120 246 / 0%) 72%, rgb(56 120 246 / 26%) 85%, rgb(56 120 246 / 0%) 97%);
+  animation: lp-wave-a 34s ease-in-out infinite alternate;
+}
+.lp-wave-b {
+  width: 150vw; aspect-ratio: 1; bottom: -104vw; left: -42vw;
+  background: radial-gradient(closest-side,
+    rgb(128 65 209 / 0%) 70%, rgb(128 65 209 / 24%) 86%, rgb(128 65 209 / 0%) 98%);
+  animation: lp-wave-b 46s ease-in-out infinite alternate;
+}
+@keyframes lp-wave-a {
+  from { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+  to { transform: translate3d(-4vw, 3vw, 0) rotate(12deg) scale(1.06); }
+}
+@keyframes lp-wave-b {
+  from { transform: translate3d(0, 0, 0) rotate(0deg) scale(1.04); }
+  to { transform: translate3d(5vw, -3vw, 0) rotate(-10deg) scale(1); }
 }
 .lp-hero-in { position: relative; z-index: 1; }
 .lp-hero h1, .lp-band h2 { color: #fff; }
@@ -70,7 +106,12 @@
   padding: var(--space-5); box-shadow: var(--shadow-sm);
   transition: transform 220ms var(--ease), box-shadow 220ms var(--ease), border-color 220ms var(--ease);
 }
-.lp-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: var(--color-accent-border); }
+/* El hover con desplazamiento, solo con ratón: en pantalla táctil se queda pegado tras el toque. */
+@media (hover: hover) and (pointer: fine) {
+  .lp-btn:hover { transform: translateY(-2px); }
+  .lp-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--color-accent-border); }
+  .lp-feature:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+}
 .lp-card h3 { margin: 0 0 var(--space-2); font-size: var(--text-md); font-weight: 600; }
 .lp-card p { margin: 0; color: var(--color-text-muted); font-size: var(--text-sm); line-height: 1.55; }
 .lp-num { display: block; font-size: 2rem; font-weight: 600; letter-spacing: -0.03em; margin-bottom: var(--space-3); min-height: 2.4rem; }
@@ -103,7 +144,11 @@
     var(--color-bg);
   box-shadow: var(--shadow); transition: transform 220ms var(--ease), box-shadow 220ms var(--ease);
 }
-.lp-feature:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.lp-feature:active { transform: scale(0.995); }
+/* Lo que hace X-Ray, en tres líneas dentro de la tarjeta. */
+.lp-feature-list { list-style: none; padding: 0; margin: var(--space-2) 0 0; display: grid; gap: var(--space-2); }
+.lp-feature-list li { display: flex; gap: var(--space-3); align-items: baseline; color: var(--color-text-muted); }
+.lp-feature-list strong { color: var(--color-text); font-weight: 600; flex: none; min-width: 7.5rem; }
 .lp-feature h2 { margin: 0; font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; }
 .lp-feature h2 .product { font-size: inherit; margin-right: var(--space-2); }
 .lp-feature .lp-eyebrow { color: var(--color-accent-text); }
@@ -126,4 +171,5 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .reveal, .lp-card, .lp-btn, .lp-feature { animation: none; transition: none; }
+  .lp-wave i { animation: none; }
 }

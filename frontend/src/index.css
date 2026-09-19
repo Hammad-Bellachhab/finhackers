@@ -22,9 +22,16 @@ h1, h2, h3 { font-weight: 500; color: var(--color-text); }
 a { color: var(--color-accent-text); }
 :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 tr:focus-visible { outline-offset: -2px; }
-button, .chip, .count-button, .alert, .portfolio tbody tr {
+button, .chip, .count-button, .portfolio tbody tr {
   transition: background-color 150ms var(--ease), color 150ms var(--ease),
-              border-color 150ms var(--ease), box-shadow 150ms var(--ease);
+              border-color 150ms var(--ease), box-shadow 150ms var(--ease),
+              transform 140ms var(--ease);
+}
+/* Todo lo que se pulsa cede un poco: sin esto la interfaz no parece estar escuchando.
+   Fuera los que ya se mueven por su cuenta (notch del chat, lupa de las gráficas). */
+button:not(.ask-notch):not(.panel-zoom):active,
+.chip:active, .count-button:active {
+  transform: scale(0.97);
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

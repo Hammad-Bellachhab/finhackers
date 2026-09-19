@@ -7,7 +7,6 @@ import { HEALTH_BAND_COLOR, Panel, axis, monthAxis, tooltip } from '../shared/ch
 import { useAsync } from '../shared/useAsync'
 import { ErrorNotice, Skeleton } from '../shared/States'
 import { TellMeCard } from '../shared/TellMeCard'
-import { Monitor } from './Monitor'
 import { PortfolioTable } from './PortfolioTable'
 import './portfolio.css'
 
@@ -48,9 +47,6 @@ function Cartera({ onSelect }: { onSelect: (id: string) => void }) {
   const fina = (b: string) => data.rows.filter((r) => r.healthBand === b).length
   return (
     <>
-      <h2>Se han movido solas</h2>
-      <Monitor onSelect={onSelect} />
-
       <h2>Las {data.rows.length.toLocaleString('es-ES')} empresas{data.month && ` · ${data.month}`}</h2>
       <div className="counts">
         <div className="count"><strong>{c.healthy}</strong><span>Sanas</span></div>

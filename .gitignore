@@ -22,6 +22,9 @@ __pycache__/
 .DS_Store
 Thumbs.db
 .claude/
+# Skills instaladas con `npx skills add`: herramientas locales, no del producto
+.agents/
+skills-lock.json
 
 # Dataset del reto (646 MB descomprimido, fuera de git; invoices.csv y transactions.csv van por Git LFS).
 # Ver docs/reto-embat.md para su procedencia. Solo la carpeta data/ de la raíz: pipeline/data/ tiene sus propias reglas.
