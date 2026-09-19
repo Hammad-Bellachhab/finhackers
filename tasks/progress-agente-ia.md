@@ -25,5 +25,5 @@ Si la sesión se corta, retomar desde el primer paso sin marcar.
 - [x] `wrangler.jsonc`: main + binding ASSETS + run_worker_first /api/*; Vite proxy /api → :8787
 - [x] Front: `shared/AskTellMe.tsx` + `ask-tellme.css`, contexto = empresa abierta o cartera
 - [x] Probado en local (wrangler dev + Vite): cartera y COMP_0058 responden con datos reales
-- [ ] Producción: `npx wrangler secret put GEMINI_API_KEY` (usuario) + push
+- [x] Producción: `npx wrangler secret put GEMINI_API_KEY` + push
 - [x] Iteración 2: análisis TellMe plegable (details), notch "TellMe" con destello animado (hover y mientras responde), chat sin evidencias ni aviso, modo oscuro con botón y fundido (View Transitions), claro por defecto
