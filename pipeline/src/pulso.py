@@ -330,7 +330,9 @@ def history_by_month() -> list[dict]:
 
 
 def alerts():
-    al = db.q("SELECT * FROM alerts")
+    # Join con company para poder filtrar el monitor por empresa/cartera (grupo, tamaño, país)
+    # igual que ya se filtra la vista Cartera (ver portfolio()).
+    al = db.q('SELECT a.*, c.group_id, c.size_cohort, c.country FROM alerts a JOIN company c USING(company_id)')
     ev = pd.read_csv(C.REPORTS_DIR / "anticipation_events.csv").dropna(subset=["alert_month"]).groupby("company_id")["lead_months"].last()
     out = []
     for a in al.itertuples():
@@ -341,7 +343,8 @@ def alerts():
                     "monthsAhead": None if lead is None or pd.isna(lead) else int(lead),
                     "message": f"{a.alert.capitalize()}: {a.why}" if a.why else a.alert.capitalize(),
                     "createdAt": f"{a.T}-01T08:00:00Z", "signal": a.alert, "severity": int(a.severity),
-                    "delta1m": round(num(a.health_delta_1m, 0), 1), "why": a.why or ""})
+                    "delta1m": round(num(a.health_delta_1m, 0), 1), "why": a.why or "",
+                    "group": a.group_id, "sizeCohort": a.size_cohort, "country": a.country})
     return out
 
 
