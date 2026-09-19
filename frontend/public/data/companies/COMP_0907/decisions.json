@@ -1,0 +1,1 @@
+[{"id":"COMP_0907-reduce_usage","lever":"reduce_usage","title":"Reduce el uso de tus líneas","rationale":"Tienes dispuesto el 100% de lo concedido; por encima del 80 % es señal de estrés.","metricId":"credit_usage","currentValue":1.0,"targetValue":0.7,"cashImpact":0,"scoreImpact":-0.6,"caution":null}]

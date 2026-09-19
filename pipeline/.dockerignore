@@ -1,7 +1,0 @@
-.venv
-**/__pycache__
-data/parquet
-data/tmp
-data/test_companies/*.csv
-reports/test_companies/work
-tests

@@ -10,7 +10,7 @@
 - [x] Producto + comprador definidos: Pulso, radar de salud financiera para tesorero/CFO, vendible por Embat
 - [x] Demo navegable: frontend React (`frontend/`) + dashboard Streamlit, ambos contra la API real (`pipeline/src/api/pulso.py`)
 - [x] Limpieza de repo: borrados `backend/` y `db/` (nadie los usaba; el motor lee Parquet y sirve `pipeline/data/serve.db`), CI en `.github/workflows/ci.yml`
-- [x] Despliegue: front en Cloudflare (`wrangler.jsonc`) y motor en Fly.io (`pipeline/fly.toml`)
+- [x] Despliegue: todo estático en Cloudflare (`wrangler.jsonc`); datos precalculados con `python -m src.pulso`
 
 ## Siguiente
 

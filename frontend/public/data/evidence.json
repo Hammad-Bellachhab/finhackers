@@ -1,0 +1,1 @@
+{"holdout":{"companies":82,"auc":0.817,"spearman":0.429},"anticipation":{"medianMonths":4.0,"p25":1.0,"p75":7.0,"detected":107},"bothDirections":{"improvingRecall":0.952,"slippingRecall":0.805},"stability":{"dipsCorrectlyIgnored":7,"structuralCaught":51}}

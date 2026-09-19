@@ -1,0 +1,1 @@
+[{"id":"COMP_0135-open_credit_line","lever":"open_credit_line","title":"Abre o amplía una línea de crédito","rationale":"Tienes caja para 36 días de gasto; por debajo de 60 hay tensión.","metricId":"cash_days","currentValue":35.956,"targetValue":90,"cashImpact":1354491,"scoreImpact":0.4,"caution":null}]

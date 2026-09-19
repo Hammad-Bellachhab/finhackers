@@ -26,9 +26,14 @@ python -m src.predict --raw <csv> --out <salida>  # puntuar empresas nuevas
 
 ## Despliegue
 
-- **Motor** en Fly.io: `cd pipeline && python -m src.pipeline all && fly deploy` (la imagen lleva `serve.db`, modelo e informes).
-- **Front** en Cloudflare Workers: `wrangler.jsonc` compila `frontend/` y reenvía `/api/*` al motor (`API_ORIGIN`).
-  Cloudflare lo despliega solo en cada push.
+Todo en Cloudflare, sin servidor: el motor precalcula cada respuesta del front a JSON y Cloudflare sirve
+el front con esos archivos (`wrangler.jsonc`). Se despliega solo en cada push a `main`.
+
+```bash
+cd pipeline
+python -m src.pipeline all   # si cambian datos o modelo
+python -m src.pulso          # → frontend/public/data/ (≈ 1 min); commit + push y Cloudflare publica
+```
 
 ## Frontend (puerto 5173)
 
@@ -38,4 +43,4 @@ npm install
 npm run dev
 ```
 
-Vite hace proxy de `/api` a `localhost:8000`, que es donde tiene que escuchar el motor.
+El front lee los JSON de `frontend/public/data/` (los genera `python -m src.pulso`); no necesita el motor encendido.

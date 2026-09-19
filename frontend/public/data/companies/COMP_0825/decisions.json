@@ -1,0 +1,1 @@
+[{"id":"COMP_0825-refinance","lever":"refinance","title":"Refinancia la deuda","rationale":"Tus entradas cubren la cuota 1.13 veces; la banca pide al menos 1,25.","metricId":"dscr","currentValue":1.134,"targetValue":1.25,"cashImpact":2470,"scoreImpact":-0.4,"caution":null}]

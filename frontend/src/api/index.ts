@@ -1,6 +1,6 @@
-/** Fachada de datos. Llama al motor (pipeline/src/api/pulso.py) salvo en los tests
- *  o con VITE_MOCK=1, que resuelven contra el mock. Los componentes no cambian:
- *  solo conocen estas firmas. */
+/** Fachada de datos. Lee los JSON que precalcula el motor (python -m src.pulso ->
+ *  public/data/), salvo en los tests o con VITE_MOCK=1, que resuelven contra el mock.
+ *  Los componentes no cambian: solo conocen estas firmas. */
 
 import { buildDataset, type MockCompany } from './mock/dataset'
 import { companyName } from './mock/names'
@@ -27,27 +27,27 @@ function withNames(_key: string, v: unknown): unknown {
   return v
 }
 
-async function get<T>(path: string, mock: () => T, init?: RequestInit): Promise<T> {
+async function get<T>(path: string, mock: () => T): Promise<T> {
   if (USE_MOCK) return mock()
-  const res = await fetch(path, init)
-  if (!res.ok) throw new Error(`La API respondió ${res.status}`)
+  const res = await fetch(path)
+  if (!res.ok) throw new Error(res.status === 404 ? 'Empresa no encontrada' : `Los datos respondieron ${res.status}`)
   return JSON.parse(await res.text(), withNames) as T
 }
 
 export function getCompanyScore(id: string): Promise<CompanyScore> {
-  return get(`/api/companies/${id}/score`, () => find(id).score)
+  return get(`/data/companies/${id}/score.json`, () => find(id).score)
 }
 
 export function getForecast(id: string): Promise<Forecast> {
-  return get(`/api/companies/${id}/forecast`, () => find(id).forecast)
+  return get(`/data/companies/${id}/forecast.json`, () => find(id).forecast)
 }
 
 export function getDecisions(id: string): Promise<Decision[]> {
-  return get(`/api/companies/${id}/decisions`, () => find(id).decisions)
+  return get(`/data/companies/${id}/decisions.json`, () => find(id).decisions)
 }
 
 export function getPortfolio(): Promise<Portfolio> {
-  return get('/api/portfolio', () => {
+  return get('/data/portfolio.json', () => {
     const rows = buildDataset().map((c) => ({
       companyId: c.score.companyId,
       name: c.score.name,
@@ -73,7 +73,7 @@ export function getPortfolio(): Promise<Portfolio> {
 }
 
 export function getAlerts(): Promise<Alert[]> {
-  return get('/api/alerts', () =>
+  return get('/data/alerts.json', () =>
     buildDataset()
       .filter((c) => Math.abs(c.score.delta3m) >= 6)
       .slice(0, 40)
@@ -92,7 +92,7 @@ export function getAlerts(): Promise<Alert[]> {
 }
 
 export function getEvidence(): Promise<Evidence> {
-  return get('/api/evidence', () => {
+  return get('/data/evidence.json', () => {
     const data = buildDataset()
     const held = data.filter((c) => c.score.heldOut)
     const detected = data.filter((c) => c.forecast.detection !== null)
@@ -110,29 +110,51 @@ export function getEvidence(): Promise<Evidence> {
   })
 }
 
-/** Simulacion determinista: mover una metrica hacia su referencia sube el score
- *  de forma proporcional a la distancia recorrida. Misma entrada, misma salida. */
-export function simulate(id: string, metricId: MetricId, value: number): Promise<Simulation> {
-  return get(`/api/companies/${id}/simulate`, () => {
-    const c = find(id)
-    const metric = c.score.metrics.find((m) => m.id === metricId)
-    if (!metric) throw new Error('Métrica desconocida')
+type SimPoint = { value: number; scoreDelta: number; cashDelta: number }
 
-    // Acercarse a la referencia mejora; alejarse penaliza.
-    const before = Math.abs(metric.value - metric.reference)
-    const after = Math.abs(value - metric.reference)
-    const factor = metricId === 'dscr' ? 12 : metricId === 'credit_usage' ? 20 : 0.35
-    const scoreDelta = Number(((before - after) * factor).toFixed(1))
+/** Interpolacion lineal sobre la rejilla precalculada por el motor (se satura en los extremos). */
+function interpolate(grid: SimPoint[], value: number): SimPoint {
+  const i = grid.findIndex((p) => p.value >= value)
+  if (i === -1) return grid[grid.length - 1]
+  if (i === 0) return grid[0]
+  const [a, b] = [grid[i - 1], grid[i]]
+  const t = (value - a.value) / (b.value - a.value || 1)
+  return {
+    value,
+    scoreDelta: Number((a.scoreDelta + t * (b.scoreDelta - a.scoreDelta)).toFixed(1)),
+    cashDelta: Math.round(a.cashDelta + t * (b.cashDelta - a.cashDelta)),
+  }
+}
 
-    const projected = c.forecast.horizon.map((p) => ({
-      month: p.month,
-      score: Math.max(2, Math.min(98, Math.round(p.score + scoreDelta))),
+/** Simulacion determinista: misma entrada, misma salida. El efecto sale del modelo real,
+ *  precalculado en una rejilla por metrica. */
+export async function simulate(id: string, metricId: MetricId, value: number): Promise<Simulation> {
+  if (!USE_MOCK) {
+    const [grids, forecast] = await Promise.all([
+      get<Partial<Record<MetricId, SimPoint[]>>>(`/data/companies/${id}/simulate.json`, () => ({})),
+      getForecast(id),
+    ])
+    const grid = grids[metricId]
+    if (!grid) throw new Error('Esta empresa no tiene datos para esa métrica')
+    const { scoreDelta, cashDelta } = interpolate(grid, value)
+    const projected = forecast.horizon.map((p) => ({
+      month: p.month, score: Math.max(0, Math.min(100, Number((p.score + scoreDelta).toFixed(1)))),
     }))
-    const cashDelta = metricId === 'dso' ? Math.round((metric.value - value) * 4200) : 0
     return { metricId, value, projected, scoreDelta, cashDelta }
-  }, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ metricId, value }),
-  })
+  }
+
+  // Mock: acercarse a la referencia mejora; alejarse penaliza.
+  const c = find(id)
+  const metric = c.score.metrics.find((m) => m.id === metricId)
+  if (!metric) throw new Error('Métrica desconocida')
+  const before = Math.abs(metric.value - metric.reference)
+  const after = Math.abs(value - metric.reference)
+  const factor = metricId === 'dscr' ? 12 : metricId === 'credit_usage' ? 20 : 0.35
+  const scoreDelta = Number(((before - after) * factor).toFixed(1))
+  const projected = c.forecast.horizon.map((p) => ({
+    month: p.month,
+    score: Math.max(2, Math.min(98, Math.round(p.score + scoreDelta))),
+  }))
+  const cashDelta = metricId === 'dso' ? Math.round((metric.value - value) * 4200) : 0
+  return { metricId, value, projected, scoreDelta, cashDelta }
 }
