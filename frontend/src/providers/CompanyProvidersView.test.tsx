@@ -49,11 +49,12 @@ describe('CompanyProvidersView', () => {
     const onSelect = vi.fn()
     render(<CompanyProvidersView companyId="c-1" onSelect={onSelect} />)
 
+    // Igual que el buscador de Empresa: empieza vacío, no enseña la empresa activa.
     const buscador = await screen.findByLabelText('Empresa')
-    expect(buscador).toHaveValue('Empresa 1')
+    expect(buscador).toHaveValue('')
 
-    await userEvent.clear(buscador)
     await userEvent.type(buscador, 'Acería del Norte · c-999')
     expect(onSelect).toHaveBeenCalledWith('c-999')
+    expect(buscador).toHaveValue('')   // se vacía otra vez tras elegir
   })
 })

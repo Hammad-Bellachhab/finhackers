@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { getProviders } from '../api'
 import type { Provider, Providers } from '../api/types'
 import { formatMoney } from '../shared/format'
@@ -40,22 +40,17 @@ function ProviderCard({ p, companyId }: { p: Provider; companyId: string }) {
   )
 }
 
-/** Buscador nativo (datalist): nombre o ID, sin librerías, igual que en Empresa. El texto
- *  refleja siempre la empresa activa, tanto si se llega aquí buscando como desde otra pestaña. */
+/** Buscador nativo (datalist): nombre o ID, sin librerías. Igual que el de Empresa: empieza
+ *  vacío y se vacía otra vez al elegir, no enseña la empresa activa. */
 function CompanyPicker({
-  companyId, empresas, onSelect,
-}: { companyId: string; empresas: { id: string; name: string }[]; onSelect: (id: string) => void }) {
-  const actual = empresas.find((c) => c.id === companyId)
-  const [q, setQ] = useState(actual?.name ?? companyId)
-
-  useEffect(() => {
-    setQ(actual?.name ?? companyId)
-  }, [companyId, actual?.name])
+  empresas, onSelect,
+}: { empresas: { id: string; name: string }[]; onSelect: (id: string) => void }) {
+  const [q, setQ] = useState('')
 
   const pick = (v: string) => {
     setQ(v)
     const hit = empresas.find((c) => c.id === v || `${c.name} · ${c.id}` === v)
-    if (hit) onSelect(hit.id)
+    if (hit) { onSelect(hit.id); setQ('') }
   }
 
   return (
@@ -91,7 +86,7 @@ export function CompanyProvidersView({
   return (
     <>
       <h2>Proveedores del cliente{data.month && ` · ${data.month}`}</h2>
-      <CompanyPicker companyId={companyId} empresas={empresas} onSelect={onSelect} />
+      <CompanyPicker empresas={empresas} onSelect={onSelect} />
 
       {mios.length === 0 ? (
         <p className="empty">Esta empresa no tiene ningún producto conectado.</p>
