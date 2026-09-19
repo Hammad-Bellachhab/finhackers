@@ -57,12 +57,9 @@ function ProviderRow({ p, onSelect }: { p: Provider; onSelect: (id: string) => v
         <td className="num">{p.products.toLocaleString('es-ES')}</td>
         <td className="muted">{tipos(p.types)}</td>
         <td><Gauge score={p.meanHealth} label="salud media de sus empresas" /></td>
-        {/* El flex va en un div: un <td> con display:flex deja de ser celda y descuadra la fila. */}
-        <td>
-          <div className="provider-bands">
-            <BandBar bands={p.bands} total={p.companies} />
-            <span className="muted">{Math.round(100 * p.riskShare)} % en riesgo</span>
-          </div>
+        <td className="provider-bands">
+          <BandBar bands={p.bands} total={p.companies} />
+          <span className="muted">{Math.round(100 * p.riskShare)} % en riesgo</span>
         </td>
         <td className="num">{p.slipping.toLocaleString('es-ES')}</td>
         <td className="num">{p.outstanding > 0 ? formatMoney(p.outstanding, true) : '—'}</td>
