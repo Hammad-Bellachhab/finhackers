@@ -14,7 +14,11 @@ export function initialTheme(): Theme {
 /** Aplica el tema con un fundido (View Transitions) donde el navegador lo soporte. */
 export function applyTheme(t: Theme, animate = true) {
   const set = () => { document.documentElement.dataset.theme = t }
-  if (animate && document.startViewTransition) document.startViewTransition(set)
-  else set()
+  if (animate && document.startViewTransition) {
+    const vt = document.startViewTransition(set)
+    // Pulsar dos veces seguidas aborta la transición anterior: rechaza, pero no es un error.
+    vt.ready.catch(() => {})
+    vt.finished.catch(() => {})
+  } else set()
   try { localStorage.setItem(KEY, t) } catch { /* sin persistencia */ }
 }

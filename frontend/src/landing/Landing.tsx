@@ -187,8 +187,8 @@ export function XRayLanding() {
             {/* En una sola cadena: partirlo en dos deja un espacio antes del punto mientras carga. */}
             <p>
               {e
-                ? `De los deterioros reales, esos se vieron venir con ${e.anticipation.medianMonths} meses de margen de mediana.`
-                : 'De los deterioros reales, esos se vieron venir con meses de margen.'}
+                ? `de los deterioros reales se vieron venir, con ${e.anticipation.medianMonths} meses de margen de mediana.`
+                : 'de los deterioros reales se vieron venir, con meses de margen.'}
             </p>
           </article>
           <article className="lp-card reveal" style={{ animationDelay: '140ms' }}>

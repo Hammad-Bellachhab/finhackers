@@ -17,6 +17,7 @@
 /* "X-Ray" en negrita con el degradado de TellMe (identidad pedida para el producto). */
 .product {
   font-size: var(--text-lg); font-weight: 700; letter-spacing: -0.02em; display: inline-block;
+  flex: none; white-space: nowrap;
   background: var(--tellme-gradient); -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 .logo-link { display: inline-flex; align-items: center; border-radius: var(--radius-sm); }
