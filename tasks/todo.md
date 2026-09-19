@@ -17,6 +17,20 @@
       Los proveedores comerciales (facturas) no entran: en el dataset ninguna contraparte se comparte entre dos
       empresas (124.030 contrapartes, todas de una sola empresa), así que esa relación no existe.
 
+## Hecho — "Hacia dónde va": la banda ya no es una recta
+
+La proyección a 6 meses de la ficha era una recta OLS ±1,96·σ·√k: no usaba el modelo, no sabía
+frenar (proyectaba 10 empresas hasta salud 0) y su anchura no estaba medida. Ahora es un montecarlo
+empírico (`pipeline/src/projection.py`): 2.000 trayectorias sorteadas entre los meses-empresa del
+panel que estuvieron en el mismo estado (nivel de salud, sorpresa del mes, inercia a 1 y 3 meses),
+pesados por parecido. La banda son los percentiles 10-90.
+
+- [x] `src/projection.py` + paso `projection` del pipeline y backtest (`reports/projection_backtest.json`)
+- [x] `src/pulso.py`: `forecast()` lo usa y publica de dónde sale la banda; `python -m src.pulso forecast`
+      regenera solo los `forecast.json` (no hace `rmtree`, no se lleva los `tellme.json`)
+- [x] Front: `ForecastSection` explica la banda con los números del motor; `Forecast.basis` en el contrato
+- [x] Medido en las 82 empresas reservadas: cobertura 80,9 % (antes 74,3 %), MAE 4,91 (antes 7,31)
+
 ## Siguiente
 
 - [ ] Día de la evaluación: puntuar el test oculto con `python -m src.predict --raw <csv> --out <salida>` y subir al leaderboard

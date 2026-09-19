@@ -55,6 +55,19 @@ export type Forecast = {
   stability: 'dip' | 'structural'
   stabilityNote: string
   detection: { detectedAt: string; evidentAt: string; monthsAhead: number } | null
+  /** De donde sale la banda: montecarlo sobre empresas comparables (src/projection.py).
+   *  Opcional porque los datos simulados del modo demo no lo traen. */
+  basis?: ForecastBasis
+}
+
+export type ForecastBasis = {
+  paths: number          // trayectorias sorteadas
+  neighbours: number     // meses-empresa que de verdad sostienen la banda
+  companies: number      // empresas distintas de las que salen
+  interval: number       // 80 = banda del percentil 10 al 90
+  coverage: number | null  // cobertura medida en las empresas reservadas
+  probDrop5: number      // trayectorias que pierden mas de 5 puntos de salud
+  probRisk: number       // trayectorias que acaban en banda de riesgo
 }
 
 export type LeverId =
