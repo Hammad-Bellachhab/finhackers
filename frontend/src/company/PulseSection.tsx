@@ -57,7 +57,12 @@ export function PulseSection({ score }: { score: CompanyScore }) {
       <div className="metrics">
         {score.metrics.map((m) => (
           <div key={m.id} className={`metric metric-${m.status}`}>
-            <span className="metric-label">{m.label}</span>
+            <span className="metric-label">
+              {m.label}
+              {/* El estado también en texto, no solo en color (WCAG 1.4.1). */}
+              {m.status === 'watch' && <span className="pill pill-vigilar">Vigilar</span>}
+              {m.status === 'breach' && <span className="pill pill-riesgo">Fuera de umbral</span>}
+            </span>
             <span className="metric-value">{metricValue(m)}</span>
           </div>
         ))}

@@ -1,183 +1,106 @@
-/* Design tokens — paleta de Embat.
+/* Design tokens — marca de Embat (tema claro).
  *
- * Extraida del design system de embat.io (tokens del tema, no los defaults de
- * WordPress). Ellos definen cada color en pareja: version clara y version
- * "inverse" para fondo oscuro. Aqui se respeta ese mapeo.
+ * Guía: docs/superpowers/specs/2026-09-19-pulso-visual.md. Paleta completa, con los
+ * valores "inverse" para oscuro: docs/paleta-embat.md.
  *
- * Referencia legible: docs/paleta-embat.md
- *
- * Regla de uso: en los componentes se usan SIEMPRE los tokens semanticos
- * (--color-*), nunca los crudos (--embat-*). Asi el modo oscuro sale gratis.
- */
+ * Regla de uso: en los componentes se usan SIEMPRE los tokens semánticos
+ * (--color-*), nunca los crudos (--embat-*). */
+
+@font-face {
+  font-family: "Haffer";
+  src: url("/fonts-haffer-400.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+/* Solo hay 400 y 500. El rango 500-800 hace que los 600/700 que ya hay en el CSS
+   usen el fichero 500 en vez de una negrita sintética (fea en Haffer). */
+@font-face {
+  font-family: "Haffer";
+  src: url("/fonts-haffer-500.woff2") format("woff2");
+  font-weight: 500 800; font-style: normal; font-display: swap;
+}
 
 :root {
-  /* ---- Marca (crudos, no usar directamente en componentes) ---- */
-  --embat-navy: #050b2c; /* el azul insignia: texto en claro, fondo en oscuro */
-  --embat-navy-2: #232845;
-  --embat-navy-3: #41465f;
-  --embat-blue: #3878f6; /* azul de accion */
-  --embat-blue-hover: #0338bb;
-  --embat-blue-pressed: #002a9b;
+  --color-trend-up-soft: #e3f3f6;
+  --color-ai-wash: #f5f8ff;
+  /* ---- Marca (crudos) ---- */
+  --embat-navy: #050b2c;
+  --embat-blue: #3878f6;
   --embat-blue-light: #e7efff;
-  --embat-blue-medium: #81acff;
   --embat-purple: #8041d1;
-  --embat-purple-medium: #c357ec;
-  --embat-aqua: #3ec0d6;
-  --embat-pink: #d23b72;
-  --embat-warm: #d6873e;
-  --embat-coral: #f7b2a8;
+  --embat-gradient: linear-gradient(275deg, #c357ec 4.22%, #b565f3 50%, #5c92fe 95.78%); /* solo TellMe */
 
-  /* Gradiente de marca (morado -> azul) */
-  --embat-gradient: linear-gradient(275deg, #c357ec 4.22%, #b565f3 50%, #5c92fe 95.78%);
-  --embat-gradient-soft: linear-gradient(270deg, #88aaf7, #9f93ee);
-
-  /* ---- Semanticos: superficie y texto ---- */
+  /* ---- Superficie y texto ---- */
   --color-bg: #ffffff;
   --color-bg-subtle: #fbfbfc;
-  --color-surface: #f3f4f6;
-  --color-surface-hover: #f3f4f6;
-  --color-surface-pressed: #e8e8ed;
-  --color-border: #e8e8ed;
-  --color-border-strong: #d2d2db;
+  --color-surface: #f6f8fb;          /* tiles internos (KPI, drivers, cambios) */
+  --color-surface-hover: #e7efff;    /* hover = Soft Blue */
+  --color-surface-pressed: #eef1f6;  /* fondo de pill neutra */
+  --color-border: #e3e7ef;
+  --color-border-strong: #c9cfdb;
+  --color-border-control: #8a90a0;   /* borde de input/select (3.2:1, WCAG 1.4.11) */
 
   --color-text: #050b2c;
-  --color-text-muted: #6e707c;
   --color-text-subtle: #42444c;
+  --color-text-muted: #5c6070;
   --color-text-disabled: #888996;
   --color-text-on-accent: #ffffff;
 
-  /* ---- Semanticos: accion ---- */
-  --color-accent: #3878f6;
+  /* ---- Acción ---- */
+  --color-accent: #3878f6;           /* rellenos, iconos, indicador, focus; NO texto normal (4.05:1) */
+  --color-accent-text: #1f5ad6;      /* texto azul */
   --color-accent-hover: #0338bb;
   --color-accent-pressed: #002a9b;
   --color-accent-soft: #e7efff;
+  --color-accent-border: #c9dafd;    /* borde de la tarjeta TellMe */
+  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent);
 
-  /* ---- Semanticos: estado ---- */
-  --color-success: #08ab39;
-  --color-success-soft: #e7ffee;
-  --color-success-strong: #007d25;
-  --color-warning: #dfb631;
-  --color-warning-soft: #fff5de;
-  --color-warning-strong: #997800;
+  /* ---- Estado (≥4.5:1 como texto sobre blanco salvo --color-warning) ---- */
+  --color-success: #127c3a;
+  --color-success-soft: #e8f6ee;
+  --color-success-strong: #0b5f2b;
+  --color-warning: #b86e00;          /* solo gráfico/icono; para texto usar -strong */
+  --color-warning-soft: #fff4dc;
+  --color-warning-strong: #7a5a00;
   --color-danger: #c2401f;
-  --color-danger-soft: #ffe7e0;
+  --color-danger-soft: #ffe9e3;
   --color-danger-strong: #931d00;
 
-  /* ---- Nivel: donde esta hoy ---- */
   --color-band-healthy: var(--color-success);
   --color-band-stable: var(--color-text-muted);
   --color-band-risk: var(--color-danger);
-
-  /* ---- Trayectoria: hacia donde va. Eje independiente del nivel:
-     una empresa puede ser 'healthy' y estar cayendo. ---- */
-  --color-trend-up: var(--embat-aqua);
+  /* Trayectoria: eje independiente del nivel (una empresa sana puede estar cayendo). */
+  --color-trend-up: #0b7d91;
   --color-trend-down: var(--color-warning);
   --color-trend-flat: var(--color-text-muted);
 
-  /* ---- Categoricos para graficas (orden de uso) ---- */
+  /* ---- Gráficas (orden de uso). Verde fuera: reservado a "bien/sana". ---- */
   --chart-1: #3878f6;
   --chart-2: #8041d1;
-  --chart-3: #3ec0d6;
-  --chart-4: #d6873e;
+  --chart-3: #0b7d91;
+  --chart-4: #b86e00;
   --chart-5: #d23b72;
-  --chart-6: #08ab39;
+  --chart-6: #050b2c;
 
-  /* ---- Tipografia y forma ---- */
-  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* ---- Tipografía ---- */
+  --font-sans: "Haffer", Arial, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", monospace;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.75rem;
+  --text-kpi: 1.5rem;
+
+  /* ---- Espacio (escala 4) ---- */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+
+  /* ---- Forma ---- */
   --radius-sm: 6px;
-  --radius: 10px;
-  --radius-lg: 16px;
-  --shadow-sm: 0 1px 2px rgb(5 11 44 / 6%);
-  --shadow: 0 4px 16px rgb(5 11 44 / 8%);
-}
-
-/* Modo oscuro: los tokens "inverse" del design system de Embat. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --color-bg: #050b2c;
-    --color-bg-subtle: #050b2c;
-    --color-surface: #232845;
-    --color-surface-hover: #232845;
-    --color-surface-pressed: #41465f;
-    --color-border: #373c56;
-    --color-border-strong: #696d80;
-
-    --color-text: #ffffff;
-    --color-text-muted: #afafbb;
-    --color-text-subtle: #d2d2db;
-    --color-text-disabled: #787d96;
-    --color-text-on-accent: #ffffff;
-
-    --color-accent: #5c92fe;
-    --color-accent-hover: #a5c4ff;
-    --color-accent-pressed: #c7daff;
-    --color-accent-soft: #002a9b;
-
-    --color-success: #80efa2;
-    --color-success-soft: #007d25;
-    --color-success-strong: #e7ffee;
-    --color-warning: #dfb631;
-    --color-warning-soft: #997800;
-    --color-warning-strong: #fff5de;
-    --color-danger: #e5775b;
-    --color-danger-soft: #7d1900;
-    --color-danger-strong: #ffe7e0;
-
-    --color-trend-up: #5ed3e5;
-
-    --chart-1: #5c92fe;
-    --chart-2: #b083e8;
-    --chart-3: #5ed3e5;
-    --chart-4: #e59f5e;
-    --chart-5: #e05a8a;
-    --chart-6: #80efa2;
-
-    --shadow-sm: 0 1px 2px rgb(0 0 0 / 30%);
-    --shadow: 0 4px 16px rgb(0 0 0 / 40%);
-  }
-}
-
-/* Mismo bloque para el toggle manual. */
-:root[data-theme="dark"] {
-  --color-bg: #050b2c;
-  --color-bg-subtle: #050b2c;
-  --color-surface: #232845;
-  --color-surface-hover: #232845;
-  --color-surface-pressed: #41465f;
-  --color-border: #373c56;
-  --color-border-strong: #696d80;
-
-  --color-text: #ffffff;
-  --color-text-muted: #afafbb;
-  --color-text-subtle: #d2d2db;
-  --color-text-disabled: #787d96;
-  --color-text-on-accent: #ffffff;
-
-  --color-accent: #5c92fe;
-  --color-accent-hover: #a5c4ff;
-  --color-accent-pressed: #c7daff;
-  --color-accent-soft: #002a9b;
-
-  --color-success: #80efa2;
-  --color-success-soft: #007d25;
-  --color-success-strong: #e7ffee;
-  --color-warning: #dfb631;
-  --color-warning-soft: #997800;
-  --color-warning-strong: #fff5de;
-  --color-danger: #e5775b;
-  --color-danger-soft: #7d1900;
-  --color-danger-strong: #ffe7e0;
-
-  --color-trend-up: #5ed3e5;
-
-  --chart-1: #5c92fe;
-  --chart-2: #b083e8;
-  --chart-3: #5ed3e5;
-  --chart-4: #e59f5e;
-  --chart-5: #e05a8a;
-  --chart-6: #80efa2;
-
-  --shadow-sm: 0 1px 2px rgb(0 0 0 / 30%);
-  --shadow: 0 4px 16px rgb(0 0 0 / 40%);
+  --radius: 8px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 2px rgb(5 11 44 / 5%);
+  --shadow: 0 1px 4px rgb(5 11 44 / 8%);
+  --shadow-lg: 0 8px 16px rgb(5 11 44 / 9%);
+  --ease: cubic-bezier(0.2, 0, 0, 1);
 }

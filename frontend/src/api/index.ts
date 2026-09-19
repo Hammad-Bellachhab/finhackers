@@ -6,7 +6,7 @@ import { buildDataset, type MockCompany } from './mock/dataset'
 import { companyName } from './mock/names'
 import type {
   Alert, CompanyProfile, CompanyScore, Decision, Evidence, Forecast, MetricId, ModelReport,
-  Portfolio, Simulation,
+  Portfolio, Simulation, TellMe,
 } from './types'
 
 const USE_MOCK = import.meta.env.MODE === 'test' || import.meta.env.VITE_MOCK === '1'
@@ -34,7 +34,10 @@ function withNames(_key: string, v: unknown): unknown {
 async function get<T>(path: string, mock: () => T): Promise<T> {
   if (USE_MOCK) return mock()
   const res = await fetch(path)
-  if (!res.ok) throw new Error(res.status === 404 ? 'Empresa no encontrada' : `Los datos respondieron ${res.status}`)
+  // Un fichero que no existe vuelve como index.html (fallback de SPA en Vite y Cloudflare): es un 404.
+  const missing = res.status === 404 || (res.ok && !res.headers.get('content-type')?.includes('json'))
+  if (missing) throw new Error('Empresa no encontrada', { cause: 404 })
+  if (!res.ok) throw new Error(`Los datos respondieron ${res.status}`)
   return JSON.parse(await res.text(), withNames) as T
 }
 
@@ -58,6 +61,34 @@ export function getProfile(id: string): Promise<CompanyProfile> {
 
 export function getModelReport(): Promise<ModelReport> {
   return get('/data/model.json', SIN_MOCK)
+}
+
+/** Análisis de TellMe (la IA de Embat). Sin id: el de la cartera. null = aún no generado (404). */
+export function getTellMe(companyId?: string): Promise<TellMe | null> {
+  const path = companyId ? `/data/companies/${companyId}/tellme.json` : '/data/tellme/portfolio.json'
+  return get<TellMe | null>(path, () => ({
+    scope: companyId ? 'company' : 'portfolio',
+    companyId,
+    headline: companyId ? 'Sana, pero cobra cada vez más tarde' : '885 empresas sanas; 169 empiezan a torcerse',
+    summary: 'Resumen de ejemplo (mock). En modo real lo escribe TellMe a partir de los datos del motor.',
+    insights: [
+      {
+        id: 'mock-1', kind: 'trend', severity: 'watch', title: 'El cobro se alarga',
+        explanation: 'Sus clientes tardan 19 días más en pagar que hace un año.',
+        evidence: [{ label: 'Días en cobrar', value: '72 d' }, { label: 'Mediana 12 m', value: '53 d' }],
+        action: 'Revisar los plazos con los tres clientes principales.',
+      },
+    ],
+    glossary: [{ term: 'DSO', plain: 'Días que tardas en cobrar una factura.' }],
+    generatedAt: '2026-09-19T00:00:00Z',
+    model: 'mock',
+  }))
+    // TellMe escribe IDs (COMP_1065): en pantalla van los mismos nombres que en el resto de la web.
+    .then((t) => t && JSON.parse(JSON.stringify(t).replace(/COMP_\d{4}/g, (id) => companyName(id))))
+    .catch((e: Error) => {
+      if (e.cause === 404) return null
+      throw e
+    })
 }
 
 export function getPortfolio(): Promise<Portfolio> {

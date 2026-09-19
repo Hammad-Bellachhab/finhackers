@@ -6,6 +6,7 @@ import type { PortfolioMonth } from '../api/types'
 import { HEALTH_BAND_COLOR, Panel, axis, monthAxis, tooltip } from '../shared/charts'
 import { useAsync } from '../shared/useAsync'
 import { ErrorNotice, Skeleton } from '../shared/States'
+import { TellMeCard } from '../shared/TellMeCard'
 import { Monitor } from './Monitor'
 import { PortfolioTable } from './PortfolioTable'
 import './portfolio.css'
@@ -21,9 +22,9 @@ function Evolution({ history }: { history: PortfolioMonth[] }) {
           <YAxis yAxisId="n" {...axis} />
           <YAxis yAxisId="h" orientation="right" domain={[50, 100]} {...axis} />
           <Tooltip {...tooltip} />
-          <Legend wrapperStyle={{ fontSize: 11 }} />
+          <Legend wrapperStyle={{ fontSize: 12 }} />
           {bands.map(([k, name]) => (
-            <Bar key={k} yAxisId="n" dataKey={k} name={name} stackId="b" fill={HEALTH_BAND_COLOR[name]} isAnimationActive={false} />
+            <Bar key={k} yAxisId="n" dataKey={k} name={name} stackId="b" fill={HEALTH_BAND_COLOR[name]} stroke="var(--color-bg)" strokeWidth={1} isAnimationActive={false} />
           ))}
           <Line yAxisId="h" dataKey="meanHealth" name="Salud media" stroke="var(--chart-1)" strokeWidth={2} dot={false} isAnimationActive={false} />
         </ComposedChart>
@@ -33,6 +34,10 @@ function Evolution({ history }: { history: PortfolioMonth[] }) {
 }
 
 export function PortfolioView({ onSelect }: { onSelect: (id: string) => void }) {
+  return <><TellMeCard /><Cartera onSelect={onSelect} /></>
+}
+
+function Cartera({ onSelect }: { onSelect: (id: string) => void }) {
   const { data, error, loading } = useAsync(() => getPortfolio(), [])
 
   if (loading) return <Skeleton height="26rem" />

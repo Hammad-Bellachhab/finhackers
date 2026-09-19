@@ -15,7 +15,7 @@ export function ErrorNotice({ error, onRetry }: { error: Error; onRetry?: () => 
     <div className="error-notice" role="alert">
       <strong>No se han podido cargar los datos.</strong>
       <span>{error.message}</span>
-      {onRetry && <button type="button" onClick={onRetry}>Reintentar</button>}
+      <button type="button" onClick={onRetry ?? (() => location.reload())}>Reintentar</button>
     </div>
   )
 }

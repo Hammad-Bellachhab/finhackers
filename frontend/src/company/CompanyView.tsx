@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { getCompanyScore, getDecisions, getForecast, getPortfolio } from '../api'
 import { useAsync } from '../shared/useAsync'
 import { ErrorNotice, Skeleton } from '../shared/States'
+import { TellMeCard } from '../shared/TellMeCard'
 import { DecisionsSection } from './DecisionsSection'
 import { ForecastSection } from './ForecastSection'
 import { ProfileSections } from './ProfileSections'
@@ -43,6 +44,7 @@ export function CompanyView({ companyId, onSelect }: { companyId: string; onSele
       {score.error && <ErrorNotice error={score.error} />}
       {score.data && (
         <>
+          <TellMeCard companyId={companyId} name={score.data.name} />
           <PulseSection score={score.data} />
           <ProfileSections companyId={companyId} />
           {forecast.loading && <Skeleton />}

@@ -3,6 +3,7 @@ import {
   ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts'
 import type { ScorePoint } from '../api/types'
+import { tooltip } from './charts'
 import { formatMonth } from './format'
 import './shared.css'
 
@@ -60,24 +61,14 @@ export function ScoreLine({
           <CartesianGrid stroke="var(--color-border)" vertical={false} />
           <XAxis
             dataKey="month" tickFormatter={formatMonth} minTickGap={28}
-            tick={{ fill: 'var(--color-text-muted)', fontSize: 11 }}
+            tick={{ fill: 'var(--color-text-muted)', fontSize: 12 }}
             stroke="var(--color-border)"
           />
           <YAxis
-            domain={domain} tick={{ fill: 'var(--color-text-muted)', fontSize: 11 }}
+            domain={domain} tick={{ fill: 'var(--color-text-muted)', fontSize: 12 }}
             stroke="var(--color-border)" width={44} allowDataOverflow
           />
-          <Tooltip
-            // Recharts entrega la etiqueta como ReactNode: solo la formateamos
-            // si de verdad es el 'YYYY-MM' que esperamos.
-            labelFormatter={(m) => (typeof m === 'string' ? formatMonth(m) : m)}
-            contentStyle={{
-              background: 'var(--color-bg)',
-              border: '1px solid var(--color-border)',
-              borderRadius: 'var(--radius-sm)',
-              color: 'var(--color-text)',
-            }}
-          />
+          <Tooltip {...tooltip} />
           {bandHigh.length > 0 && (
             <Area dataKey="high" stroke="none" fill="var(--color-accent)" fillOpacity={0.14}
                   isAnimationActive={false} connectNulls />

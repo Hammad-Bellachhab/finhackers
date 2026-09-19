@@ -29,13 +29,15 @@ export default function App() {
   return (
     <div className="shell">
       <header className="topbar">
-        <span className="mark" aria-hidden="true" />
-        <strong>Pulso</strong>
+        <span className="logo" role="img" aria-label="Embat" />
+        <span className="topbar-sep" aria-hidden="true" />
+        <span className="product">X-Ray</span>
         <nav>
           {TABS.map((t) => (
             <button
               key={t.id} type="button"
               className={vista === t.id ? 'on' : ''}
+              aria-current={vista === t.id ? 'page' : undefined}
               onClick={() => setVista(t.id)}
             >
               {t.label}

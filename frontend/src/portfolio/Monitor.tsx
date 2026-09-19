@@ -24,7 +24,7 @@ export function Monitor({ onSelect }: { onSelect: (id: string) => void }) {
         <div
           key={a.id} className={`alert alert-${a.kind}`} onClick={() => onSelect(a.companyId)}
           role="button" tabIndex={0}
-          onKeyDown={(e) => { if (e.key === 'Enter') onSelect(a.companyId) }}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(a.companyId) } }}
         >
           <strong>{a.companyName}</strong>
           <Delta value={a.delta} />

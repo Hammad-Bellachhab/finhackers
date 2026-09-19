@@ -54,6 +54,7 @@ export function PortfolioTable({
           <button
             key={f.id} type="button"
             className={filtro === f.id ? 'chip chip-on' : 'chip'}
+            aria-pressed={filtro === f.id}
             onClick={() => setFiltro(f.id)}
           >
             {f.label}
@@ -105,7 +106,7 @@ export function PortfolioTable({
                   <td>
                     {r.name}
                     {r.heldOut && (
-                      <span className="holdout-dot" title="No vista en entrenamiento" />
+                      <span className="holdout-dot" role="img" aria-label="No vista en entrenamiento" title="No vista en entrenamiento" />
                     )}
                   </td>
                   <td className="num">{r.score}</td>

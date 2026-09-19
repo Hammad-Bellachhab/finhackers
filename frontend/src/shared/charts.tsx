@@ -3,9 +3,9 @@ import type { Contribution } from '../api/types'
 import { formatMonth } from './format'
 import './shared.css'
 
-/** Estilo común de ejes y tooltip: todo con tokens, así claro/oscuro sale solo. */
+/** Estilo común de ejes y tooltip: todo con tokens. */
 export const axis = {
-  tick: { fill: 'var(--color-text-muted)', fontSize: 11 },
+  tick: { fill: 'var(--color-text-muted)', fontSize: 12 },
   stroke: 'var(--color-border)',
 }
 
@@ -15,7 +15,7 @@ export const tooltip = {
   labelFormatter: (m: unknown) => (typeof m === 'string' && /^\d{4}-\d{2}$/.test(m) ? formatMonth(m) : String(m)),
   contentStyle: {
     background: 'var(--color-bg)', border: '1px solid var(--color-border)',
-    borderRadius: 'var(--radius-sm)', color: 'var(--color-text)', fontSize: 12,
+    borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-lg)', color: 'var(--color-text)', fontSize: 12,
   },
 }
 

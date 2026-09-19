@@ -88,7 +88,7 @@ function WhySection({ p }: { p: CompanyProfile }) {
               <XAxis {...monthAxis} />
               <YAxis domain={[0, 100]} {...axis} />
               <Tooltip {...tooltip} />
-              <Legend wrapperStyle={{ fontSize: 11 }} />
+              <Legend wrapperStyle={{ fontSize: 12 }} />
               {[90, 75, 50].map((y) => <ReferenceLine key={y} y={y} stroke="var(--color-border-strong)" strokeDasharray="2 3" />)}
               <Line dataKey="health" name="Salud mensual" stroke="var(--color-text-muted)" strokeDasharray="2 3" dot={false} isAnimationActive={false} />
               <Line dataKey="smooth" name="Salud suavizada" stroke="var(--chart-1)" strokeWidth={3} dot={false} isAnimationActive={false} />
@@ -119,7 +119,7 @@ function TreasurySection({ p }: { p: CompanyProfile }) {
               <XAxis {...monthAxis} />
               <YAxis {...axis} tickFormatter={money} width={56} />
               <Tooltip {...tooltip} formatter={(v, n) => [money(v), n]} />
-              <Legend wrapperStyle={{ fontSize: 11 }} />
+              <Legend wrapperStyle={{ fontSize: 12 }} />
               <Bar dataKey="inflow" name="Cobros" stackId="f" fill="var(--color-success)" isAnimationActive={false} />
               <Bar dataKey="outflowNeg" name="Pagos" stackId="f" fill="var(--color-danger)" isAnimationActive={false} />
               <Line dataKey="cash" name="Caja reconstruida" stroke="var(--chart-1)" strokeWidth={3} dot={false} isAnimationActive={false} />
@@ -133,7 +133,7 @@ function TreasurySection({ p }: { p: CompanyProfile }) {
               <XAxis {...monthAxis} />
               <YAxis {...axis} />
               <Tooltip {...tooltip} />
-              <Legend wrapperStyle={{ fontSize: 11 }} />
+              <Legend wrapperStyle={{ fontSize: 12 }} />
               <Line dataKey="payDelay" name="Pago a proveedores" stroke="var(--color-warning)" strokeWidth={2} dot={false} isAnimationActive={false} />
               <Line dataKey="collectDelay" name="Cobro de clientes" stroke="var(--chart-3)" strokeWidth={2} dot={false} isAnimationActive={false} />
             </ComposedChart>
@@ -147,7 +147,7 @@ function TreasurySection({ p }: { p: CompanyProfile }) {
               <YAxis yAxisId="l" {...axis} unit="%" />
               <YAxis yAxisId="r" orientation="right" {...axis} />
               <Tooltip {...tooltip} />
-              <Legend wrapperStyle={{ fontSize: 11 }} />
+              <Legend wrapperStyle={{ fontSize: 12 }} />
               <Bar yAxisId="r" dataKey="interestCharges" name="Liquidaciones de intereses (3 m)" fill="var(--color-border-strong)" isAnimationActive={false} />
               <Line yAxisId="l" dataKey="overduePct" name="% facturas a pagar vencidas" stroke="var(--color-danger)" strokeWidth={2} dot={false} isAnimationActive={false} />
             </ComposedChart>
@@ -227,7 +227,7 @@ function ScenarioSection({ p }: { p: CompanyProfile }) {
       <h2>¿Y si…? Escenarios</h2>
       <div className="filters">
         {p.scenarios.map((x, i) => (
-          <button key={x.id} type="button" className={i === sel ? 'chip chip-on' : 'chip'} onClick={() => setSel(i)}>
+          <button key={x.id} type="button" className={i === sel ? 'chip chip-on' : 'chip'} aria-pressed={i === sel} onClick={() => setSel(i)}>
             {x.label}
           </button>
         ))}

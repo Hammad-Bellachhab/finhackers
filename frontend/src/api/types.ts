@@ -213,3 +213,29 @@ export type ModelReport = {
   }
   figures: string[]
 }
+
+// ---------- TellMe: la IA de Embat (pipeline/src/tellme.py, precalculado) ----------
+
+export type InsightKind = 'trend' | 'anomaly' | 'risk' | 'opportunity' | 'action'
+export type Severity = 'info' | 'watch' | 'alert'
+
+export type Insight = {
+  id: string
+  kind: InsightKind
+  severity: Severity
+  title: string
+  explanation: string
+  evidence: { label: string; value: string }[]
+  action?: string
+}
+
+export type TellMe = {
+  scope: 'company' | 'portfolio'
+  companyId?: string
+  headline: string
+  summary: string
+  insights: Insight[]
+  glossary: { term: string; plain: string }[]
+  generatedAt: string
+  model: string
+}

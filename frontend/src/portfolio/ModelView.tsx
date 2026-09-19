@@ -21,7 +21,7 @@ export function ModelView() {
     <>
       <Thesis m={data} />
       <ModelsTable m={data} />
-      <div className="grid-2">
+      <div className="grid-2 gap-top">
         <Anticipation m={data} />
         <Unseen m={data} />
       </div>
