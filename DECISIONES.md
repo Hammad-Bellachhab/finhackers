@@ -24,3 +24,14 @@ Registro de decisiones tomadas sin supervisión. Una línea de justificación ca
 - `ModelInfo` incluye ya lo de la vista 3 (comparación A/B con IC, curva PR, ablación por bloques A-F, SHAP global) para que el contrato quede completo. Curva PR paramétrica con área = AUC-PR objetivo (0,55 y 0,71). Los números de IC, ablación y SHAP son inventados con rangos creíbles.
 - La explicación es una frase generada a partir del factor dominante con los KPIs reales de la empresa; las contribuciones son una aproximación, no SHAP real.
 - El dataset se construye al cargar `mockApi` para que no cuente dentro de la latencia simulada de 300-600 ms.
+
+## Bloque 3: vista Cartera
+
+- Navegación por hash con `src/app/route.ts` (sin router externo). La cartera guarda filtros, orden y página en `sessionStorage`, así al volver desde una ficha se conserva el contexto.
+- Orden por defecto: score de mayor a menor (lo que pide el prompt: "ordenada por riesgo"). El delta pesa más en lo visual, no en el orden: columna "Cambio en el mes" con la cifra de mayor tamaño y en color, y las filas con delta ≥ 10 llevan borde rojo a la izquierda y la celda tintada. Ordenar por delta es un clic en la cabecera o en el atajo "suben rápido".
+- Los dos primeros datos del resumen son atajos de filtro (suben rápido, riesgo alto); no hay checkbox aparte para lo mismo. El latón se usa solo en la cifra de "suben rápido" (acción principal de la vista) y en su subrayado al activarse.
+- Paginación de 50 filas con controles de texto ("Página anterior/siguiente"), sin flechas. La virtualización queda descartada: 50 filas por página ya controla el rendimiento.
+- La banda de riesgo lleva el color solo en el texto (borde neutro): con ~200 filas en alto, un borde rojo por fila era ruido y competía con el delta.
+- Mientras se recarga la lista se atenúa la tabla en vez de sustituirla por un skeleton; el skeleton (bloques estáticos, sin animación) solo aparece en la primera carga.
+- Contraste AA calculado para los tokens de texto en ambos temas: mínimo 4,74:1 (`--ink-muted` sobre `--bg` en claro). Latón puro como texto no llega en claro (2,84:1 sobre `--bg`), por eso se usa `--accent-text`.
+- Las capturas se hicieron con Chrome headless sobre `vite preview` local y con los hosts de Google Fonts bloqueados (no hay llamadas externas desde la sesión), así que se ven con las tipografías de respaldo. Revisado: tema claro, oscuro, filtro activo, estado vacío y móvil de 390 px.
