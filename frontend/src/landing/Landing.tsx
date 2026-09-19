@@ -1,5 +1,6 @@
 import { getEvidence, getPortfolio, getProviders } from '../api'
 import { TellMeLogo, TellMeWordmark } from '../shared/TellMeLogo'
+import { ThemeToggle } from '../shared/ThemeToggle'
 import { useAsync } from '../shared/useAsync'
 import './landing.css'
 
@@ -13,7 +14,7 @@ const ERP_NAME: Record<string, string> = {
 // useGrouping 'always': en es-ES los números de 4 cifras no llevan punto por defecto (1286 → 1.286).
 const nf = (n: number) => n.toLocaleString('es-ES', { useGrouping: 'always' })
 
-function TopNav({ showXrayCta = true }: { showXrayCta?: boolean }) {
+function TopNav() {
   return (
     <header className="lp-nav">
       <a href="#/" className="logo-link lp-logo" aria-label="Embat, inicio"><span className="logo" /></a>
@@ -21,12 +22,24 @@ function TopNav({ showXrayCta = true }: { showXrayCta?: boolean }) {
         <a href="#/xray">X-Ray</a>
         <a href="#/app">Demo</a>
       </nav>
-      {showXrayCta && <a href="#/xray" className="lp-btn lp-btn-primary lp-btn-sm">Descubre X-Ray</a>}
+      <ThemeToggle className="lp-theme-toggle" />
+      <a href="#/xray" className="lp-btn lp-btn-primary lp-btn-sm">Descubre X-Ray</a>
     </header>
   )
 }
 
-/** Inicio de Embat: su marca, qué hace y todo lo que ya tiene conectado. El logo siempre trae aquí. */
+/** Onda de luz del fondo del héroe. Decorativa: fuera del árbol de accesibilidad. */
+function Wave() {
+  return (
+    <div className="lp-wave" aria-hidden="true">
+      <i className="lp-wave-a" />
+      <i className="lp-wave-b" />
+    </div>
+  )
+}
+
+/** Inicio de Embat: qué hace la plataforma, con qué está conectada y qué añade X-Ray encima.
+ *  El logo siempre trae aquí. */
 export function EmbatHome() {
   const providers = useAsync(() => getProviders(), [])
   const portfolio = useAsync(() => getPortfolio(), [])
@@ -41,15 +54,16 @@ export function EmbatHome() {
 
   return (
     <div className="lp">
-      <TopNav showXrayCta={false} />
+      <TopNav />
 
       <section className="lp-hero">
+        <Wave />
         <div className="lp-hero-in">
           <p className="lp-eyebrow reveal">Plataforma de tesorería</p>
-          <h1 className="reveal">Donde la tesorería corporativa se encuentra con la inteligencia</h1>
+          <h1 className="reveal">Toda la tesorería de tu grupo, conectada y al día</h1>
           <p className="lp-lead reveal">
-            Prevé, concilia y mueve la caja desde una sola plataforma conectada a tus bancos y a tu ERP.
-            Inteligencia que crece contigo y protege tu liquidez en cada entidad, banco y divisa.
+            Embat se conecta a tus bancos y a tu ERP, concilia los movimientos solo y mantiene
+            la posición de caja al minuto. Sin exportar ficheros ni cuadrar hojas de cálculo.
           </p>
           <div className="lp-actions reveal">
             <a href="#/xray" className="lp-btn lp-btn-primary">Descubre X-Ray</a>
@@ -105,7 +119,10 @@ export function EmbatHome() {
         <div className="lp-band-in">
           <TellMeLogo size={56} className="lp-band-logo" />
           <h2><TellMeWordmark />, la IA de Embat</h2>
-          <p>Trabaja en cada proceso de tu equipo de finanzas para que el tiempo se vaya en decidir, no en los datos.</p>
+          <p>
+            Lee los mismos datos que tú y te los cuenta en español: qué ha cambiado este mes,
+            por qué, y qué conviene mirar primero. Y le puedes preguntar.
+          </p>
         </div>
       </section>
 
@@ -113,7 +130,15 @@ export function EmbatHome() {
         <a href="#/xray" className="lp-feature reveal">
           <span className="lp-eyebrow">Nuevo</span>
           <h2><span className="product">X-Ray</span> La salud financiera de cada empresa, mes a mes</h2>
-          <p>Cómo está, hacia dónde va y qué hacer, a partir de la tesorería que Embat ya ve.</p>
+          <p>
+            Con los movimientos, las facturas y la deuda que Embat ya tiene, X-Ray pone una nota
+            a cada empresa todos los meses y avisa cuando empieza a torcerse.
+          </p>
+          <ul className="lp-feature-list">
+            <li><strong>Cómo está</strong> Una salud de 0 a 100, comparable entre empresas del mismo tamaño.</li>
+            <li><strong>Hacia dónde va</strong> Si mejora o empeora, y una proyección a seis meses con su margen.</li>
+            <li><strong>Qué hacer</strong> Qué le está restando puntos y qué palanca lo corrige, con el efecto estimado.</li>
+          </ul>
           <span className="lp-btn lp-btn-primary">Descubre X-Ray</span>
         </a>
       </section>
@@ -135,7 +160,7 @@ export function XRayLanding() {
 
   return (
     <div className="lp">
-      <TopNav showXrayCta={false} />
+      <TopNav />
       <section className="lp-hero lp-hero-xray">
         <div className="lp-hero-in">
           <p className="lp-eyebrow reveal">Embat · Nuevo</p>
@@ -159,9 +184,11 @@ export function XRayLanding() {
           <article className="lp-card reveal" style={{ animationDelay: '70ms' }}>
             <span className="lp-num">{e ? pct(e.bothDirections.slippingRecall) : '…'}</span>
             <h3>Avisa antes</h3>
+            {/* En una sola cadena: partirlo en dos deja un espacio antes del punto mientras carga. */}
             <p>
-              De los deterioros reales, esos se vieron venir
-              {e ? `, con ${e.anticipation.medianMonths} meses de margen de mediana.` : '.'}
+              {e
+                ? `De los deterioros reales, esos se vieron venir con ${e.anticipation.medianMonths} meses de margen de mediana.`
+                : 'De los deterioros reales, esos se vieron venir con meses de margen.'}
             </p>
           </article>
           <article className="lp-card reveal" style={{ animationDelay: '140ms' }}>
@@ -170,10 +197,10 @@ export function XRayLanding() {
             <p>TellMe cuenta en lenguaje llano por qué se mueve el número y qué palanca lo corrige.</p>
           </article>
         </div>
-        {e && portfolio.data && (
+        {portfolio.data && (
           <p className="lp-stats reveal">
-            {nf(portfolio.data.rows.length)} empresas analizadas · {e.holdout.companies} que el modelo nunca vio ·
-            AUC {e.holdout.auc.toFixed(2).replace('.', ',')} en esas empresas
+            {nf(portfolio.data.rows.length)} empresas analizadas con los 24 meses de tesorería que
+            Embat ya tiene. Nadie rellena un formulario ni manda un balance.
           </p>
         )}
         <div className="lp-actions lp-center">

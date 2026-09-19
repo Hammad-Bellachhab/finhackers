@@ -3,7 +3,7 @@ import './App.css'
 import { DEFAULT_COMPANY } from './api'
 import { CompanyView } from './company/CompanyView'
 import { AskTellMe } from './shared/AskTellMe'
-import { applyTheme, type Theme } from './shared/theme'
+import { ThemeToggle } from './shared/ThemeToggle'
 import { AlertsView } from './portfolio/AlertsView'
 import { ModelView } from './portfolio/ModelView'
 import { PortfolioView } from './portfolio/PortfolioView'
@@ -39,13 +39,6 @@ export default function App() {
   const [vista, setVista] = useState<Vista>('cartera')
   const [companyId, setCompanyId] = useState(DEFAULT_COMPANY)
 
-  const [theme, setTheme] = useState<Theme>(() => (document.documentElement.dataset.theme as Theme) ?? 'light')
-  const toggleTheme = () => {
-    const t: Theme = theme === 'dark' ? 'light' : 'dark'
-    setTheme(t)
-    applyTheme(t)
-  }
-
   const abrirEmpresa = (id: string) => {
     setCompanyId(id)
     setVista('empresa')
@@ -76,13 +69,7 @@ export default function App() {
             </div>
           ))}
         </nav>
-        <button
-          type="button" className="theme-toggle" onClick={toggleTheme}
-          aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-          title={theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
-        >
-          {theme === 'dark' ? '☀' : '☾'}
-        </button>
+        <ThemeToggle />
       </header>
 
       {/* key: cada pestaña entra con un fundido corto */}
