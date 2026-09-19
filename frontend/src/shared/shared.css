@@ -223,7 +223,7 @@
 .panel-zoom:hover { color: var(--color-text); }
 .panel-body .recharts-wrapper, .panel-body img { cursor: zoom-in; }
 .zoom-dialog {
-  width: min(72rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); padding: var(--space-5);
+  width: min(var(--page-max), calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); padding: var(--space-5);
   border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-bg); color: var(--color-text);
   box-shadow: 0 30px 80px rgb(5 11 44 / 35%);
 }

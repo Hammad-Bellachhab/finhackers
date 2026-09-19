@@ -106,6 +106,9 @@
   --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
 
   /* ---- Forma ---- */
+  /* Ancho de la app: aprovecha la pantalla para no tener que desplazarse en las tablas. */
+  --page-max: 110rem;
+
   --radius-sm: 6px;
   --radius: 8px;
   --radius-lg: 12px;
