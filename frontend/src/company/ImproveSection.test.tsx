@@ -156,6 +156,7 @@ describe('ImproveSection', () => {
     render1()
     await waitFor(() => expect(screen.getByTestId('plan-score')).toBeInTheDocument())
     const antes = document.querySelectorAll('.drags li').length
+    const scoreAntes = screen.getByTestId('plan-score').textContent
 
     // El motor devuelve 6 drags y la rejilla precalculada entre 0 y 5: si el bloque siguiera al
     // plan, alternar de camino repintaria otra lista y la pagina daria un salto de 200-300 px.
@@ -164,7 +165,9 @@ describe('ImproveSection', () => {
       levers: [], drags: [], exact: true,
     })
     fireEvent.change(screen.getByLabelText(/mover días en cobrar/i), { target: { value: '20' } })
-    await waitFor(() => expect(screen.getByTestId('plan-score').textContent).toBe('70'))
+    // No se fija la cifra: al total se le suman los drags sin palanca del primer diagnostico, que
+    // salen de la rejilla precalculada. Basta con esperar a que el plan nuevo haya entrado.
+    await waitFor(() => expect(screen.getByTestId('plan-score').textContent).not.toBe(scoreAntes))
 
     expect(document.querySelectorAll('.drags li').length).toBe(antes)
   })
@@ -183,21 +186,35 @@ describe('ImproveSection', () => {
     })
     render1()
 
-    await waitFor(() => expect(screen.getByTestId('plan-ceiling')).toBeInTheDocument())
-    // 70 + 2,5 + 1,5 = 74. El drag de dso no entra.
-    expect(screen.getByTestId('plan-ceiling').textContent).toBe('74')
-    expect(screen.getByText(/2 señales, 4 puntos/)).toBeInTheDocument()
+    // 70 + 2,5 + 1,5 = 74, y el delta va desde la salud de hoy: 74 - 60 = +14.
+    // El drag de dso no entra: su palanca ya esta dentro de planHealth.
+    await waitFor(() => expect(screen.getByTestId('plan-score').textContent).toBe('74'))
+    expect(screen.getByText(/\(\+14 puntos\)/)).toBeInTheDocument()
+    // El pie desglosa que parte del total no esta repuntuada.
+    expect(screen.getByText(/Incluye 4 puntos de 2 señales sin palanca directa/)).toBeInTheDocument()
   })
 
-  it('sin drags huerfanos no hay linea de techo', async () => {
+  it('el techo no pasa de 100 y el delta se recorta con el', async () => {
+    vi.mocked(getPlan).mockResolvedValueOnce({
+      companyId: 'c-0001', baseHealth: 90, planHealth: 95, scoreDelta: 5, levers: [], exact: true,
+      drags: [{ id: 'g1', label: 'Ingresos a la baja', impact: -30, block: 'B', metricId: null }],
+    })
+    render1()
+
+    // 95 + 30 = 125, pero la salud es 0-100: se queda en 100 y el delta en +10, no en +35.
+    await waitFor(() => expect(screen.getByTestId('plan-score').textContent).toBe('100'))
+    expect(screen.getByText(/\(\+10 puntos\)/)).toBeInTheDocument()
+  })
+
+  it('sin drags huerfanos el total es el del modelo, sin tocar', async () => {
     vi.mocked(getPlan).mockResolvedValueOnce({
       companyId: 'c-0001', baseHealth: 60, planHealth: 70, scoreDelta: 10, levers: [], exact: true,
       drags: [{ id: 'g1', label: 'Cobra tarde', impact: -3, block: 'C', metricId: 'dso' }],
     })
     render1()
 
-    await waitFor(() => expect(screen.getByTestId('plan-score')).toBeInTheDocument())
-    expect(screen.queryByTestId('plan-ceiling')).toBeNull()
+    await waitFor(() => expect(screen.getByTestId('plan-score').textContent).toBe('70'))
+    expect(screen.queryByText(/sin palanca directa/)).toBeNull()
   })
 
   it('avisa cuando no hay nada que corregir', () => {

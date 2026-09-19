@@ -118,13 +118,18 @@ export function ImproveSection({
   const desfasado = !vista || ultimo.current?.key !== targetsKey
 
   // Lo que le baja el score y ningun slider toca (metricId nulo, o una metrica que no se ofrece
-  // como palanca). No entra en planHealth, asi que se enseña aparte como techo: hasta donde
-  // llegaria si ademas resolviera eso. Ojo, no es comparable con planHealth y por eso no se suma
-  // dentro: planHealth lo repuntua el modelo, y estos impactos son la linealizacion de SHAP que
-  // hace inference.drags(), que ademas se solapa entre señales y tiende a inflarse.
+  // como palanca, como ccc). Por decision de producto entra en la cifra final: el total es el
+  // techo, lo que alcanzaria si ademas resolviera eso.
+  //
+  // Ojo al leerlo: las dos mitades no valen lo mismo. planHealth lo repuntua el modelo con todas
+  // las palancas a la vez; `margen` es la linealizacion de SHAP de inference.drags(), exacta solo
+  // para cambios pequeños y que ademas se solapa entre señales, asi que tira hacia arriba. El pie
+  // del bloque lo dice y desglosa cuantos puntos vienen de ahi.
   const sinPalanca = drags.current.filter((d) => !levers.some((l) => l.metric.id === d.metricId))
   const margen = Math.round(sinPalanca.reduce((a, d) => a - d.impact, 0) * 10) / 10
-  const techo = vista && margen > 0 ? Math.min(100, Math.round((vista.planHealth + margen) * 10) / 10) : null
+  const techo = vista ? Math.min(100, Math.round((vista.planHealth + margen) * 10) / 10) : 0
+  // Desde la salud de hoy, no desde planHealth: el tope de 100 puede recortar parte del margen.
+  const techoDelta = vista ? Math.round((techo - vista.baseHealth) * 10) / 10 : 0
 
   if (levers.length === 0) {
     return (
@@ -232,29 +237,25 @@ export function ImproveSection({
           <>
             <p>
               Con este plan su salud pasa de <strong>{vista.baseHealth}</strong> a{' '}
-              <strong data-testid="plan-score">{vista.planHealth}</strong>{' '}
-              <span className={vista.scoreDelta >= 0 ? 'delta-up' : 'delta-down'}>
-                {`(${vista.scoreDelta > 0 ? '+' : ''}${vista.scoreDelta} puntos)`}
+              <strong data-testid="plan-score">{techo}</strong>{' '}
+              <span className={techoDelta >= 0 ? 'delta-up' : 'delta-down'}>
+                {`(${techoDelta > 0 ? '+' : ''}${techoDelta} puntos)`}
               </span>
             </p>
-            {techo !== null && (
-              <p className="plan-ceiling">
-                Si además resolviera lo que no tiene palanca directa{' '}
-                ({sinPalanca.length} {sinPalanca.length === 1 ? 'señal' : 'señales'}, {margen} puntos),
-                el techo estaría en <strong data-testid="plan-ceiling">{techo}</strong>.{' '}
-                <span className="muted">
-                  Aproximado: son los pesos del modelo sumados uno a uno, sin repuntuar.
-                </span>
-              </p>
-            )}
             <small className="muted">
               {plan.error
                 ? 'No se ha podido actualizar: este es el último plan que sí se calculó.'
                 : desfasado
                   ? 'Recalculando con el modelo…'
-                  : vista.exact
-                    ? 'Repuntuado con el modelo, aplicando todas las palancas a la vez.'
-                    : 'Estimación: suma el efecto de cada palanca por separado, sin tener en cuenta cómo se solapan.'}
+                  : `${
+                      vista.exact
+                        ? 'Repuntuado con el modelo, aplicando todas las palancas a la vez.'
+                        : 'Estimación: suma el efecto de cada palanca por separado, sin tener en cuenta cómo se solapan.'
+                    }${
+                      margen > 0
+                        ? ` Incluye ${margen} puntos de ${sinPalanca.length} ${sinPalanca.length === 1 ? 'señal' : 'señales'} sin palanca directa, sumados por el peso que les da el modelo y no repuntuados.`
+                        : ''
+                    }`}
             </small>
           </>
         ) : (

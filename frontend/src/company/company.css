@@ -201,9 +201,3 @@
    distinto: se le reserva el alto para que cambiar de uno a otro no mueva la pagina. */
 .plan-total small { display: block; min-height: 2.6em; margin-top: var(--space-2); }
 .plan-total strong { font-size: var(--text-kpi); }
-/* El techo va debajo y por debajo en jerarquía: es una estimación, no el número repuntuado. */
-.plan-ceiling {
-  margin-top: var(--space-3); padding-top: var(--space-3);
-  border-top: 1px dashed var(--color-border-strong); font-size: 0.9rem;
-}
-.plan-ceiling strong { font-size: var(--text-lg); }
