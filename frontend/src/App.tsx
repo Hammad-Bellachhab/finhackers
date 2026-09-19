@@ -5,14 +5,13 @@ import { CompanyView } from './company/CompanyView'
 import { AskTellMe } from './shared/AskTellMe'
 import { applyTheme, type Theme } from './shared/theme'
 import { AlertsView } from './portfolio/AlertsView'
-import { EvidenceView } from './portfolio/EvidenceView'
 import { ModelView } from './portfolio/ModelView'
 import { PortfolioView } from './portfolio/PortfolioView'
 import { CompanyProvidersView } from './providers/CompanyProvidersView'
 import { ProvidersView } from './providers/ProvidersView'
 
 type Vista =
-  | 'cartera' | 'alertas' | 'proveedores' | 'evidencia' | 'modelo'
+  | 'cartera' | 'alertas' | 'proveedores' | 'modelo'
   | 'empresa' | 'empresa-proveedores'
 
 /** Dos planos distintos: lo que se ve de toda la cartera y lo que se ve de una empresa.
@@ -24,7 +23,6 @@ const GRUPOS: { id: string; label: string; tabs: { id: Vista; label: string }[] 
       { id: 'cartera', label: 'Cartera' },
       { id: 'alertas', label: 'Alertas' },
       { id: 'proveedores', label: 'Proveedores' },
-      { id: 'evidencia', label: 'Evidencia' },
       { id: 'modelo', label: 'Modelo' },
     ],
   },
@@ -92,7 +90,6 @@ export default function App() {
         {vista === 'cartera' && <PortfolioView onSelect={abrirEmpresa} />}
         {vista === 'alertas' && <AlertsView onSelect={abrirEmpresa} />}
         {vista === 'proveedores' && <ProvidersView onSelect={abrirEmpresa} />}
-        {vista === 'evidencia' && <EvidenceView />}
         {vista === 'modelo' && <ModelView />}
         {vista === 'empresa' && <CompanyView companyId={companyId} onSelect={setCompanyId} />}
         {vista === 'empresa-proveedores' && (
