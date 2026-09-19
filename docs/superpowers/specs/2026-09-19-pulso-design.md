@@ -1,202 +1,274 @@
 # Pulso — diseño
 
-*Reto X-Ray de Embat, HackSpain 2026. Aprobado el 2026-09-19.*
+*Reto X-Ray de Embat, HackSpain 2026. Revisado el 2026-09-19.*
 
-> **Tu pulso, gratis. El de tu red, de pago.**
+Un score de salud financiera y, encima, dos superficies con el mismo motor detrás:
 
-## 1. Contexto y restricciones
+- **Pulso Empresa** — lo que ve una empresa sobre sí misma: su score, su previsión y qué
+  decisiones tomar.
+- **Pulso Cartera** — la vista de conjunto sobre las 1.286 empresas: quién está sano, quién
+  mejora, quién se tuerce.
 
-El reto pide un score de salud financiera **y un producto vendible encima**. El score solo no
-es entrega valida. La evaluacion tiene tres bloques de igual peso (acierta / llega a tiempo /
-vale algo), detallados en `docs/reto-embat.md`.
+## 1. Por qué dos partes
 
-Tres restricciones fijan el diseño:
+Las seis preguntas del reto se reparten en dos planos y ninguna superficie sola las contesta:
 
-1. **Embat ya tiene el panel de tesoreria.** Su producto cubre posicion de caja consolidada,
-   prevision de liquidez, conciliacion con IA, pagos, netting intercompañia y analisis de
-   comportamiento de pago. Replicar cualquiera de esas cosas resta en vez de sumar.
-2. **La rubrica es la especificacion del front.** Cada criterio tiene que ser visible en
-   pantalla, no afirmado en un slide.
-3. **El front va primero, contra datos mock**, con el contrato de API cerrado. El back se
-   construye en paralelo y se cablea despues sin tocar componentes.
+- *Quién está sano*, *quién está mejorando*, *quién empieza a torcerse* son preguntas sobre el
+  **conjunto**. Una ficha individual no las responde, por buena que sea.
+- *Por qué ha cambiado*, *cuándo se vio venir* y *bache o caída* son preguntas sobre **una
+  empresa**. Una tabla de 1.286 filas no las responde.
 
-## 2. Producto
+Además, el test oculto de 60-80 empresas —lo que puntúa el leaderboard— solo se puede
+enseñar en la vista de conjunto. Sin ella, la generalización se queda en un slide.
 
-La empresa ve **su propio score gratis**. Paga por ver el score de **las empresas con las que
-trabaja**: sus clientes y sus proveedores.
+## 2. Restricciones
 
-**Por que se vende:**
+1. **Embat ya tiene el panel de tesorería**: posición de caja, previsión de liquidez,
+   conciliación con IA, pagos, netting. Replicar cualquiera de esas cosas resta.
+2. **Nada de monetización en pantalla.** Sin paywalls ni planes. El comprador se responde en
+   una frase del pitch: lo paga la empresa, lo cobra Embat como módulo nuevo, y el coste
+   marginal para Embat es cero porque los datos ya los tiene.
+3. **El front va primero contra mock**, con el contrato de API cerrado. El motor se cablea
+   después sin tocar componentes.
 
-- La empresa ya le esta dando sus datos a Embat. Devolverle su score cuesta cero y es el gancho.
-- Lo que se paga es **mirar hacia fuera**. Si tu mayor cliente se tuerce, eso es tu problema
-  meses antes de que deje de pagarte, y hoy nadie te lo dice.
-- **Efecto red**: cuantas mas empresas hay dentro, mas contrapartes se pueden puntuar y mejor.
-  Es un foso que solo tiene quien ya agrega los datos de muchas. Un competidor con mejor modelo
-  y sin red no lo puede copiar.
-- **Comprador**: la empresa. Lo cobra Embat como modulo nuevo. La resta que lo justifica: un
-  solo impago evitado de 180.000 € paga la suscripcion muchas veces, y el coste marginal para
-  Embat es cero.
+## 3. El eje: puntuación → predicción → decisión
 
-**La anticipacion es el argumento de venta**, no una metrica de concurso: "te avisamos cinco
-meses antes de que tu cliente dejara de pagarte".
+**Puntuación.** Nivel y trayectoria, dos ejes independientes. El ejemplo del brief lo exige:
+Velasco cae de 82 a 68 y *sigue pareciendo sana*. Nivel `healthy`, tendencia `down`.
+Colapsarlos en una etiqueta pierde justo la lectura que el reto pide.
 
-## 3. Trazabilidad rubrica -> pantalla
+**Predicción.** Proyección **determinista** a 3 y 6 meses: mismo input, mismo output, sin
+aleatoriedad. Reproducible delante del jurado. Se proyecta el score y también las métricas que
+lo mueven.
 
-| Criterio de evaluacion | Donde se ve |
+**Decisión.** Cada predicción se convierte en una palanca con regla de disparo, acción concreta
+e impacto estimado en euros y en puntos de score. Reglas deterministas, no un modelo de
+lenguaje improvisando consejos.
+
+## 4. Aviso sobre el scoring de crédito
+
+El estándar del sector es el **Altman Z-score** (`Z = 1.2·X₁ + 1.4·X₂ + 3.3·X₃ + 0.6·X₄ +
+1.0·X₅`, zona de peligro por debajo de 1.81). **No es calculable con este dataset**: sus cinco
+ratios necesitan balance y cuenta de resultados —activo total, reservas, EBIT, fondos propios,
+ventas— y aquí solo hay flujos. Se documenta para que nadie lo intente a mitad del sábado.
+
+Lo que sí se calcula, y sirve a la vez de feature del modelo y de palanca de decisión:
+
+| Métrica | De dónde sale | Referencia |
+|---|---|---|
+| **DSO** — días en cobrar | `invoices` emitidas: emisión → cobro | su propia mediana de 12 m |
+| **DPO** — días en pagar | `invoices` recibidas | ídem |
+| **Ciclo de caja** | DSO − DPO (no hay inventario, así que sin DIO) | cuanto más corto, mejor |
+| **DSCR** — cobertura del servicio de deuda | flujo operativo ÷ cuota (`debt_schedule_config`) | **≥ 1,25**; la banca exige 1,1–1,5 |
+| **Días de caja** | saldo ÷ quema mensual | < 60 días = tensión |
+| **Uso de líneas** | `outstanding` ÷ `granted` (`debt_products`) | > 80 % = señal clásica de estrés |
+| **Concentración de clientes** | cobros por `counterparty_id` | un cliente > 30 % = frágil |
+| **Puntualidad propia** | facturas recibidas pagadas tarde | se deteriora antes que la caja |
+
+## 5. Pulso Empresa
+
+Una sola vista con tres secciones, sin navegación intermedia: en una demo, cada clic es una
+oportunidad de perder al jurado.
+
+### 5.1 Pulso
+
+El score como **línea de 24 meses**, nunca un número suelto. Nivel, tendencia, delta a 1 y a 3
+meses. Debajo, los drivers que lo movieron, cada uno con su señal, su dirección y **la fecha en
+que empezó a moverse**.
+
+> Contesta: *por qué ha cambiado* (pregunta 5), *trayectoria*.
+
+### 5.2 Previsión
+
+Proyección determinista a 3 y 6 meses con banda de incertidumbre, y dos piezas más:
+
+- **Cuándo se vio venir**: diagrama que enfrenta el mes en que el sistema detectó el cambio
+  contra el mes en que fue evidente en los números, con la distancia anotada en meses.
+- **Bache o deterioro**: distintivo explícito. El aviso de *"es un bache, no actúes"* vale
+  tanto como la alarma — evita romper una relación comercial sana o refinanciar sin necesidad.
+
+> Contesta: *cuándo se vio venir* (6), *bache o caída* (4), *anticipación*, *estabilidad*.
+
+### 5.3 Decisiones
+
+Palancas ordenadas por impacto en euros. Cada una es determinista: una regla de disparo, una
+acción y un impacto estimado.
+
+| Palanca | Se dispara cuando | Acción | Impacto |
+|---|---|---|---|
+| Acelerar cobro | DSO > mediana 12 m + 10 d | descuento por pronto pago, recordatorios, factoring | libera caja atrapada |
+| Estirar pago | DPO por debajo de su histórico y caja tensa | renegociar plazos con proveedores | libera caja |
+| Refinanciar | DSCR < 1,25 | alargar plazo o bajar tipo | devuelve DSCR sobre el umbral |
+| Amortizar deuda cara | días de caja holgados y tipo alto | amortización anticipada | baja gasto financiero |
+| Ampliar línea | días de caja < 60 | abrir o ampliar línea de crédito | colchón antes de necesitarlo |
+| Bajar uso de líneas | dispuesto/concedido > 80 % | reducir disposición | quita una señal de estrés |
+| Diversificar | un cliente > 30 % de cobros | buscar contrapartes | baja riesgo de concentración |
+| Pagar a tiempo | facturas propias pagadas tarde | priorizar pagos | frena el deterioro antes de que llegue a la caja |
+
+Sobre *estirar pago*: la literatura avisa de que forzar el DPO daña la relación con
+proveedores y acaba en peores precios o plazos más duros. La palanca lleva ese aviso; no se
+recomienda a ciegas.
+
+**El simulador** es la pieza de demo: se mueve el DSO y la proyección del score responde en
+vivo. Determinista por construcción, explicable, y enseña el modelo funcionando sin una sola
+transparencia.
+
+> Contesta: *producto encima del score*.
+
+## 6. Pulso Cartera
+
+Las 1.286 empresas en una vista.
+
+- **Tres respuestas de un vistazo**: quién está sano, quién está mejorando, quién empieza a
+  torcerse. Mejora y deterioro con **idéntico peso visual** — nada de semáforo de riesgo, que
+  sesgaría hacia una sola cara.
+- **El test oculto va marcado.** Las 60-80 empresas que el modelo nunca vio se distinguen en
+  la propia tabla. Así la generalización se ve, no se afirma.
+- Orden por nivel o por movimiento; filtro por banda y por dirección.
+- **Monitor**: las alertas aparecen solas, sin que nadie pregunte. Cada una dice qué se movió,
+  cuánto, y cuántos meses antes se detectó.
+- **Evidencia**: rendimiento sobre el holdout, anticipación mediana en meses, y las dos caras
+  medidas por separado. Es lo que casi todos dejan en slides.
+
+> Contesta: *quién está sano* (1), *quién mejora* (2), *quién se tuerce* (3),
+> *generalización*, *las dos caras*, *monitor*.
+
+## 7. Trazabilidad completa
+
+| Lo que se mira | Dónde se ve |
 |---|---|
-| Generalizacion | Marca de "no vista en entrenamiento" en la ficha + pantalla Evidencia |
-| Trayectoria | El score es siempre una linea de 24 meses, nunca un numero suelto |
-| Las dos caras | Mi red ordena mejora y deterioro con identico peso visual |
-| Anticipacion | Diagrama detectado-vs-evidente en la ficha de contraparte, en meses |
-| Estabilidad | Distintivo explicito bache / deterioro estructural, con aviso de "no actues" |
-| Monitor (bonus) | Alertas que aparecen solas en la barra superior |
-| Explicacion | Drivers con señal, direccion y fecha, en cada ficha |
-| Producto y comprador | Es el propio modelo de negocio: el paywall esta en la pantalla |
-| Artesania | Tres estados por vista, tema claro/oscuro, build verde |
+| 1. Quién está sano | Cartera |
+| 2. Quién está mejorando | Cartera |
+| 3. Quién empieza a torcerse | Cartera (nivel alto + tendencia a la baja) |
+| 4. Bache o caída | Empresa · Previsión |
+| 5. Por qué ha cambiado | Empresa · Pulso (drivers con fecha) |
+| 6. Cuándo se vio venir | Empresa · Previsión |
+| Generalización | Cartera (marca de holdout) + Evidencia |
+| Trayectoria | Ambas: el score siempre es una línea |
+| Las dos caras | Cartera, con igual peso visual |
+| Anticipación medida | Empresa · Previsión + Evidencia |
+| Estabilidad | Empresa · Previsión |
+| Monitor (bonus) | Cartera |
+| Explicación | Empresa · Pulso |
+| Producto | Empresa · Decisiones |
+| Comprador | Una frase del pitch, no ocupa pantalla |
+| Artesanía | Tres estados por vista, claro/oscuro, build verde |
 
-## 4. Superficies
+## 8. Contrato de API
 
-### 4.1 Mi pulso *(gratis)*
-
-Tu score. Linea de 24 meses como elemento dominante, banda actual, delta contra el mes pasado
-y contra hace tres, y las tres señales que mas lo movieron con su fecha.
-
-Cubre *trayectoria* y *explicacion*.
-
-### 4.2 Mi red *(de pago — el producto)*
-
-Tus contrapartes puntuadas, **ordenadas por euros en riesgo, no por score**. Esa ordenacion es
-la diferencia entre un dashboard y algo que se firma: no es "este cliente esta en 42", es
-"este cliente esta en 42 y le tienes 180 k€ a 45 dias".
-
-Dos direcciones con el mismo peso visual: los que se tuercen y los que mejoran. Un proveedor
-que mejora es uno al que pedir mejores condiciones.
-
-Filtros: rol (cliente / proveedor), direccion del movimiento, y solo-con-exposicion.
-
-Cubre *las dos caras* y ancla el *producto*.
-
-### 4.3 Ficha de contraparte *(el paywall)*
-
-El score del tercero, sus drivers, y la pieza que mas vende: **el diagrama de anticipacion**,
-que enfrenta el mes en que el sistema lo detecto contra el mes en que fue evidente en sus
-numeros, y anota la distancia en meses.
-
-Incluye el distintivo **bache vs. deterioro estructural**. El aviso de "esto es un bache, no
-actues" vale tanto como la alarma: evita que la empresa rompa una relacion comercial sana.
-
-Las primeras contrapartes se ven gratis; el resto pide suscripcion. El paywall es parte de la
-demo, no un obstaculo: enseña el modelo de negocio funcionando.
-
-Cubre *anticipacion*, *estabilidad* y *explicacion*.
-
-### 4.4 Evidencia
-
-La pantalla que demuestra el bloque "si acierta" en vivo: rendimiento sobre el holdout,
-anticipacion media medida en meses, y el desglose de las dos caras por separado.
-
-Casi todos los equipos dejan esto en slides. Enseñarlo funcionando es barato y pesa un tercio
-de la nota.
-
-### 4.5 Monitor *(bonus, transversal)*
-
-Las alertas aparecen **solas** en la barra superior, sin que nadie pregunte. Cada alerta dice
-que se movio, cuanto, y cuanta exposicion hay detras.
-
-## 5. Contrato de API
-
-El front consume estas cinco rutas. Los mock viven en `frontend/src/api/mock/` **detras de la
-misma firma** que la API real: cablear el back es cambiar una constante, no reescribir vistas.
-
-**Nivel y trayectoria son dos ejes independientes, y se representan por separado.** El ejemplo
-del brief lo exige: Velasco baja de 82 a 68 y *sigue pareciendo sana*. Su nivel es `healthy` y
-su tendencia es `down`. Colapsar ambos en una sola etiqueta perderia justo la lectura que el
-reto pide. En pantalla se combinan ("sana, pero torciendose"), nunca se sustituyen.
+Los mock viven en `frontend/src/api/mock/` **detrás de la misma firma** que la API real:
+cablear el motor es cambiar una constante, no reescribir vistas.
 
 ```ts
-type Band = 'healthy' | 'stable' | 'risk'      // nivel: donde esta hoy
-type Trend = 'up' | 'down' | 'flat'            // trayectoria: hacia donde va
+type Band = 'healthy' | 'stable' | 'risk'      // nivel: dónde está hoy
+type Trend = 'up' | 'down' | 'flat'            // trayectoria: hacia dónde va
 
-type ScorePoint = { month: string; score: number }          // month: 'YYYY-MM'
+type ScorePoint = { month: string; score: number }        // 'YYYY-MM'
 
 type Driver = {
   id: string
-  label: string            // "El cobro se alarga"
+  label: string          // "El cobro se alarga"
   direction: Trend
-  impact: number           // puntos de score aportados, con signo
-  since: string            // 'YYYY-MM' — cuando empezo a moverse
-  detail: string           // frase explicativa para humanos
+  impact: number         // puntos de score, con signo
+  since: string          // 'YYYY-MM': cuándo empezó a moverse
+  detail: string
 }
 
-type Exposure = {
-  amount: number           // pendiente de cobro/pago, en moneda de la empresa
-  currency: string
-  overdueDays: number
-  invoiceCount: number
+type Metric = {
+  id: 'dso' | 'dpo' | 'ccc' | 'dscr' | 'cash_days' | 'credit_usage' | 'concentration'
+  label: string
+  value: number
+  unit: 'days' | 'ratio' | 'pct'
+  reference: number      // umbral o mediana propia
+  status: 'ok' | 'watch' | 'breach'
 }
+
+// ---------- Pulso Empresa ----------
 
 // GET /api/companies/{id}/score
 type CompanyScore = {
   companyId: string
   name: string
-  score: number            // 0-100
-  band: Band               // nivel
-  trend: Trend             // trayectoria
+  score: number          // 0-100
+  band: Band
+  trend: Trend
   delta1m: number
   delta3m: number
-  series: ScorePoint[]     // 24 puntos
+  series: ScorePoint[]   // 24 puntos
   drivers: Driver[]
-  heldOut: boolean         // true = el modelo no la vio nunca
+  metrics: Metric[]
+  heldOut: boolean       // el modelo no la vio nunca
 }
 
-// GET /api/companies/{id}/network
-type NetworkEntry = {
-  counterpartyId: string
+// GET /api/companies/{id}/forecast
+type Forecast = {
+  companyId: string
+  horizon: ScorePoint[]              // proyección a 3 y 6 meses
+  bandLow: ScorePoint[]              // incertidumbre
+  bandHigh: ScorePoint[]
+  stability: 'dip' | 'structural'    // bache o deterioro
+  stabilityNote: string              // "es un bache, no actúes"
+  detection: {
+    detectedAt: string               // cuándo lo vio el sistema
+    evidentAt: string                // cuándo fue evidente en los números
+    monthsAhead: number
+  } | null
+}
+
+// GET /api/companies/{id}/decisions
+type Decision = {
+  id: string
+  lever: 'collect_faster' | 'pay_slower' | 'refinance' | 'amortise'
+       | 'open_credit_line' | 'reduce_usage' | 'diversify' | 'pay_on_time'
+  title: string          // "Acelera el cobro"
+  rationale: string      // la regla que la disparó, en lenguaje humano
+  metricId: Metric['id']
+  currentValue: number
+  targetValue: number
+  cashImpact: number     // euros liberados o ahorrados
+  scoreImpact: number    // puntos de score a 3 meses
+  caution: string | null // p. ej. el aviso sobre forzar el DPO
+}
+
+// POST /api/companies/{id}/simulate   body: { metricId, value }
+type Simulation = {
+  metricId: Metric['id']
+  value: number
+  projected: ScorePoint[]
+  scoreDelta: number
+  cashDelta: number
+}
+
+// ---------- Pulso Cartera ----------
+
+// GET /api/portfolio
+type PortfolioRow = {
+  companyId: string
   name: string
-  role: 'customer' | 'supplier' | 'both'
   score: number
   band: Band
   trend: Trend
   delta3m: number
-  exposure: Exposure
-  eurosAtRisk: number      // exposure.amount ponderado por el riesgo del score.
-                           // Criterio de orden por defecto de Mi red.
-  locked: boolean          // detras del paywall
+  heldOut: boolean
+  topDriver: string      // la señal dominante, para la tabla
 }
-type NetworkResponse = { companyId: string; entries: NetworkEntry[] }
-
-// GET /api/counterparties/{id}
-type CounterpartyDetail = {
-  counterpartyId: string
-  name: string
-  role: 'customer' | 'supplier' | 'both'
-  score: number
-  band: Band
-  trend: Trend
-  series: ScorePoint[]
-  drivers: Driver[]
-  detection: {
-    detectedAt: string     // 'YYYY-MM' — cuando lo vio el sistema
-    evidentAt: string      // 'YYYY-MM' — cuando fue evidente en sus numeros
-    monthsAhead: number
-  } | null
-  stability: 'dip' | 'structural'
-  exposure: Exposure
+type Portfolio = {
+  rows: PortfolioRow[]
+  counts: { healthy: number; stable: number; risk: number
+            improving: number; slipping: number; heldOut: number }
 }
 
 // GET /api/alerts
 type Alert = {
   id: string
-  subjectId: string
-  subjectName: string
-  subjectType: 'self' | 'counterparty'
+  companyId: string
+  companyName: string
   kind: 'improving' | 'slipping'
   score: number
   delta: number
   monthsAhead: number | null
-  eurosAtRisk: number | null
   message: string
-  createdAt: string        // ISO
+  createdAt: string      // ISO
 }
 
 // GET /api/evidence
@@ -209,57 +281,44 @@ type Evidence = {
 ```
 
 **Nota de datos**: el dataset no trae nombres de empresa, solo IDs. Hace falta una capa de
-nombres legibles y estables por `company_id` / `counterparty_id`; un ID crudo en pantalla
-arruina la demo.
+nombres legibles y estables por `company_id`; un ID crudo en pantalla arruina la demo.
 
-## 6. Arquitectura del front
+## 9. Arquitectura del front
 
 ```
 frontend/src/
-  api/          index.ts (fachada), types.ts (lo de arriba), mock/
-  pulse/        Mi pulso
-  network/      Mi red
-  counterparty/ Ficha de contraparte
-  evidence/     Evidencia
-  monitor/      Alertas
-  shared/       ScoreLine, BandBadge, Delta, Money, Empty/Error/Skeleton
-  styles/       tokens.css (paleta de Embat), global
+  api/          index.ts (fachada), types.ts, mock/
+  company/      Pulso Empresa: pulse/, forecast/, decisions/
+  portfolio/    Pulso Cartera: tabla, monitor, evidence/
+  shared/       ScoreLine, BandBadge, TrendArrow, Money, Metric,
+                Empty / Error / Skeleton
+  styles/       tokens.css (paleta de Embat)
 ```
 
-Una carpeta por superficie. Lo compartido solo cuando lo usan dos superficies, no antes.
+**Gráficas**: Recharts para las series de 24 meses y la proyección. **SVG propio** para el
+diagrama de anticipación — es la pieza que tiene que impresionar y no sale de una librería.
 
-**Graficas**: Recharts para las series de 24 meses. **SVG propio** para el diagrama de
-anticipacion — es la pieza que tiene que impresionar y no sale de una libreria.
+**Colores**: solo tokens semánticos, nunca hex. Los tokens de banda actuales mezclan nivel y
+trayectoria; hay que alinearlos con la separación de la sección 8:
+`--color-band-healthy|stable|risk` para el nivel y `--color-trend-up|down|flat` para la
+dirección. El nivel se pinta como relleno de la insignia; la tendencia, como flecha.
 
-**Colores**: solo tokens semanticos, nunca hex literales, o se rompe el modo oscuro. Ver
-`docs/paleta-embat.md`.
+## 10. Estados y errores
 
-Los tokens de banda actuales mezclan nivel y trayectoria; hay que alinearlos con la separacion
-de la seccion 5: `--color-band-healthy|stable|risk` para el nivel, y tokens de tendencia
-`--color-trend-up|down|flat` para la direccion. El nivel se pinta como relleno de la insignia;
-la tendencia, como flecha y color de la linea.
+Cada vista implementa sus **tres estados desde el principio**: cargando (esqueleto, no
+spinner), vacío (con texto útil) y fallo (con el error y un reintento).
 
-## 7. Estados y errores
+En una demo ante jurado, una pantalla en blanco por un fetch caído cuesta más que cualquier
+error del modelo. El front nunca debe depender de que el motor esté vivo para pintar algo.
 
-Cada vista implementa sus **tres estados desde el principio**: cargando (esqueleto, no spinner),
-vacio (con texto util), y fallo (con el error y un reintento).
-
-En una demo ante jurado, una pantalla en blanco por un fetch caido cuesta mas que cualquier
-error del modelo. El front nunca debe depender de que el back este vivo para pintar algo.
-
-## 8. Verificacion
+## 11. Verificación
 
 - `npm run build` (typecheck + build) verde en cada paso.
-- Captura de cada pantalla en claro y oscuro, revisada de verdad, no asumida.
-- Recorrido completo de la demo: Mi pulso -> Mi red -> ficha con anticipacion -> Evidencia,
-  con el back caido, para probar que los estados de fallo aguantan.
+- Captura de cada pantalla en claro y oscuro, mirada de verdad, no asumida.
+- Recorrido completo de la demo **con el motor apagado**, para probar los estados de fallo.
 
-## 9. Fuera de alcance
+## 12. Fuera de alcance
 
-Decidido explicitamente, para que no vuelva a discutirse:
-
-- **Prevision de caja y conciliacion**: es el producto actual de Embat. Replicarlo resta.
-- **Selector de rol analista / empresa**: doblaria el front y dejaria las dos mitades a medio
-  pulir. El usuario es la empresa.
-- **Autenticacion real**: el paywall es una maqueta que enseña el modelo de negocio; no hay
-  usuarios ni cobros de verdad.
+- **Previsión de caja y conciliación**: es el producto actual de Embat.
+- **Paywall, planes y cobros**: el comprador se explica hablando.
+- **Autenticación real**: no hay usuarios.
