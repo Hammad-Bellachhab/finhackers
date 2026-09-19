@@ -14,7 +14,16 @@
   mask: url(/embat.svg) no-repeat center / contain;
 }
 .topbar-sep { width: 1px; height: 20px; background: var(--color-border-strong); margin: 0 var(--space-3); flex: none; }
-.product { font-size: var(--text-md); font-weight: 500; }
+.product {
+  font-size: var(--text-lg);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: var(--embat-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
 
 .topbar nav {
   display: flex; margin-left: var(--space-6);
@@ -36,13 +45,29 @@
   font: inherit; font-size: var(--text-sm); font-weight: 500;
   padding: 0 var(--space-3); height: 100%; border-radius: 0; position: relative;
   cursor: pointer; white-space: nowrap;
+  transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.topbar nav button:hover { color: var(--color-text); }
+.topbar nav button:hover {
+  color: var(--color-text);
+  transform: translateY(-1px);
+}
+.topbar nav button:active {
+  transform: translateY(0);
+}
 .topbar nav button:focus-visible { outline-offset: -2px; }
-.topbar nav button.on { color: var(--color-accent-text); }
+.topbar nav button.on {
+  color: var(--color-accent-text);
+  font-weight: 600;
+}
 .topbar nav button.on::after {
   content: ''; position: absolute; left: 12px; right: 12px; bottom: 0;
   height: 2px; background: var(--color-accent); border-radius: 2px 2px 0 0;
+  animation: tab-indicator-slide 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes tab-indicator-slide {
+  from { transform: scaleX(0); opacity: 0; }
+  to { transform: scaleX(1); opacity: 1; }
 }
 
 .page { max-width: 72rem; margin: 0 auto; padding: var(--space-6) var(--space-5) var(--space-8); }

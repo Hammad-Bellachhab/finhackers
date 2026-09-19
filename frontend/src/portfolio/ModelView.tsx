@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { getModelReport } from '../api'
 import type { ModelReport } from '../api/types'
@@ -14,6 +15,8 @@ const BLOCK_COLORS = ['var(--chart-4)', 'var(--color-danger)', 'var(--chart-1)',
 /** "Rendimiento del modelo" del dashboard de Diego: A (solo balance) frente a B (+ comportamiento). */
 export function ModelView() {
   const { data, error, loading } = useAsync(() => getModelReport(), [])
+  const [zoomImage, setZoomedImage] = useState<string | null>(null)
+
   if (loading) return <Skeleton height="30rem" />
   if (error) return <ErrorNotice error={error} />
   if (!data) return null
@@ -31,7 +34,17 @@ export function ModelView() {
       </div>
       <Importance m={data} />
       <Errors m={data} />
-      <Figures m={data} />
+      <Figures m={data} onZoom={setZoomedImage} />
+
+      {zoomImage && (
+        <div className="figure-zoom-overlay" onClick={() => setZoomedImage(null)}>
+          <div className="figure-zoom-content" onClick={(e) => e.stopPropagation()}>
+            <button type="button" className="figure-zoom-close" onClick={() => setZoomedImage(null)}>×</button>
+            <img className="figure-zoom-img" src={`/data/figures/${zoomImage}`} alt="Diagrama ampliado" />
+            <p className="figure-zoom-caption">{FIG_TITLE[zoomImage] ?? zoomImage}</p>
+          </div>
+        </div>
+      )}
     </>
   )
 }
@@ -155,7 +168,7 @@ function Ablation({ m }: { m: ModelReport }) {
       <ResponsiveContainer width="100%" height={240}>
         <BarChart data={rows} margin={{ top: 8, right: 8, bottom: 0, left: -8 }}>
           <CartesianGrid stroke="var(--color-border)" vertical={false} />
-          <XAxis dataKey="exp" {...axis} interval={0} angle={-30} textAnchor="end" height={50} />
+          <XAxis dataKey="exp" {...axis} interval={0} angle={-45} textAnchor="end" height={70} tick={{ fontSize: 10 }} />
           <YAxis {...axis} tickFormatter={(v) => Number(v).toFixed(2)} />
           <Tooltip {...tooltip} formatter={(v) => [signed(Number(v)), 'Δ AUC-PR']} />
           <Bar dataKey="delta" isAnimationActive={false}>
@@ -177,7 +190,7 @@ function Importance({ m }: { m: ModelReport }) {
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={blocks} margin={{ top: 8, right: 8, bottom: 0, left: -12 }}>
               <CartesianGrid stroke="var(--color-border)" vertical={false} />
-              <XAxis dataKey="bloque" {...axis} interval={0} angle={-20} textAnchor="end" height={60} />
+              <XAxis dataKey="bloque" {...axis} interval={0} angle={-45} textAnchor="end" height={85} tick={{ fontSize: 10 }} />
               <YAxis {...axis} tickFormatter={(v) => pct(Number(v))} />
               <Tooltip {...tooltip} formatter={(v) => [pct(Number(v)), 'cuota']} />
               <Bar dataKey="cuota" isAnimationActive={false}>
@@ -233,14 +246,20 @@ const FIG_TITLE: Record<string, string> = {
   'ablation.png': 'Ablación por bloques',
 }
 
-function Figures({ m }: { m: ModelReport }) {
+function Figures({ m, onZoom }: { m: ModelReport; onZoom: (img: string) => void }) {
   return (
     <>
       <h2>Diagramas del entrenamiento</h2>
       <div className="grid-2">
         {m.figures.map((f) => (
           <Panel key={f} title={FIG_TITLE[f] ?? f}>
-            <img className="figure" src={`/data/figures/${f}`} alt={FIG_TITLE[f] ?? f} loading="lazy" />
+            <img
+              className="figure figure-zoomable"
+              src={`/data/figures/${f}`}
+              alt={FIG_TITLE[f] ?? f}
+              loading="lazy"
+              onClick={() => onZoom(f)}
+            />
           </Panel>
         ))}
       </div>

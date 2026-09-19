@@ -67,10 +67,12 @@ export function ImproveSection({
   companyId,
   decisions,
   metrics,
+  onDeltaChange,
 }: {
   companyId: string
   decisions: Decision[]
   metrics: Metric[]
+  onDeltaChange?: (delta: number) => void
 }) {
   const levers = useMemo(() => buildLevers(decisions, metrics), [decisions, metrics])
 
@@ -99,6 +101,11 @@ export function ImproveSection({
   const ultimo = useRef<{ plan: Plan; key: string } | null>(null)
   if (plan.data) ultimo.current = { plan: plan.data, key }
   const vista = plan.data ?? ultimo.current?.plan ?? null
+
+  const activeDelta = vista?.scoreDelta ?? 0
+  useEffect(() => {
+    if (onDeltaChange) onDeltaChange(activeDelta)
+  }, [activeDelta, onDeltaChange])
 
   // El diagnostico es de la empresa, no del plan: no cambia porque se muevan las palancas. Se fija
   // con la primera respuesta y no se vuelve a tocar, porque ademas el motor devuelve 6 y la rejilla
