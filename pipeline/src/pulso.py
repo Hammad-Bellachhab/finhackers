@@ -21,7 +21,7 @@ from src.api import db
 from src.api.inference import SCENARIOS, InferenceService
 from src.evaluate import score_main
 from src.features import CATEGORICAL
-from src.metrics import METRIC_META, metric_values, metrics, num, overrides_for
+from src.metrics import metric_values, metrics, num, overrides_for
 from src.providers import providers
 
 STATE: dict = {}          # export() deja aquí el InferenceService
