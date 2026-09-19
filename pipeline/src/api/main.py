@@ -111,6 +111,8 @@ def model_info(s: InferenceService = Depends(svc)):
         info["shap_block_importance"] = row["shap_block_importance"]
         info["top_features"] = row["top_features"]
         info["error_analysis"] = row["error_analysis"]
+        info["anticipation"] = row.get("anticipation", {})
+        info["holdout_unseen_companies"] = row.get("holdout_unseen_companies", {})
         info["last_labeled_month"] = row["last_labeled_month"]
         info["last_scored_month"] = row["last_scored_month"]
     except Exception as e:                           # la BD puede no estar aún
@@ -120,9 +122,10 @@ def model_info(s: InferenceService = Depends(svc)):
 
 @app.get("/companies", dependencies=[Depends(guard)])
 def companies(T: str | None = None, band: str | None = None, cohort: str | None = None, country: str | None = None,
-              q: str | None = None, sort: str = Query("score", pattern="^(score|delta|delta_asc|company|percentile)$"),
+              q: str | None = None, trajectory: str | None = None, health_band: str | None = None,
+              sort: str = Query("score", pattern="^(score|delta|delta_asc|company|percentile|health|health_desc|health_delta|health_delta_desc)$"),
               limit: int = Query(50, ge=1, le=500), offset: int = Query(0, ge=0)):
-    rows, total = db.list_companies(T, band, cohort, country, q, sort, limit, offset)
+    rows, total = db.list_companies(T, band, cohort, country, q, sort, limit, offset, trajectory, health_band)
     return {"T": T or db.latest_month(), "total": total, "limit": limit, "offset": offset, "items": rows}
 
 
@@ -140,6 +143,18 @@ def company_score(company_id: str, T: str | None = None):
     if not r:
         raise HTTPException(404, "sin score para esa empresa / mes")
     return r
+
+
+@app.get("/companies/{company_id}/changes", dependencies=[Depends(guard)])
+def company_changes(company_id: str, T: str | None = None):
+    """Qué señales explican el cambio de score entre el mes anterior y T (reto: pregunta 5)."""
+    return {"company_id": company_id, "T": T or db.latest_month(), "changes": db.company_changes(company_id, T)}
+
+
+@app.get("/alerts", dependencies=[Depends(guard)])
+def alerts(kind: str | None = None, limit: int = Query(100, ge=1, le=2000)):
+    """Monitor proactivo: caídas estructurales, caídas bruscas, deterioros incipientes, mejoras y sólidas (último mes)."""
+    return {"T": db.latest_month(), "items": db.alerts(kind, limit)}
 
 
 @app.get("/companies/{company_id}/features", dependencies=[Depends(guard)])

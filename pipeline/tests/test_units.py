@@ -70,3 +70,20 @@ def test_platt_calibrator_is_monotonic():
 
 def test_label_weights_sum_to_one():
     assert abs(sum(C.LABEL_WEIGHTS.values()) - 1.0) < 1e-9
+
+
+def test_health_trajectory_rules():
+    from src.health import add_health
+    months = [f"2025-{m:02d}" for m in range(1, 13)]
+    # empresa que se deteriora de forma sostenida, otra estable, otra con un bache de un mes
+    p_down = [0.05, 0.05, 0.05, 0.08, 0.15, 0.25, 0.35, 0.45, 0.55, 0.60, 0.65, 0.70]
+    p_flat = [0.05] * 12
+    p_blip = [0.05, 0.05, 0.05, 0.05, 0.05, 0.40, 0.06, 0.05, 0.05, 0.05, 0.05, 0.05]
+    df = pd.DataFrame({"company_id": ["down"] * 12 + ["flat"] * 12 + ["blip"] * 12, "T": months * 3, "p": p_down + p_flat + p_blip})
+    h = add_health(df, "p")
+    last = h.groupby("company_id").tail(1).set_index("company_id")
+    assert last.loc["down", "trajectory"] == "deteriorándose" and last.loc["down", "is_structural"]
+    assert last.loc["flat", "trajectory"] == "estable" and last.loc["flat", "is_exceptional"] and last.loc["flat", "health_band"] == "sólida"
+    blip_rows = h[h.company_id == "blip"]
+    assert blip_rows["is_blip"].any() and last.loc["blip", "trajectory"] == "estable"
+    assert (h["health"] == 100 * (1 - h["p"])).all()

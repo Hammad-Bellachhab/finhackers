@@ -45,11 +45,12 @@ SEED = int(os.environ.get("SEED", 42))
 # --------------------------------------------------------------------------------------
 # Marco temporal (Capa 3, Figura 3 del documento de arquitectura)
 # --------------------------------------------------------------------------------------
-DATA_START = "2024-09-01"
-DATA_END = "2026-09-01"          # exclusivo: 2026-09 solo tiene un día de datos y se descarta
-SNAPSHOT_DATE = "2026-09-01"     # fecha de la foto de balances / estado de facturas
-FIRST_MONTH = "2024-09"          # primer mes del panel
-LAST_MONTH = "2026-08"           # último mes completo del panel (T máximo para scoring)
+# Sobreescribibles por entorno: src/predict.py los ajusta al rango real de un test oculto.
+DATA_START = os.environ.get("DATA_START", "2024-09-01")
+DATA_END = os.environ.get("DATA_END", "2026-09-01")            # exclusivo: 2026-09 solo tiene un día y se descarta
+SNAPSHOT_DATE = os.environ.get("SNAPSHOT_DATE", "2026-09-01")  # fecha de la foto de balances / estado de facturas
+FIRST_MONTH = os.environ.get("FIRST_MONTH", "2024-09")         # primer mes del panel
+LAST_MONTH = os.environ.get("LAST_MONTH", "2026-08")           # último mes completo del panel (T máximo para scoring)
 
 OBS_MONTHS = 12                  # ventana de observación (features)
 GAP_MONTHS = int(os.environ.get("GAP_MONTHS", 1))          # gap anti-contaminación
@@ -85,6 +86,19 @@ N_CV_FOLDS = 3
 # Servicio
 # --------------------------------------------------------------------------------------
 RISK_BANDS = [(0.0, 0.10, "bajo"), (0.10, 0.25, "medio"), (0.25, 0.50, "alto"), (0.50, 1.01, "crítico")]
+
+# --------------------------------------------------------------------------------------
+# Score de salud bidireccional (reto X-Ray): salud = 100 · (1 − p_deterioro calibrada)
+# --------------------------------------------------------------------------------------
+HEALTH_SMOOTHING = 0.5           # EMA mensual sobre la salud: estabilidad frente a baches de un mes
+HEALTH_BANDS = [(90, 101, "sólida"), (75, 90, "sana"), (50, 75, "vigilar"), (0, 50, "riesgo")]
+TRAJ_DELTA_3M = 8.0              # puntos de salud (suavizada) en 3 meses para hablar de mejora / deterioro
+TRAJ_MIN_CONSISTENT = 2          # de los últimos 3 deltas mensuales, cuántos deben ir en la misma dirección
+BLIP_DROP = 8.0                  # caída mensual que, si se recupera al mes siguiente, se considera bache puntual
+EXCEPTIONAL_MIN_HEALTH = 90.0    # "excepcionalmente sólida": salud suavizada >= 90 durante >= 6 meses seguidos
+EXCEPTIONAL_MONTHS = 6
+ALERT_MIN_DROP_1M = 10.0         # monitor proactivo: caída de salud en un mes que dispara alerta
+ANTICIPATION_ALERT_HEALTH = 75.0 # umbral de "alerta" para medir cuántos meses antes se anticipa un evento
 MIN_COHORT_SIZE = 10   # no se muestra benchmark con cohortes menores (Capa 8)
 TOP_N_SHAP = 8
 

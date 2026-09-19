@@ -153,9 +153,12 @@ def build_features(save: bool = True) -> tuple[pd.DataFrame, dict]:
     static["loan_granted_total"] = debt[debt["type"].isin(["loan", "mortgage", "leasing"])].groupby("company_id")["granted"].apply(lambda s: s.abs().sum())
     sc = sched.copy()
     sc["w"] = sc["granted_balance"].abs().fillna(0) + 1
-    static["wavg_interest_rate"] = sc.groupby("company_id").apply(lambda d: np.average(d["annual_interest_rate_or_spread"].fillna(0), weights=d["w"]), include_groups=False)
-    static["total_periods_mean"] = sc.groupby("company_id")["total_periods"].mean()
-    static["share_variable_rate"] = sc.groupby("company_id")["interest_type"].apply(lambda s: (s == "variable").mean())
+    if len(sc):
+        static["wavg_interest_rate"] = sc.groupby("company_id").apply(lambda d: np.average(d["annual_interest_rate_or_spread"].fillna(0), weights=d["w"]), include_groups=False)
+        static["total_periods_mean"] = sc.groupby("company_id")["total_periods"].mean()
+        static["share_variable_rate"] = sc.groupby("company_id")["interest_type"].apply(lambda s: (s == "variable").mean())
+    else:                                           # test sin calendarios de préstamo (p. ej. test oculto pequeño)
+        static["wavg_interest_rate"] = static["total_periods_mean"] = static["share_variable_rate"] = np.nan
     for col in ["n_bank_accounts", "n_cards", "n_products_total", "n_banks", "n_debt_products", "n_loans",
                 "n_credit_lines", "n_leasing", "n_guarantees", "n_confirming_factoring", "debt_granted_total", "loan_granted_total"]:
         static[col] = static[col].fillna(0)

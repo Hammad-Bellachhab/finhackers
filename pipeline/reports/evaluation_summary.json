@@ -1,5 +1,5 @@
 {
-  "version": "v20260919_034755",
+  "version": "v20260919_120958",
   "main_model": "ens_B",
   "holdout": {
     "lr_A": {
@@ -486,6 +486,104 @@
     "catboost_B": {
       "auc_pr_mean": 0.5261363739169611,
       "auc_pr_std": 0.03909621026687182
+    }
+  },
+  "anticipation": {
+    "definition": "evento = primer mes con >=2 meses seguidos malos (caja<0 | >=50% facturas a pagar con >30d | sin transacciones) tras >=3 buenos; alerta = salud suavizada < 75.0 o trayectoria 'deteriorándose' en los 12 meses previos; scores del modelo congelado en el holdout (fuera de muestra desde 2025-06)",
+    "out_of_sample_from": "2025-06",
+    "n_events": 238,
+    "n_anticipated": 84,
+    "share_anticipated": 0.711864406779661,
+    "share_detected_by_event": 0.4957983193277311,
+    "lead_months_median": 3.0,
+    "lead_months_mean": 3.6186440677966103,
+    "lead_distribution": {
+      "0": 34,
+      "1": 15,
+      "2": 8,
+      "3": 5,
+      "4": 13,
+      "5": 8,
+      "6": 7,
+      "7": 10,
+      "8": 2,
+      "9": 8,
+      "10": 2,
+      "11": 3,
+      "12": 3
+    },
+    "false_alert_rate": 0.25892857142857145,
+    "n_alert_windows": 112,
+    "band_flip_rate": 0.17083333333333334,
+    "n_band_changes": 1440,
+    "health_drop_before_event_mean": -3.9525487732209053
+  },
+  "holdout_unseen_companies": {
+    "n_unseen_companies": 261,
+    "n_train": 4346,
+    "lgbm_A": {
+      "unseen": {
+        "n": 494,
+        "positives": 68,
+        "auc_pr": 0.21468788004540407,
+        "auc_roc": 0.6049088649544325,
+        "brier": 0.15304268520414077,
+        "base_rate": 0.13765182186234817,
+        "p@50": 0.24,
+        "r@50": 0.3529411764705882,
+        "r@top10pct": 0.1764705882352941
+      },
+      "seen_same_model": {
+        "n": 1730,
+        "positives": 248,
+        "auc_pr": 0.4069791065188626,
+        "auc_roc": 0.7828607265682818,
+        "brier": 0.12827645135395876,
+        "base_rate": 0.14335260115606938,
+        "p@50": 0.52,
+        "r@50": 0.21041666666666667,
+        "r@top10pct": 0.37135416666666665
+      }
+    },
+    "lgbm_B": {
+      "unseen": {
+        "n": 494,
+        "positives": 68,
+        "auc_pr": 0.3145185821337127,
+        "auc_roc": 0.7653962993648163,
+        "brier": 0.12508224513177937,
+        "base_rate": 0.13765182186234817,
+        "p@50": 0.32,
+        "r@50": 0.47058823529411764,
+        "r@top10pct": 0.29411764705882354
+      },
+      "seen_same_model": {
+        "n": 1730,
+        "positives": 248,
+        "auc_pr": 0.4981405806576074,
+        "auc_roc": 0.838225371120108,
+        "brier": 0.10658159615156615,
+        "base_rate": 0.14335260115606938,
+        "p@50": 0.6200000000000001,
+        "r@50": 0.25104166666666666,
+        "r@top10pct": 0.415625
+      }
+    },
+    "lift_lgbm": {
+      "auc_pr_A_ci": [
+        0.15745814765962934,
+        0.31446628216030353
+      ],
+      "auc_pr_B_ci": [
+        0.23851144360849708,
+        0.4255796637598815
+      ],
+      "lift_ci": [
+        0.04150403684909993,
+        0.16119964474108694
+      ],
+      "lift_mean": 0.10061957675055436,
+      "p_lift_le_0": 0.0
     }
   }
 }

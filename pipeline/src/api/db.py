@@ -35,14 +35,14 @@ def latest_month() -> str:
 def model_info() -> dict:
     row = q("SELECT * FROM model_info ORDER BY trained_at DESC LIMIT 1").iloc[0].to_dict()
     for k in ("train_months", "label_config", "holdout_metrics", "lift", "cv_metrics", "ablation", "calibration",
-              "shap_block_importance", "top_features", "error_analysis"):
+              "shap_block_importance", "top_features", "error_analysis", "anticipation", "holdout_unseen_companies"):
         if isinstance(row.get(k), str):
             row[k] = json.loads(row[k])
     return row
 
 
 def list_companies(T: str | None, band: str | None, cohort: str | None, country: str | None, search: str | None,
-                   sort: str, limit: int, offset: int) -> tuple[list[dict], int]:
+                   sort: str, limit: int, offset: int, trajectory: str | None = None, health_band: str | None = None) -> tuple[list[dict], int]:
     T = T or latest_month()
     where = ['r."T" = :T']
     params: dict = {"T": T, "limit": limit, "offset": offset}
@@ -54,12 +54,19 @@ def list_companies(T: str | None, band: str | None, cohort: str | None, country:
         where.append("c.country = :country"); params["country"] = country
     if search:
         where.append("(c.company_id LIKE :search OR c.group_id LIKE :search)"); params["search"] = f"%{search}%"
+    if trajectory:
+        where.append("r.trajectory = :traj"); params["traj"] = trajectory
+    if health_band:
+        where.append("r.health_band = :hband"); params["hband"] = health_band
     order = {"score": "r.score DESC", "delta": "r.delta_1m DESC", "delta_asc": "r.delta_1m ASC", "company": "c.company_id ASC",
-             "percentile": "r.percentile DESC"}.get(sort, "r.score DESC")
+             "percentile": "r.percentile DESC", "health": "r.health_smooth ASC", "health_desc": "r.health_smooth DESC",
+             "health_delta": "r.health_delta_3m ASC", "health_delta_desc": "r.health_delta_3m DESC"}.get(sort, "r.score DESC")
     base = f"FROM risk_score r JOIN company c USING(company_id) WHERE {' AND '.join(where)}"
     total = int(q(f"SELECT count(*) AS n {base}", **params)["n"].iloc[0])
     rows = q(f'''SELECT c.company_id, c.group_id, c.country, c.erp, c.main_bank, c.size_cohort, c.group_size, c.has_invoices,
-                        r."T", r.score, r.score_A, r.percentile, r.percentile_cohort, r.band, r.delta_1m, r.is_out_of_sample, r.realized_label
+                        r."T", r.score, r.score_A, r.percentile, r.percentile_cohort, r.band, r.delta_1m, r.is_out_of_sample, r.realized_label,
+                        r.health, r.health_smooth, r.health_band, r.trajectory, r.health_delta_1m, r.health_delta_3m,
+                        r.is_blip, r.is_structural, r.is_exceptional, r.alert
                  {base} ORDER BY {order} NULLS LAST LIMIT :limit OFFSET :offset''', **params)
     return records(rows), total
 
@@ -71,8 +78,22 @@ def company(company_id: str) -> dict | None:
     out = c.iloc[0].to_dict()
     out["kpi_series"] = records(q('SELECT * FROM company_month_kpi WHERE company_id = :cid ORDER BY "T"', cid=company_id))
     out["score_series"] = records(q('SELECT "T", score, score_A, percentile, percentile_cohort, band, delta_1m, is_out_of_sample, '
-                                    'realized_label, realized_D FROM risk_score WHERE company_id = :cid ORDER BY "T"', cid=company_id))
+                                    'realized_label, realized_D, health, health_smooth, health_band, trajectory, health_delta_1m, '
+                                    'health_delta_3m, is_blip, is_structural, is_exceptional, alert '
+                                    'FROM risk_score WHERE company_id = :cid ORDER BY "T"', cid=company_id))
     return out
+
+
+def company_changes(company_id: str, T: str | None = None) -> list[dict]:
+    T = T or latest_month()
+    return records(q('SELECT "T", "T_prev", rank, feature, block, delta_shap, direction, before, after FROM score_change_explanation '
+                     'WHERE company_id = :cid AND "T" = :T ORDER BY rank', cid=company_id, T=T))
+
+
+def alerts(kind: str | None = None, limit: int = 100) -> list[dict]:
+    if kind:
+        return records(q('SELECT * FROM alerts WHERE alert = :k ORDER BY severity DESC, health_delta_1m ASC LIMIT :n', k=kind, n=limit))
+    return records(q('SELECT * FROM alerts ORDER BY severity DESC, health_delta_1m ASC LIMIT :n', n=limit))
 
 
 def company_score(company_id: str, T: str | None = None) -> dict | None:
@@ -125,9 +146,11 @@ def benchmarks(company_id: str | None, T: str | None, size_cohort: str | None, c
 def score_distribution(T: str | None = None) -> dict:
     T = T or latest_month()
     r = q('SELECT band, count(*) AS n, avg(score) AS mean_score FROM risk_score WHERE "T" = :T GROUP BY band', T=T)
+    hb = q('SELECT health_band, count(*) AS n FROM risk_score WHERE "T" = :T GROUP BY health_band', T=T)
+    tj = q('SELECT trajectory, count(*) AS n FROM risk_score WHERE "T" = :T GROUP BY trajectory', T=T)
     m = q('SELECT "T", avg(score) AS mean_score, sum(CASE WHEN band IN (\'alto\',\'crítico\') THEN 1 ELSE 0 END) AS n_high, '
           'count(*) AS n FROM risk_score GROUP BY "T" ORDER BY "T"')
-    return {"T": T, "bands": records(r), "by_month": records(m)}
+    return {"T": T, "bands": records(r), "health_bands": records(hb), "trajectories": records(tj), "by_month": records(m)}
 
 
 def log_inference(endpoint: str, company_id: str | None, score: float | None, version: str, payload: dict | None = None) -> None:

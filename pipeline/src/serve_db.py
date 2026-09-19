@@ -6,6 +6,8 @@ Tablas:
     company_features    vector de features por empresa y mes (entrada del simulador / scoring online)
     risk_score          score calibrado, percentil, banda, delta mensual, versión de modelo
     score_explanation   top-n contribuciones SHAP por empresa y mes (precalculadas)
+    score_change_explanation  señales que explican el cambio de score entre T−1 y T
+    alerts              monitor proactivo: qué merece atención en el último mes (caídas, mejoras, sólidas)
     benchmark           p25/p50/p75 por cohorte (tamaño × país × tamaño de grupo), solo si n >= 10
     model_info          versión, métricas, fecha de entrenamiento
 
@@ -24,6 +26,7 @@ from sqlalchemy import create_engine, text
 from src import config as C
 from src.evaluate import load_registry, score_main
 from src.features import load_features
+from src.health import add_health
 from src.labels import LABELS_PATH
 
 KPI_COLS = [
@@ -63,7 +66,13 @@ def build_tables() -> dict[str, pd.DataFrame]:
     X["score_prev"] = X.groupby("company_id")["score"].shift(1)
     X["delta_1m"] = X["score"] - X["score_prev"]
     X["is_out_of_sample"] = X["T"] > last_labeled_T
-    risk = X[["company_id", "T", "score", "score_raw", "score_A", "percentile", "percentile_cohort", "band", "delta_1m", "is_out_of_sample"]].copy()
+    # salud bidireccional y trayectoria (reto X-Ray): mismas reglas que predict.py
+    H = add_health(X[["company_id", "T", "score"]], "score")
+    hcols = ["health", "health_smooth", "health_delta_1m", "health_delta_3m", "trajectory", "is_blip", "is_structural",
+             "is_exceptional", "health_band", "alert"]
+    X = X.join(H[hcols])
+    risk = X[["company_id", "T", "score", "score_raw", "score_A", "percentile", "percentile_cohort", "band", "delta_1m",
+              "is_out_of_sample"] + hcols].copy()
     risk["model_version"] = version
     risk["scored_at"] = datetime.now(timezone.utc).isoformat()
     # resultado realizado (solo meses etiquetados): para la vista "qué pasó después"
@@ -83,7 +92,8 @@ def build_tables() -> dict[str, pd.DataFrame]:
         "last_month": last["T"].values, "months_in_panel": last["months_in_panel"].values,
         "created_at": dim.loc[last.index, "created_at"].astype(str).values,
         "latest_score": last["score"].values, "latest_band": last["band"].values, "latest_delta_1m": last["delta_1m"].values,
-        "latest_percentile": last["percentile"].values,
+        "latest_percentile": last["percentile"].values, "latest_health": last["health_smooth"].values,
+        "latest_health_band": last["health_band"].values, "latest_trajectory": last["trajectory"].values,
     }).reset_index(drop=True)
 
     # ---------------------------------------------------------------- company_month_kpi
@@ -95,9 +105,22 @@ def build_tables() -> dict[str, pd.DataFrame]:
     kpi = kpi.merge(lab[["company_id", "T"] + list(C.LABEL_WEIGHTS)].rename(columns={c: f"outcome_{c}" for c in C.LABEL_WEIGHTS}),
                     on=["company_id", "T"], how="left")
 
-    # ---------------------------------------------------------------- score_explanation
+    # ---------------------------------------------------------------- score_explanation / score_change_explanation
     expl = pd.read_parquet(C.REPORTS_DIR / "score_explanations.parquet")
     expl["model_version"] = version
+    chg = pd.read_parquet(C.REPORTS_DIR / "score_change_explanations.parquet")
+    chg["model_version"] = version
+
+    # ---------------------------------------------------------------- alerts (monitor proactivo, último mes)
+    last_T = X["T"].max()
+    al = risk[(risk["T"] == last_T) & (risk["alert"] != "")].copy()
+    al["severity"] = al["alert"].map({"caída estructural": 3, "caída brusca este mes": 2, "deterioro incipiente": 1,
+                                      "mejora progresiva": 0, "excepcionalmente sólida": 0}).fillna(0)
+    top_chg = (chg[chg["T"] == last_T].sort_values(["company_id", "rank"]).groupby("company_id")
+               .apply(lambda d: " | ".join(f"{r['after']}" for _, r in d.head(2).iterrows()), include_groups=False))
+    al["why"] = al["company_id"].map(top_chg)
+    alerts = al[["company_id", "T", "alert", "severity", "health_smooth", "health_delta_1m", "health_delta_3m", "trajectory", "why"]] \
+        .sort_values(["severity", "health_delta_1m"], ascending=[False, True]).reset_index(drop=True)
 
     # ---------------------------------------------------------------- benchmark
     B = X[["company_id", "T", "size_cohort", "country", "group_size", "score"] + [k for k in BENCH_KPIS if k != "score"]].copy()
@@ -133,12 +156,14 @@ def build_tables() -> dict[str, pd.DataFrame]:
         "calibration": json.dumps({k: v for k, v in md["metrics"]["calibration"].items()}),
         "shap_block_importance": json.dumps(ev["shap_block_importance"]), "top_features": json.dumps(ev["top_features"]),
         "error_analysis": json.dumps(ev["error_analysis"]), "n_features": len(art["features_B"]),
+        "anticipation": json.dumps(ev.get("anticipation", {})),
+        "holdout_unseen_companies": json.dumps(ev.get("holdout_unseen_companies", {})),
         "last_labeled_month": last_labeled_T, "last_scored_month": str(X["T"].max()),
     }])
     # ---------------------------------------------------------------- company_features (para /simulate y /score online)
     feats = X[["company_id", "T"] + art["features_B"]].copy()
-    return {"company": company, "company_month_kpi": kpi, "risk_score": risk, "score_explanation": expl, "benchmark": bench,
-            "model_info": info, "company_features": feats}
+    return {"company": company, "company_month_kpi": kpi, "risk_score": risk, "score_explanation": expl,
+            "score_change_explanation": chg, "alerts": alerts, "benchmark": bench, "model_info": info, "company_features": feats}
 
 
 def write(tables: dict[str, pd.DataFrame]) -> None:
@@ -151,6 +176,7 @@ def write(tables: dict[str, pd.DataFrame]) -> None:
             'CREATE INDEX IF NOT EXISTS ix_risk_T ON risk_score ("T")',
             'CREATE INDEX IF NOT EXISTS ix_kpi_company_T ON company_month_kpi (company_id, "T")',
             'CREATE INDEX IF NOT EXISTS ix_expl_company_T ON score_explanation (company_id, "T")',
+            'CREATE INDEX IF NOT EXISTS ix_chg_company_T ON score_change_explanation (company_id, "T")',
             'CREATE INDEX IF NOT EXISTS ix_bench ON benchmark ("T", size_cohort, country_group, group_bucket, kpi)',
             "CREATE INDEX IF NOT EXISTS ix_company ON company (company_id)",
             'CREATE INDEX IF NOT EXISTS ix_feat_company_T ON company_features (company_id, "T")',

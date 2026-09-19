@@ -345,6 +345,118 @@ def make_figures(preds: pd.DataFrame, results: dict, imp: pd.DataFrame, block_im
         fig.tight_layout(); fig.savefig(FIG_DIR / "ablation.png"); plt.close(fig)
 
 
+# --------------------------------------------------------------------------------------
+# Reto X-Ray: explicación de cambios y anticipación
+# --------------------------------------------------------------------------------------
+def change_explanations(art: dict, X: pd.DataFrame, S: pd.DataFrame, top_n: int = 5) -> pd.DataFrame:
+    """Para cada (empresa, T) con mes anterior: las señales cuyo SHAP más cambió (qué causó el cambio de score).
+
+    Vectorizado: diferencias de SHAP entre filas consecutivas de la misma empresa y top-n por |Δ| con argpartition.
+    Solo señales propias de la empresa: el contexto de grupo/banco (bloque E) no explica "qué ha hecho" la empresa.
+    """
+    feats = [f for f in art["features_B"] if art.get("block_of", {}).get(f) != "E"]
+    Xs = X.sort_values(["company_id", "t_idx"])
+    same = (Xs["company_id"].to_numpy()[1:] == Xs["company_id"].to_numpy()[:-1])
+    Sv = S.loc[Xs.index, feats].to_numpy(dtype=float)
+    D = Sv[1:] - Sv[:-1]
+    D = D[same]
+    now_idx = Xs.index.to_numpy()[1:][same]
+    prev_idx = Xs.index.to_numpy()[:-1][same]
+    k = min(top_n, len(feats))
+    top = np.argpartition(-np.abs(D), k - 1, axis=1)[:, :k]
+    rows = []
+    cid = X["company_id"]; T = X["T"]
+    for r in range(len(now_idx)):
+        i_now, i_prev = now_idx[r], prev_idx[r]
+        order = top[r][np.argsort(-np.abs(D[r, top[r]]))]
+        for rank, j in enumerate(order):
+            f = feats[j]
+            rows.append({"company_id": cid.at[i_now], "T": T.at[i_now], "T_prev": T.at[i_prev], "rank": rank + 1,
+                         "block": art.get("block_of", {}).get(f, ""), "feature": f, "delta_shap": float(D[r, j]),
+                         "direction": "empeora" if D[r, j] > 0 else "mejora",
+                         "before": describe(f, X.at[i_prev, f]), "after": describe(f, X.at[i_now, f])})
+    return pd.DataFrame(rows)
+
+
+def anticipation_analysis(X: pd.DataFrame, art_holdout: dict, months: list[str]) -> tuple[dict, pd.DataFrame]:
+    """¿Cuántos meses antes de un evento real de deterioro la salud cayó bajo el umbral de alerta?
+
+    Evento (independiente del modelo, medido en los datos): primer mes con >= 2 meses seguidos "malos"
+    (caja reconstruida < 0, o >= 50 % de facturas a pagar vencidas ese mes con > 30 días, o sin transacciones
+    tras estar activa) precedido de >= 3 meses buenos. Se puntúa con el modelo congelado en el holdout
+    (entrenado con T <= 2025-05), de modo que los scores posteriores son fuera de muestra.
+    """
+    from src.health import add_health
+    from src.schema import load_cm
+    cash = load_cm("cm_cash"); tx = load_cm("cm_tx"); outc = load_cm("cm_invoice_outcome")
+    companies = sorted(X["company_id"].unique())
+
+    def piv(df, col, fill=np.nan):
+        return df.pivot(index="company_id", columns="T", values=col).reindex(index=companies, columns=months).astype(float).fillna(fill)
+
+    neg = piv(cash, "cash_balance") < 0
+    ntx = piv(tx, "n_tx", 0.0)
+    pay = outc[outc["is_payable"]].rename(columns={"due_month": "T"})
+    n_cls, n_bad = piv(pay, "n_classifiable", 0.0), piv(pay, "n_bad", 0.0)
+    late = ((n_cls >= 3) & (n_bad / n_cls.where(n_cls > 0, np.nan) >= 0.5)).fillna(False)
+    first_active = np.argmax(ntx.values > 0, axis=1)
+    inactive = (ntx == 0) & (np.arange(len(months))[None, :] > first_active[:, None])
+    bad = (neg | late | inactive).to_numpy()
+    # scores fuera de muestra con el modelo congelado
+    sc = X[["company_id", "T", "t_idx"]].copy()
+    sc["p"] = score_main(art_holdout, X, calibrated=True)
+    sc = add_health(sc, "p")
+    hs = sc.pivot(index="company_id", columns="T", values="health_smooth").reindex(index=companies, columns=months)
+    traj = sc.pivot(index="company_id", columns="T", values="trajectory").reindex(index=companies, columns=months)
+    t_min = int(art_holdout.get("train_max_t_idx", 0)) + 1          # primer mes fuera de muestra
+    events, false_alerts, n_alert_windows = [], 0, 0
+    for i, cid in enumerate(companies):
+        b = bad[i]
+        h = hs.iloc[i].to_numpy(dtype=float); tr = traj.iloc[i].to_numpy()
+        for e in range(t_min + 1, len(months) - 1):
+            if b[e] and b[e + 1] and e >= 3 and not b[e - 3:e].any():
+                alert_months = [m for m in range(max(t_min, e - 12), e + 1)
+                                if (not np.isnan(h[m]) and h[m] < C.ANTICIPATION_ALERT_HEALTH) or tr[m] == "deteriorándose"]
+                lead = (e - alert_months[0]) if alert_months else None
+                events.append({"company_id": cid, "event_month": months[e], "alert_month": months[alert_months[0]] if alert_months else None,
+                               "lead_months": lead, "health_at_event": float(h[e]) if not np.isnan(h[e]) else None,
+                               "health_6m_before": float(h[e - 6]) if e >= 6 and not np.isnan(h[e - 6]) else None})
+                break
+        # falsas alertas: primera alerta fuera de muestra sin ningún mes malo en los 9 meses siguientes (si son observables)
+        for m in range(t_min, len(months) - 9):
+            if not np.isnan(h[m]) and h[m] < C.ANTICIPATION_ALERT_HEALTH and (m == 0 or np.isnan(h[m - 1]) or h[m - 1] >= C.ANTICIPATION_ALERT_HEALTH):
+                n_alert_windows += 1
+                if not bad[i, m:m + 10].any():
+                    false_alerts += 1
+                break
+    ev = pd.DataFrame(events)
+    leads = ev["lead_months"].dropna() if len(ev) else pd.Series(dtype=float)
+    # estabilidad: cambios de banda que se revierten al mes siguiente (fuera de muestra)
+    band = sc.pivot(index="company_id", columns="T", values="health_band").reindex(index=companies, columns=months).to_numpy()
+    flips, changes = 0, 0
+    for i in range(len(companies)):
+        for m in range(t_min + 1, len(months) - 1):
+            if isinstance(band[i, m], str) and isinstance(band[i, m - 1], str) and band[i, m] != band[i, m - 1]:
+                changes += 1
+                flips += int(band[i, m + 1] == band[i, m - 1])
+    out = {
+        "definition": ("evento = primer mes con >=2 meses seguidos malos (caja<0 | >=50% facturas a pagar con >30d | sin transacciones) "
+                       f"tras >=3 buenos; alerta = salud suavizada < {C.ANTICIPATION_ALERT_HEALTH} o trayectoria 'deteriorándose' en los "
+                       f"12 meses previos; scores del modelo congelado en el holdout (fuera de muestra desde {months[t_min]})"),
+        "out_of_sample_from": months[t_min],
+        "n_events": int(len(ev)), "n_anticipated": int((leads >= 1).sum()),
+        "share_anticipated": float((leads >= 1).mean()) if len(leads) else None,
+        "share_detected_by_event": float(ev["lead_months"].notna().mean()) if len(ev) else None,
+        "lead_months_median": float(leads.median()) if len(leads) else None,
+        "lead_months_mean": float(leads.mean()) if len(leads) else None,
+        "lead_distribution": {str(int(k)): int(v) for k, v in leads.value_counts().sort_index().items()},
+        "false_alert_rate": float(false_alerts / n_alert_windows) if n_alert_windows else None, "n_alert_windows": int(n_alert_windows),
+        "band_flip_rate": float(flips / changes) if changes else None, "n_band_changes": int(changes),
+        "health_drop_before_event_mean": float((ev["health_at_event"] - ev["health_6m_before"]).mean()) if len(ev) else None,
+    }
+    return out, ev
+
+
 def run() -> dict:
     C.ensure_dirs()
     art, md, version = load_registry()
@@ -367,6 +479,19 @@ def run() -> dict:
     expl = local_explanations(art, X)
     expl.to_parquet(C.REPORTS_DIR / "score_explanations.parquet", index=False)
     print(f"[evaluate] explicaciones locales: {len(expl):,} filas ({expl['company_id'].nunique()} empresas, top-{C.TOP_N_SHAP})")
+    # --- qué señales explican el cambio de score mes a mes (reto: pregunta 5) --------------
+    S_all = shap_values(art, X)
+    chg = change_explanations(art, X, S_all)
+    chg.to_parquet(C.REPORTS_DIR / "score_change_explanations.parquet", index=False)
+    print(f"[evaluate] explicaciones de cambio: {len(chg):,} filas")
+    # --- anticipación fuera de muestra (reto: pregunta 6 y criterio 'anticipación') ----------
+    art_h = joblib.load(C.REGISTRY_DIR / version / "pipeline_holdout.joblib")
+    antic, ev_df = anticipation_analysis(X, art_h, C.month_range())
+    antic = _clean(antic)
+    (C.REPORTS_DIR / "anticipation.json").write_text(json.dumps(antic, indent=2, ensure_ascii=False))
+    ev_df.to_csv(C.REPORTS_DIR / "anticipation_events.csv", index=False)
+    print(f"[evaluate] anticipación: {antic['n_events']} eventos, anticipados {antic['share_anticipated'] or 0:.0%} "
+          f"(mediana {antic['lead_months_median']} meses), falsas alertas {antic['false_alert_rate'] or 0:.0%}, flips de banda {antic['band_flip_rate'] or 0:.0%}")
 
     # --- análisis de errores ---------------------------------------------------------------
     err = error_analysis(preds, X, lab)
@@ -379,7 +504,8 @@ def run() -> dict:
     summary = {"version": version, "main_model": md["main_model"], "holdout": results["holdout"], "lift": results["lift"],
                "ablation": results.get("ablation", {}), "calibration": {k: v for k, v in results["calibration"].items() if k != "curve"},
                "shap_block_importance": block_imp, "top_features": imp.head(25).to_dict(orient="records"),
-               "error_analysis": err, "cv": {k: {"auc_pr_mean": v["auc_pr_mean"], "auc_pr_std": v["auc_pr_std"]} for k, v in results["cv"].items()}}
+               "error_analysis": err, "cv": {k: {"auc_pr_mean": v["auc_pr_mean"], "auc_pr_std": v["auc_pr_std"]} for k, v in results["cv"].items()},
+               "anticipation": antic, "holdout_unseen_companies": results.get("holdout_unseen_companies", {})}
     summary = _clean(summary)
     (C.REPORTS_DIR / "evaluation_summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False, default=str))
     print(f"[evaluate] figuras en {FIG_DIR}")

@@ -12,6 +12,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pandas as pd
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -64,6 +65,10 @@ with TestClient(app) as c:
     s = c.get(f'/companies/{cid}/score').json(); assert 0 <= s['score'] <= 1 and len(s['explanation']) > 0
     b = c.get(f'/benchmarks?company_id={cid}').json(); assert 'cohort' in b
     sim = c.post('/simulate', json={'company_id': cid, 'scenario': 'overdraft_2_months'}).json(); assert 'after' in sim
+    assert 'health_smooth' in items[0] and items[0]['trajectory'] in ('mejorando', 'estable', 'deteriorándose')
+    assert 'items' in c.get('/alerts').json()
+    assert 'changes' in c.get(f'/companies/{cid}/changes').json()
+    assert 'anticipation' in c.get('/model/info').json()
     feats = c.get(f'/companies/{cid}/features').json()['features']
     sc = c.post('/score', json={'features': feats}).json(); assert abs(sc['score'] - s['score']) < 1e-6
     assert c.get('/companies/NOPE').status_code == 404
@@ -72,3 +77,15 @@ print('API OK')
     r = subprocess.run([sys.executable, "-c", code], cwd=ROOT, env=env, capture_output=True, text=True, timeout=300)
     assert r.returncode == 0, f"API smoke falló:\n{r.stdout[-2000:]}\n{r.stderr[-3000:]}"
     assert "API OK" in r.stdout
+
+
+def test_predict_on_new_companies(env):
+    """Test oculto: predict.py sobre CSVs (aquí, los sintéticos) con el modelo registrado en el smoke."""
+    out = Path(env["DATA_DIR"]).parent / "pred"
+    r = subprocess.run([sys.executable, "-m", "src.predict", "--raw", env["RAW_DIR"], "--out", str(out)],
+                       cwd=ROOT, env=env, capture_output=True, text=True, timeout=600)
+    assert r.returncode == 0, "predict falló:\n" + r.stdout[-2000:] + "\n" + r.stderr[-3000:]
+    latest = pd.read_csv(out / "predictions_latest.csv")
+    assert {"company_id", "health_smooth", "health_band", "trajectory", "p_deterioro", "razones_principales"} <= set(latest.columns)
+    assert latest["health_smooth"].between(0, 100).all() and latest["company_id"].is_unique
+    assert (out / "changes.csv").exists() and (out / "summary.json").exists()

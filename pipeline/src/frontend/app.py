@@ -18,7 +18,9 @@ import streamlit as st
 API = os.environ.get("API_URL", "http://localhost:8000")
 API_KEY = os.environ.get("API_KEY")
 HEADERS = {"X-API-Key": API_KEY} if API_KEY else {}
-BAND_COLOR = {"bajo": "#2e7d32", "medio": "#f9a825", "alto": "#ef6c00", "crítico": "#c62828"}
+BAND_COLOR = {"bajo": "#2e7d32", "medio": "#f9a825", "alto": "#ef6c00", "crítico": "#c62828",
+              "sólida": "#1b5e20", "sana": "#2e7d32", "vigilar": "#ef6c00", "riesgo": "#c62828"}
+TRAJ_ICON = {"mejorando": "▲ mejorando", "estable": "■ estable", "deteriorándose": "▼ deteriorándose"}
 BLOCK_NAME = {"A": "Estructural", "B": "Comportamiento de pago", "C": "Liquidez", "D": "Concentración", "E": "Grupo / banco", "F": "Texto y calidad"}
 
 st.set_page_config(page_title="Embat X-Ray · Salud financiera PYMEs", layout="wide", page_icon="📈")
@@ -54,35 +56,43 @@ except Exception as e:
 
 st.sidebar.title("Embat X-Ray")
 st.sidebar.caption(f"modelo **{health['model_version']}** · datos hasta **{health['latest_month']}** · BD {health['database']}")
-view = st.sidebar.radio("Vista", ["Cartera", "Ficha de empresa", "Benchmarks", "Simulador", "Rendimiento del modelo"])
+view = st.sidebar.radio("Vista", ["Cartera", "Alertas", "Ficha de empresa", "Benchmarks", "Simulador", "Rendimiento del modelo"])
 st.sidebar.markdown("---")
-st.sidebar.caption("Score = probabilidad calibrada de deterioro financiero en los 6 meses siguientes al mes de referencia "
-                   "(gap de 1 mes). Bandas: bajo < 10 % · medio < 25 % · alto < 50 % · crítico ≥ 50 %.")
+st.sidebar.caption("**Salud** = 100 × (1 − probabilidad calibrada de deterioro en los 6 meses siguientes), suavizada mes a mes. "
+                   "Bandas: sólida ≥ 90 · sana ≥ 75 · vigilar ≥ 50 · riesgo < 50. **Trayectoria**: cambio de la salud en 3 meses "
+                   "(±8 puntos, consistente) → mejorando / estable / deteriorándose.")
 
 # ======================================================================================
 if view == "Cartera":
     st.title("Cartera — ¿de qué me preocupo hoy?")
     summ = get("/portfolio/summary")
-    bands = {b["band"]: b["n"] for b in summ["bands"]}
-    c1, c2, c3, c4, c5 = st.columns(5)
+    hb = {b["health_band"]: b["n"] for b in summ.get("health_bands", [])}
+    tj = {b["trajectory"]: b["n"] for b in summ.get("trajectories", [])}
+    c1, c2, c3, c4, c5, c6 = st.columns(6)
     c1.metric("Mes de referencia", summ["T"])
-    for col, b in zip((c2, c3, c4, c5), ("crítico", "alto", "medio", "bajo")):
-        col.metric(f"Empresas en {b}", bands.get(b, 0))
-    f1, f2, f3, f4 = st.columns([1, 1, 1, 2])
-    band = f1.selectbox("Banda", ["(todas)", "crítico", "alto", "medio", "bajo"])
-    cohort = f2.selectbox("Cohorte tamaño", ["(todas)", "q1", "q2", "q3", "q4"], help="Cuartil de pagos operativos (q4 = mayores)")
-    sort = f3.selectbox("Ordenar por", ["delta", "score", "percentile"], format_func=lambda s: {"delta": "Δ vs mes anterior (urgencia)", "score": "Score", "percentile": "Percentil"}[s])
-    q = f4.text_input("Buscar empresa / grupo")
-    data = get("/companies", band=None if band.startswith("(") else band, cohort=None if cohort.startswith("(") else cohort, sort=sort, q=q or None, limit=200)
+    c2.metric("Sólidas (≥90)", hb.get("sólida", 0)); c3.metric("Sanas", hb.get("sana", 0)); c4.metric("Vigilar", hb.get("vigilar", 0)); c5.metric("Riesgo (<50)", hb.get("riesgo", 0))
+    c6.metric("▼ deteriorándose / ▲ mejorando", f"{tj.get('deteriorándose', 0)} / {tj.get('mejorando', 0)}")
+    f1, f2, f3, f4, f5 = st.columns([1, 1, 1, 1.2, 1.6])
+    hband = f1.selectbox("Banda de salud", ["(todas)", "riesgo", "vigilar", "sana", "sólida"])
+    traj = f2.selectbox("Trayectoria", ["(todas)", "deteriorándose", "mejorando", "estable"])
+    cohort = f3.selectbox("Cohorte tamaño", ["(todas)", "q1", "q2", "q3", "q4"], help="Cuartil de pagos operativos (q4 = mayores)")
+    sort = f4.selectbox("Ordenar por", ["health_delta", "health", "health_delta_desc", "health_desc"],
+                        format_func=lambda s: {"health_delta": "Mayor caída en 3 m (urgencia)", "health": "Menor salud", "health_delta_desc": "Mayor mejora en 3 m", "health_desc": "Mayor salud"}[s])
+    q = f5.text_input("Buscar empresa / grupo")
+    data = get("/companies", health_band=None if hband.startswith("(") else hband, trajectory=None if traj.startswith("(") else traj,
+               cohort=None if cohort.startswith("(") else cohort, sort=sort, q=q or None, limit=200)
     df = pd.DataFrame(data["items"])
-    st.caption(f"{data['total']} empresas · se muestran {len(df)} · el **delta** importa más que el nivel: una empresa que sube 20 puntos es más urgente que una que lleva seis meses alta.")
+    st.caption(f"{data['total']} empresas · se muestran {len(df)} · la **trayectoria** importa más que el nivel: una empresa que pierde 20 puntos es más urgente que una que lleva seis meses baja.")
     if len(df):
-        show = df[["company_id", "group_id", "score", "delta_1m", "band", "percentile", "size_cohort", "erp", "main_bank", "has_invoices"]].copy()
-        show["score"] = show["score"].map(lambda v: f"{100 * v:.1f}%")
-        show["delta_1m"] = show["delta_1m"].map(lambda v: "—" if pd.isna(v) else f"{100 * v:+.1f} pp")
-        show["percentile"] = show["percentile"].map(lambda v: f"{100 * v:.0f}")
-        st.dataframe(show.rename(columns={"company_id": "Empresa", "group_id": "Grupo", "score": "Score", "delta_1m": "Δ 1 mes", "band": "Banda",
-                                          "percentile": "Percentil", "size_cohort": "Cohorte", "erp": "ERP", "main_bank": "Banco", "has_invoices": "ERP conectado"}),
+        show = df[["company_id", "group_id", "health_smooth", "health_delta_3m", "health_delta_1m", "health_band", "trajectory", "alert", "score", "size_cohort", "erp", "main_bank"]].copy()
+        show["health_smooth"] = show["health_smooth"].map(lambda v: f"{v:.0f}")
+        show["health_delta_3m"] = show["health_delta_3m"].map(lambda v: "—" if pd.isna(v) else f"{v:+.0f}")
+        show["health_delta_1m"] = show["health_delta_1m"].map(lambda v: "—" if pd.isna(v) else f"{v:+.0f}")
+        show["trajectory"] = show["trajectory"].map(TRAJ_ICON)
+        show["score"] = show["score"].map(lambda v: f"{100 * v:.0f}%")
+        st.dataframe(show.rename(columns={"company_id": "Empresa", "group_id": "Grupo", "health_smooth": "Salud", "health_delta_3m": "Δ 3 m", "health_delta_1m": "Δ 1 m",
+                                          "health_band": "Banda", "trajectory": "Trayectoria", "alert": "Señal", "score": "P(deterioro 6 m)",
+                                          "size_cohort": "Cohorte", "erp": "ERP", "main_bank": "Banco"}),
                      width="stretch", hide_index=True, height=520)
         m = pd.DataFrame(summ["by_month"])
         fig = go.Figure()
@@ -92,6 +102,29 @@ if view == "Cartera":
         st.plotly_chart(fig, width="stretch")
 
 # ======================================================================================
+elif view == "Alertas":
+    st.title("Alertas — monitor proactivo de cambios")
+    st.caption("Qué ha cambiado este mes y merece atención. Se recalcula en batch con cada carga de datos.")
+    al = pd.DataFrame(get("/alerts", limit=2000)["items"])
+    if not len(al):
+        st.info("Sin alertas este mes.")
+    else:
+        kinds = ["caída estructural", "caída brusca este mes", "deterioro incipiente", "mejora progresiva", "excepcionalmente sólida"]
+        counts = al["alert"].value_counts()
+        cols = st.columns(len(kinds))
+        for c, k in zip(cols, kinds):
+            c.metric(k, int(counts.get(k, 0)))
+        sel = st.multiselect("Tipo de señal", kinds, default=kinds[:3])
+        show = al[al["alert"].isin(sel)][["company_id", "alert", "health_smooth", "health_delta_1m", "health_delta_3m", "trajectory", "why"]].copy()
+        show["health_smooth"] = show["health_smooth"].map(lambda v: f"{v:.0f}")
+        show["health_delta_1m"] = show["health_delta_1m"].map(lambda v: "—" if pd.isna(v) else f"{v:+.0f}")
+        show["health_delta_3m"] = show["health_delta_3m"].map(lambda v: "—" if pd.isna(v) else f"{v:+.0f}")
+        show["trajectory"] = show["trajectory"].map(TRAJ_ICON)
+        st.dataframe(show.rename(columns={"company_id": "Empresa", "alert": "Señal", "health_smooth": "Salud", "health_delta_1m": "Δ 1 m",
+                                          "health_delta_3m": "Δ 3 m", "trajectory": "Trayectoria", "why": "Qué ha cambiado"}),
+                     width="stretch", hide_index=True, height=560)
+
+# ======================================================================================
 elif view == "Ficha de empresa":
     st.title("Ficha de empresa")
     top = get("/companies", sort="score", limit=500)["items"]
@@ -99,12 +132,18 @@ elif view == "Ficha de empresa":
     cid = st.selectbox("Empresa", ids, index=0)
     c = get(f"/companies/{cid}")
     s = get(f"/companies/{cid}/score")
-    h1, h2, h3, h4, h5 = st.columns(5)
-    h1.metric("Score actual", pct(s["score"], 1), delta=None if s["delta_1m"] is None else f"{100 * s['delta_1m']:+.1f} pp", delta_color="inverse")
-    h2.markdown(f"**Banda**<br>{badge(s['band'])}", unsafe_allow_html=True)
-    h3.metric("Percentil (cartera)", f"{100 * s['percentile']:.0f}")
-    h4.metric("Percentil (cohorte)", f"{100 * s['percentile_cohort']:.0f}")
-    h5.metric("Modelo A (solo balance)", pct(s["score_A"], 1), help="Lo que vería un scoring tradicional con las mismas empresas")
+    h1, h2, h3, h4, h5, h6 = st.columns(6)
+    h1.metric("Salud", f"{s['health_smooth']:.0f} / 100", delta=None if s["health_delta_3m"] is None else f"{s['health_delta_3m']:+.0f} en 3 m")
+    h2.markdown(f"**Banda**<br>{badge(s['health_band'])}", unsafe_allow_html=True)
+    h3.metric("Trayectoria", TRAJ_ICON.get(s["trajectory"], s["trajectory"]))
+    flags = [t for f, t in [("is_exceptional", "excepcionalmente sólida"), ("is_structural", "caída estructural"), ("is_blip", "bache puntual, recuperado")] if s.get(f)]
+    h4.metric("Señal", s["alert"] or (flags[0] if flags else "—"))
+    h5.metric("P(deterioro 6 m)", pct(s["score"], 1), delta=None if s["delta_1m"] is None else f"{100 * s['delta_1m']:+.1f} pp", delta_color="inverse")
+    h6.metric("Modelo A (solo balance)", pct(s["score_A"], 1), help="Lo que vería un scoring tradicional con las mismas empresas")
+    chg = pd.DataFrame(get(f"/companies/{cid}/changes")["changes"])
+    if len(chg):
+        st.markdown("**Qué ha cambiado este mes** — " + " · ".join(
+            f"{'🔴' if r['direction'] == 'empeora' else '🟢'} {r['after']} (antes: {r['before'].split(': ', 1)[-1]})" for _, r in chg.head(3).iterrows()))
     st.caption(f"Grupo {c['group_id']} ({int(c['group_size'] or 1)} empresas) · país {c['country']} · ERP {c['erp']} · banco principal {c['main_bank']} · "
                f"{int(c['n_bank_accounts'])} cuentas · {int(c['n_debt_products'])} productos de financiación · historial {int(c['months_in_panel'])} meses")
 
@@ -119,16 +158,19 @@ elif view == "Ficha de empresa":
             st.plotly_chart(fig, width="stretch")
             st.caption("Rojo: empuja el riesgo hacia arriba · verde: lo reduce. " + " · ".join(f"{BLOCK_NAME.get(b, b)}" for b in ex["block"].unique()[:4]))
     with right:
-        st.subheader("Evolución del score")
+        st.subheader("Trayectoria de salud")
         ss = pd.DataFrame(c["score_series"])
         fig = go.Figure()
-        fig.add_scatter(x=ss["T"], y=100 * ss["score"], name="Modelo B (comportamental)", line=dict(color="#37a", width=3))
-        fig.add_scatter(x=ss["T"], y=100 * ss["score_A"], name="Modelo A (proxy FICO)", line=dict(color="#999", dash="dot"))
-        real = ss[ss["realized_label"].notna()]
+        fig.add_scatter(x=ss["T"], y=ss["health"], name="salud (mensual)", line=dict(color="#90a4ae", width=1, dash="dot"))
+        fig.add_scatter(x=ss["T"], y=ss["health_smooth"], name="salud suavizada", line=dict(color="#37a", width=3))
+        fig.add_scatter(x=ss["T"], y=100 * (1 - ss["score_A"]), name="salud según Modelo A (proxy FICO)", line=dict(color="#999", dash="dash"))
+        for lvl, col in [(90, "#1b5e20"), (75, "#2e7d32"), (50, "#ef6c00")]:
+            fig.add_hline(y=lvl, line=dict(color=col, width=0.6, dash="dot"))
+        real = ss[ss["realized_label"] == 1]
         if len(real):
-            fig.add_scatter(x=real["T"], y=100 * real["realized_label"], name="deterioro observado (etiqueta)", mode="markers",
-                            marker=dict(color="#c62828", size=7, symbol="x"))
-        fig.update_layout(height=360, margin=dict(t=10, b=10), yaxis_title="probabilidad (%)", legend=dict(orientation="h", y=-0.2))
+            fig.add_scatter(x=real["T"], y=[5] * len(real), name="deterioro observado en los 6 m siguientes", mode="markers",
+                            marker=dict(color="#c62828", size=8, symbol="x"))
+        fig.update_layout(height=360, margin=dict(t=10, b=10), yaxis_title="salud (0–100)", yaxis_range=[0, 100], legend=dict(orientation="h", y=-0.25))
         st.plotly_chart(fig, width="stretch")
         st.caption("Meses con etiqueta conocida: score in-sample (el modelo final se entrena con todos los meses etiquetados). "
                    "Meses posteriores: fuera de muestra.")
@@ -252,6 +294,30 @@ elif view == "Rendimiento del modelo":
     for k, v in hold.items():
         rows.append({"modelo": k, "AUC-PR": v["auc_pr"], "AUC-ROC": v["auc_roc"], "precision@50": v["p@50"], "recall@top10%": v["r@top10pct"], "Brier": v["brier"]})
     st.dataframe(pd.DataFrame(rows).round(3), hide_index=True, width="stretch")
+
+    an, un = info.get("anticipation") or {}, info.get("holdout_unseen_companies") or {}
+    a1, a2 = st.columns(2)
+    with a1:
+        st.subheader("Anticipación (criterio del reto)")
+        if an.get("n_events"):
+            m1, m2, m3, m4 = st.columns(4)
+            m1.metric("Eventos reales de deterioro", an["n_events"]); m2.metric("Anticipados (≥1 mes antes)", pct(an["share_anticipated"]))
+            m3.metric("Adelanto mediano", f"{an['lead_months_median']:.0f} meses"); m4.metric("Falsas alertas", pct(an["false_alert_rate"]))
+            ld = pd.DataFrame({"meses de adelanto": list(an["lead_distribution"].keys()), "eventos": list(an["lead_distribution"].values())})
+            fig = px.bar(ld, x="meses de adelanto", y="eventos"); fig.update_layout(height=220, margin=dict(t=10, b=10)); st.plotly_chart(fig, width="stretch")
+            st.caption(f"Estabilidad: el {pct(an['band_flip_rate'])} de los cambios de banda se revierten al mes siguiente. Scores fuera de muestra desde {an['out_of_sample_from']}. "
+                       + an["definition"])
+    with a2:
+        st.subheader("Generalización a empresas no vistas (test oculto)")
+        if un.get("lgbm_B"):
+            u, sa = un["lgbm_B"]["unseen"], un["lgbm_A"]["unseen"]
+            m1, m2, m3 = st.columns(3)
+            m1.metric("Empresas apartadas", un["n_unseen_companies"]); m2.metric("AUC-PR B (no vistas)", f"{u['auc_pr']:.3f}", delta=f"vs A {sa['auc_pr']:.3f}")
+            m3.metric("AUC-ROC B (no vistas)", f"{u['auc_roc']:.3f}", delta=f"vs A {sa['auc_roc']:.3f}")
+            lu = un.get("lift_lgbm", {})
+            st.caption(f"Un 25 % de los grupos empresariales (grupo entero) se aparta del entrenamiento; se evalúa en los meses de holdout. "
+                       f"Lift B−A en empresas no vistas: +{lu.get('lift_mean', 0):.3f} AUC-PR, IC 95 % [{lu.get('lift_ci', [0, 0])[0]:+.3f}, {lu.get('lift_ci', [0, 0])[1]:+.3f}]. "
+                       f"Mismo modelo sobre empresas vistas: AUC-PR {un['lgbm_B']['seen_same_model']['auc_pr']:.3f}.")
 
     t1, t2 = st.columns(2)
     with t1:

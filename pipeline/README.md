@@ -27,6 +27,21 @@ El 82 % de la importancia SHAP del modelo B proviene de los bloques de comportam
 
 El lift es robusto al diseño del *target* (§ Sensibilidad): positivo en las cuatro combinaciones ventana × umbral.
 
+## Qué pide el reto X-Ray y dónde está cada cosa
+
+| Requisito del reto | Dónde | Resultado |
+|---|---|---|
+| **Predicción sobre el test oculto** (60–80 empresas nuevas) | `python -m src.predict --raw <csv del test> --out <salida>` → `predictions_latest.csv` (una fila por empresa: salud, banda, trayectoria, señal, razones) + `predictions.csv` (todos los meses) + `changes.csv` | 70 empresas en 24 s; mismo código de features que en entrenamiento, sin reentrenar |
+| **Generaliza a empresas no vistas** | `src/train.py` aparta el 25 % de los grupos empresariales (grupo entero) y evalúa en holdout | Modelo B en empresas nuevas: AUC‑ROC **0,765** / AUC‑PR 0,315 (vistas: 0,838 / 0,498). El Modelo A se hunde a 0,605: **memoriza empresas; el comportamiento generaliza**. Lift B−A en no vistas +0,10 [+0,04; +0,16] |
+| **Señalización bidireccional**: sólidas / mejorando / deteriorándose | `src/health.py`: salud = 100·(1−p), suavizada (EMA); trayectoria por Δ 3 m con consistencia; bandas sólida ≥ 90 · sana ≥ 75 · vigilar ≥ 50 · riesgo | Último mes: 483 excepcionalmente sólidas, 83 en mejora progresiva, 87 deterioros incipientes, 36 caídas estructurales, 25 caídas bruscas |
+| **Bache puntual vs. caída estructural** | `is_blip` (caída de un mes recuperada al siguiente) vs. `is_structural` (deteriorándose 3 meses seguidos); el suavizado evita que un mes malo cambie la lectura | 17 % de los cambios de banda se revierten al mes siguiente (estabilidad, fuera de muestra) |
+| **Cuántos meses antes anticipa** | `evaluate.anticipation_analysis`: eventos reales de deterioro (caja < 0, ≥ 50 % de facturas a pagar con > 30 d, o cese de actividad, ≥ 2 meses seguidos tras ≥ 3 buenos) vs. primera alerta de un modelo congelado en 2025‑05 (scores fuera de muestra) | **238 eventos, 71 % anticipados, adelanto mediano 3 meses**, 26 % de falsas alertas (`reports/anticipation.json`) |
+| **Explicar qué señales causaron el cambio** | `score_change_explanation` (Δ SHAP entre T−1 y T, señales propias de la empresa) → `GET /companies/{id}/changes` y "Qué ha cambiado este mes" en la ficha | "Meses en descubierto (3 m): 3 meses (antes: 0)" |
+| **Explicación por empresa** | TreeSHAP top‑8 en lenguaje natural, precalculado → `GET /companies/{id}/score` | — |
+| **Trayectoria documentada** | serie mensual de salud (cruda y suavizada) por empresa en la ficha y en `risk_score` | — |
+| **Bonus: monitor proactivo** | tabla `alerts` → `GET /alerts` y vista **Alertas** del dashboard | 5 tipos de señal, con el "por qué" |
+| Producto y comprador | **Radar de salud financiera para el tesorero/CFO** (Cartera · Alertas · Ficha · Benchmarks · Simulador), vendible por Embat como módulo de su plataforma de tesorería | responde "¿de qué me preocupo hoy?" en < 10 s; demo navegable en Streamlit (y frontend React del equipo en `../frontend`) |
+
 ## Cómo reproducirlo (un comando)
 
 ```bash
@@ -35,6 +50,7 @@ pip install -r requirements.txt
 python -m src.pipeline all        # ≈ 7 min en portátil: CSV → Parquet → panel → etiqueta → features → modelos → SHAP → BD
 python -m uvicorn src.api.main:app --port 8000            # API (capas 9-10)      → http://localhost:8000/docs
 python -m streamlit run src/frontend/app.py               # dashboard (capa 11)   → http://localhost:8501
+python -m src.predict --raw ../test_oculto --out reports/test_oculto   # test oculto: CSVs de empresas nuevas → predicciones
 ```
 
 Con `make` (`make all`, `make api`, `make frontend`, `make test`, `make sensitivity`) o con Docker
@@ -59,11 +75,14 @@ src/features.py       Capa 4  — panel empresa × mes, 154 features en 6 bloque
 src/models.py         pipelines sklearn (preproceso + modelo) que se serializan enteros; calibrador Platt
 src/train.py          Capa 5  — validación temporal expansiva con embargo, A vs B, ablación, bootstrap, calibración
                       Capa 7  — registro: models/registry/<versión>/{pipeline.joblib, lgbm_B.txt, metadata.json}
-src/evaluate.py       Capa 6  — TreeSHAP global/local, figuras, análisis de errores → reports/
+src/evaluate.py       Capa 6  — TreeSHAP global/local, explicación de cambios, anticipación, figuras, errores → reports/
+src/health.py         salud bidireccional (0–100), suavizado, trayectoria, bache vs. estructural, sólidas, alertas
+src/predict.py        test oculto: CSVs de empresas nuevas → predicciones + explicaciones, sin reentrenar
 src/sensitivity.py    § 16   — 3 vs 6 meses × p85 vs p90
-src/serve_db.py       Capa 8  — BD servida (SQLite / PostgreSQL): company, company_month_kpi, risk_score, score_explanation, benchmark, model_info
+src/serve_db.py       Capa 8  — BD servida (SQLite / PostgreSQL): company, company_month_kpi, risk_score (+ salud/trayectoria),
+                                score_explanation, score_change_explanation, alerts, benchmark, model_info
 src/api/              Capas 9-10 — FastAPI: inference.py (modelo cargado una vez, SHAP, escenarios), db.py, main.py (endpoints, auth, rate limit, log)
-src/frontend/app.py   Capa 11 — dashboard Streamlit (5 vistas) que consume la API; el frontend React del equipo vive en ../frontend
+src/frontend/app.py   Capa 11 — dashboard Streamlit (6 vistas: Cartera · Alertas · Ficha · Benchmarks · Simulador · Rendimiento) que consume la API; el frontend React del equipo vive en ../frontend
 src/pipeline.py       orquestador (= make all)
 tests/                unitarios + smoke end-to-end con datos sintéticos
 Dockerfile, docker-compose.yml, Makefile, ../.github/workflows/ci.yml, .env.example  Capa 12
@@ -204,10 +223,11 @@ doble de filas de entrenamiento y queda como alternativa configurable (`OUTCOME_
   versión, marca in/out‑of‑sample, etiqueta realizada cuando existe), `score_explanation` (top‑8 SHAP por empresa y mes,
   precalculado — no se calcula SHAP en la petición), `benchmark` (p25/p50/p75 por cohorte tamaño × país × tamaño de grupo,
   **solo con ≥ 10 empresas**, con respaldo por tamaño), `model_info`.
-* **API** (`src/api/`): `GET /health` (versión de modelo cargada), `GET /model/info`, `GET /companies` (paginado, filtros,
-  orden por score/delta), `GET /companies/{id}`, `GET /companies/{id}/score`, `GET /companies/{id}/features`, `GET /benchmarks`,
-  `GET /portfolio/summary`, `POST /score` (payload de features → score + banda + SHAP), `POST /simulate` (escenario y/o
-  *overrides* → antes/después), `GET /scenarios`. Pipeline cargado una vez al arrancar; validación Pydantic; API key opcional
+* **API** (`src/api/`): `GET /health` (versión de modelo cargada), `GET /model/info`, `GET /companies` (paginado, filtros por
+  banda de salud / trayectoria / cohorte, orden por caída o mejora en 3 m), `GET /companies/{id}`, `GET /companies/{id}/score`,
+  `GET /companies/{id}/changes` (qué cambió este mes), `GET /companies/{id}/features`, `GET /alerts` (monitor proactivo),
+  `GET /benchmarks`, `GET /portfolio/summary`, `POST /score` (payload de features → score + banda + SHAP), `POST /simulate`
+  (escenario y/o *overrides* → antes/después), `GET /scenarios`. Pipeline cargado una vez al arrancar; validación Pydantic; API key opcional
   (`API_KEY`), *rate limit* por IP, log de accesos y tabla `inference_log`. OpenAPI en `/docs`.
 * **Dashboard** (`src/frontend/app.py`): **Cartera** (tabla ordenada por Δ vs mes anterior — el delta importa más que el
   nivel — con bandas, filtros y evolución de la cartera), **Ficha de empresa** (score B vs A en el tiempo con el deterioro
@@ -218,6 +238,28 @@ doble de filas de entrenamiento y queda como alternativa configurable (`OUTCOME_
 
 El score histórico de los meses con etiqueta conocida (≤ 2026‑01) es *in‑sample* (el modelo final se entrena con todas las
 filas etiquetadas); los meses 2026‑02 … 2026‑08 son *out‑of‑sample*. Las métricas del dashboard son siempre las del holdout.
+
+## Salud bidireccional y trayectoria (reto X-Ray)
+
+El modelo devuelve una probabilidad de deterioro a 6 meses; el producto la traduce a **salud = 100 · (1 − p)** y añade
+lo que un score de un solo mes no da:
+
+* **Suavizado** (EMA, α = 0,5): un mes malo no cambia la lectura; dos seguidos sí. Es lo que separa un bache de una caída.
+* **Trayectoria**: mejorando / estable / deteriorándose si la salud suavizada cambia ≥ 8 puntos en 3 meses y al menos 2 de los
+  3 deltas mensuales van en la misma dirección.
+* **Bache puntual** (`is_blip`): caída ≥ 8 puntos en un mes recuperada (≥ 60 %) al siguiente. **Caída estructural**
+  (`is_structural`): "deteriorándose" 3 meses seguidos. **Excepcionalmente sólida** (`is_exceptional`): salud ≥ 90 durante
+  ≥ 6 meses seguidos.
+* **Alertas**: caída estructural · caída brusca este mes (≥ 10 puntos) · deterioro incipiente · mejora progresiva ·
+  excepcionalmente sólida.
+
+Todos los umbrales están en `config.py` (`HEALTH_*`, `TRAJ_*`, `BLIP_DROP`, `EXCEPTIONAL_*`, `ALERT_*`) y los aplica el mismo
+código (`src/health.py`) en el dashboard y en el test oculto.
+
+**Anticipación** (`reports/anticipation.json`): se definen eventos reales de deterioro en los datos —independientes del
+modelo— y se mide cuántos meses antes la salud (de un modelo congelado en 2025‑05, es decir, fuera de muestra) cayó por
+debajo de 75 o la trayectoria pasó a "deteriorándose": 238 eventos, 71 % anticipados con adelanto mediano de 3 meses;
+26 % de las alertas no van seguidas de evento en 9 meses; 17 % de los cambios de banda se revierten al mes siguiente.
 
 ## Capa 7 — registro de modelos
 

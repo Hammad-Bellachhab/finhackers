@@ -221,6 +221,32 @@ def run_experiments(df: pd.DataFrame, sets: dict, folds: list[dict], holdout: di
         log(f"  ablación {fs:10s} vs {ref}: CV={np.mean(cv_scores):.3f} ({results['ablation'][fs]['delta_cv']:+.3f})  "
             f"holdout={hm['auc_pr']:.3f} ({results['ablation'][fs]['delta_holdout']:+.3f})")
 
+    # --- generalización a empresas NO vistas (reto: test oculto) ---------------------------
+    # 25 % de los grupos empresariales (grupo entero: sin hermanas a ambos lados) se apartan por completo;
+    # se entrena con el resto (T <= train_max del holdout) y se evalúa en los meses de holdout de los apartados.
+    rng = np.random.default_rng(C.SEED)
+    groups = df["group_id"].fillna(df["company_id"]).unique()
+    unseen_groups = set(rng.choice(groups, size=int(0.25 * len(groups)), replace=False))
+    is_unseen = df["group_id"].fillna(df["company_id"]).isin(unseen_groups)
+    tr_seen = df[(~is_unseen) & (df["t_idx"] <= holdout["train_max"])]
+    ev_unseen = df[is_unseen & df["t_idx"].isin(holdout["eval"])]
+    ev_seen = df[(~is_unseen) & df["t_idx"].isin(holdout["eval"])]
+    results["holdout_unseen_companies"] = {"n_unseen_companies": int(ev_unseen["company_id"].nunique()), "n_train": int(len(tr_seen))}
+    pu = {}
+    for model, fs in [("lgbm", "A"), ("lgbm", "B")]:
+        pipe, p_un = fit_predict(model, sets[fs], tr_seen, ev_unseen)
+        p_se = pipe.predict_proba(ev_seen[sets[fs]])[:, 1]
+        pu[fs] = p_un
+        results["holdout_unseen_companies"][f"{model}_{fs}"] = {
+            "unseen": metrics(ev_unseen[["company_id", "T", "y"]].assign(p=p_un)),
+            "seen_same_model": metrics(ev_seen[["company_id", "T", "y"]].assign(p=p_se))}
+        u, se = results["holdout_unseen_companies"][f"{model}_{fs}"]["unseen"], results["holdout_unseen_companies"][f"{model}_{fs}"]["seen_same_model"]
+        log(f"  empresas NO vistas ({model}_{fs}): AUC-PR={u['auc_pr']:.3f} AUC-ROC={u['auc_roc']:.3f} (n={u['n']}, pos={u['positives']})  "
+            f"| vistas, mismo modelo: AUC-PR={se['auc_pr']:.3f} AUC-ROC={se['auc_roc']:.3f}")
+    results["holdout_unseen_companies"]["lift_lgbm"] = bootstrap_ci(ev_unseen[["y"]].assign(a=pu["A"], b=pu["B"]), ("a", "b"))
+    lu = results["holdout_unseen_companies"]["lift_lgbm"]
+    log(f"  lift B−A en empresas no vistas: +{lu['lift_mean']:.3f} AUC-PR  IC95=[{lu['lift_ci'][0]:.3f}, {lu['lift_ci'][1]:.3f}]")
+
     # --- calibración: Platt sobre OOF del modelo principal -------------------------------
     oof_main = oof["lgbm_B"].copy()
     if use_ens:
@@ -272,6 +298,12 @@ def register(df: pd.DataFrame, X_all: pd.DataFrame, sets: dict, results: dict, c
         pipes["catboost_B"], _ = fit_predict("catboost", feats_B, df, df.head(5))
     joblib.dump({"pipelines": pipes, "calibrator": cal, "features_B": feats_B, "features_A": feats_A,
                  "main_model": results["main_model"]}, out / "pipeline.joblib")
+    # modelo "congelado" en el holdout (train T <= train_max): sirve para medir anticipación fuera de muestra
+    hold = [f for f in results["folds"] if f["name"] == "holdout"][0]
+    tr_h = df[df["t_idx"] <= hold["train_max"]]
+    pipe_hB, _ = fit_predict("lgbm", feats_B, tr_h, tr_h.head(5))
+    joblib.dump({"pipelines": {"lgbm_B": pipe_hB}, "calibrator": cal, "features_B": feats_B, "features_A": feats_A,
+                 "main_model": "lgbm_B", "train_max_t_idx": int(hold["train_max"])}, out / "pipeline_holdout.joblib")
     pipe_B.named_steps["clf"].booster_.save_model(str(out / "lgbm_B.txt"))
     quality = json.loads((C.QUALITY_DIR / "quality_report_latest.json").read_text())
     md = {
@@ -284,7 +316,8 @@ def register(df: pd.DataFrame, X_all: pd.DataFrame, sets: dict, results: dict, c
         "input_schema": {"features_B": feats_B, "features_A": feats_A, "categorical": [c for c in feats_B if c in CATEGORICAL]},
         "n_train_rows": int(len(df)), "train_months": [str(df["T"].min()), str(df["T"].max())],
         "metrics": {"cv": results["cv"], "holdout": results["holdout"], "lift": results["lift"],
-                    "ablation": results["ablation"], "calibration": results["calibration"], "ensemble": results["ensemble"]},
+                    "ablation": results["ablation"], "calibration": results["calibration"], "ensemble": results["ensemble"],
+                    "holdout_unseen_companies": results.get("holdout_unseen_companies", {})},
         "feature_blocks": meta["blocks"],
     }
     (out / "metadata.json").write_text(json.dumps(md, indent=2, ensure_ascii=False, default=str))
