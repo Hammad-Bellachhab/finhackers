@@ -119,7 +119,7 @@ export function EmbatHome() {
       </section>
 
       <footer className="lp-foot">
-        <span className="logo" aria-hidden="true" />
+        <a href="#/" className="logo-link" aria-label="Embat, inicio"><span className="logo" /></a>
         <span className="muted">Demo de HackSpain 2026 con datos sintéticos.</span>
       </footer>
     </div>
