@@ -63,16 +63,16 @@
   --color-danger-soft: #ffe7e0;
   --color-danger-strong: #931d00;
 
-  /* ---- Bandas de score del producto ----
-   * Vocabulario del reto: el sistema tiene que leer en las dos direcciones,
-   * asi que "mejora" y "deterioro" necesitan color propio, distinto del
-   * nivel absoluto (sano / en riesgo).
-   */
+  /* ---- Nivel: donde esta hoy ---- */
   --color-band-healthy: var(--color-success);
-  --color-band-improving: var(--embat-aqua);
   --color-band-stable: var(--color-text-muted);
-  --color-band-slipping: var(--color-warning);
   --color-band-risk: var(--color-danger);
+
+  /* ---- Trayectoria: hacia donde va. Eje independiente del nivel:
+     una empresa puede ser 'healthy' y estar cayendo. ---- */
+  --color-trend-up: var(--embat-aqua);
+  --color-trend-down: var(--color-warning);
+  --color-trend-flat: var(--color-text-muted);
 
   /* ---- Categoricos para graficas (orden de uso) ---- */
   --chart-1: #3878f6;
@@ -124,7 +124,7 @@
     --color-danger-soft: #7d1900;
     --color-danger-strong: #ffe7e0;
 
-    --color-band-improving: #5ed3e5;
+    --color-trend-up: #5ed3e5;
 
     --chart-1: #5c92fe;
     --chart-2: #b083e8;
@@ -169,7 +169,7 @@
   --color-danger-soft: #7d1900;
   --color-danger-strong: #ffe7e0;
 
-  --color-band-improving: #5ed3e5;
+  --color-trend-up: #5ed3e5;
 
   --chart-1: #5c92fe;
   --chart-2: #b083e8;
