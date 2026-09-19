@@ -40,12 +40,14 @@ export type GaugeProps = {
   label?: string
 }
 
-/** Velocímetro de salud: arco de 0 a 100 con la aguja en su sitio y la puntuación dentro.
+/** Velocímetro de salud: arco de 0 a 100 con la puntuación dentro. La aguja es una marca
+ *  fina que no llega al centro: señala sin ensuciar el arco.
  *  Todo el color sale de tokens, así que el modo oscuro funciona sin tocar nada. */
 export function Gauge({ score, band, size = 'sm', label }: GaugeProps) {
   const b = band ?? healthBandOf(score)
   const color = HEALTH_BAND_COLOR[b]
-  const needle = gaugePoint(score, R - 9)
+  const desde = gaugePoint(score, R - 11)
+  const hasta = gaugePoint(score, R + 3)
   const shown = score.toLocaleString('es-ES', { maximumFractionDigits: 1 })
 
   return (
@@ -53,13 +55,12 @@ export function Gauge({ score, band, size = 'sm', label }: GaugeProps) {
       className={`gauge gauge-${size}`} viewBox="0 0 100 74" role="img"
       aria-label={`Salud ${shown} de 100${label ? `, ${label}` : `, banda ${b}`}`}
     >
-      <path d={arcPath(100)} fill="none" stroke="var(--color-border)" strokeWidth="9" strokeLinecap="round" />
-      <path d={arcPath(score)} fill="none" stroke={color} strokeWidth="9" strokeLinecap="round" />
+      <path d={arcPath(100)} fill="none" stroke="var(--color-border)" strokeWidth="6" strokeLinecap="round" />
+      <path d={arcPath(score)} fill="none" stroke={color} strokeWidth="6" strokeLinecap="round" />
       <line
-        x1={CX} y1={CY} x2={needle.x} y2={needle.y}
-        stroke="var(--color-text)" strokeWidth="2.5" strokeLinecap="round"
+        x1={desde.x} y1={desde.y} x2={hasta.x} y2={hasta.y}
+        stroke="var(--color-text)" strokeWidth="1.5" strokeLinecap="round"
       />
-      <circle cx={CX} cy={CY} r="4" fill="var(--color-text)" />
       <text x={CX} y="72" textAnchor="middle" className="gauge-value" fill={color}>{shown}</text>
     </svg>
   )

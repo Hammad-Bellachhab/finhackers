@@ -2,7 +2,8 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import type { Provider, ProviderCompany } from '../api/types'
-import { ProvidersTable, tipos } from './ProvidersTable'
+import { tipos } from './parts'
+import { ProvidersTable } from './ProvidersTable'
 
 const empresa = (n: number, score: number, extra: Partial<ProviderCompany> = {}): ProviderCompany => ({
   companyId: `c-${n}`, name: `Empresa ${n}`, score, band: score >= 75 ? 'healthy' : 'risk',
