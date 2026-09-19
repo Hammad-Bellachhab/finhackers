@@ -1,0 +1,90 @@
+/*
+ * Tokens de diseño. Dos temas, mismo sistema desplazado.
+ * Los seis colores con nombre por tema son los únicos; todo lo demás se
+ * deriva de ellos por opacidad o mezcla.
+ */
+
+:root {
+  /* Tipografía */
+  --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+
+  --text-display: 56px;
+  --lh-display: 1.05;
+  --text-h1: 32px;
+  --lh-h1: 1.15;
+  --text-h2: 20px;
+  --lh-h2: 1.3;
+  --text-body: 15px;
+  --lh-body: 1.6;
+  --text-small: 13px;
+  --lh-small: 1.5;
+  --text-mono: 14px;
+  --lh-mono: 1.4;
+  --text-mono-sm: 12px;
+  --lh-mono-sm: 1.4;
+
+  /* Espaciado: base 4px */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Radios */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  /* Movimiento, solo como respuesta a una acción */
+  --motion: 180ms ease;
+
+  --content-max: 1360px;
+}
+
+/* Claro: "Índice de tesorería" (por defecto) */
+:root,
+:root[data-theme='claro'] {
+  color-scheme: light;
+  --bg: #eef1f4;
+  --surface: #ffffff;
+  --ink: #16233b;
+  --accent: #b8863b;
+  --risk-low: #4c8062;
+  --risk-high: #a23b32;
+}
+
+/* Oscuro: "Terminal Embat". --ink es el color de texto (--text del sistema). */
+:root[data-theme='oscuro'] {
+  color-scheme: dark;
+  --bg: #0f1720;
+  --surface: #1a232e;
+  --ink: #e8e6de;
+  --accent: #d9a857;
+  --risk-low: #6fa37e;
+  --risk-high: #c4695a;
+}
+
+/* Derivados, idénticos en ambos temas */
+:root {
+  --ink-secondary: color-mix(in srgb, var(--ink) 70%, transparent);
+  --ink-muted: color-mix(in srgb, var(--ink) 65%, transparent);
+  --ink-faint: color-mix(in srgb, var(--ink) 40%, transparent); /* solo no-texto */
+  --hairline: color-mix(in srgb, var(--ink) 10%, transparent);
+  --hover: color-mix(in srgb, var(--ink) 4%, transparent);
+
+  /* Variantes de texto que cumplen AA sobre surface y bg en ambos temas */
+  --accent-text: color-mix(in srgb, var(--accent) 60%, var(--ink));
+  --risk-low-text: color-mix(in srgb, var(--risk-low) 78%, var(--ink));
+  --risk-high-text: color-mix(in srgb, var(--risk-high) 78%, var(--ink));
+
+  --risk-low-tint: color-mix(in srgb, var(--risk-low) 12%, transparent);
+  --risk-high-tint: color-mix(in srgb, var(--risk-high) 12%, transparent);
+}
+
+:root[data-theme='oscuro'] {
+  --accent-text: var(--accent);
+}
