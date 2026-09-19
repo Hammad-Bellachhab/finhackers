@@ -88,7 +88,7 @@ export default function App() {
       </header>
 
       {/* key: cada pestaña entra con un fundido corto */}
-      <main className="page view-enter" key={vista}>
+      <main className="page view-enter" key={`vista-${vista}`}>
         {vista === 'cartera' && <PortfolioView onSelect={abrirEmpresa} />}
         {vista === 'alertas' && <AlertsView onSelect={abrirEmpresa} />}
         {vista === 'proveedores' && <ProvidersView onSelect={abrirEmpresa} />}
@@ -101,7 +101,7 @@ export default function App() {
       </main>
 
       {/* key: cambiar de empresa (o volver a la cartera) empieza otra conversación */}
-      <AskTellMe key={vista === 'empresa' ? companyId : 'cartera'} companyId={vista === 'empresa' ? companyId : undefined} />
+      <AskTellMe key={`chat-${vista === 'empresa' ? companyId : 'cartera'}`} companyId={vista === 'empresa' ? companyId : undefined} />
     </div>
   )
 }
