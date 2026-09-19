@@ -40,7 +40,7 @@ const march: Provider = {
 
 /** 30 empresas: por encima de PRIMERAS (24), para que aparezca el buscador dentro del banco. */
 const bbva: Provider = {
-  name: 'BBVA', services: ['bbva'], companies: 30, products: 30,
+  name: 'BBVA', services: ['bbva'], kind: 'banco', companies: 30, products: 30,
   types: [{ type: 'checking', n: 30 }],
   bands: { 'sólida': 0, sana: 30, vigilar: 0, riesgo: 0 },
   meanHealth: 80, riskShare: 0, slipping: 0, improving: 0,
