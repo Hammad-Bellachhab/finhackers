@@ -1,0 +1,25 @@
+{
+  "model_version": "v20260919_151311",
+  "n_companies": 82,
+  "months": [
+    "2024-09",
+    "2026-08"
+  ],
+  "latest_month": "2026-08",
+  "n_rows": 1290,
+  "bands_latest": {
+    "sana": 41,
+    "sólida": 21,
+    "riesgo": 11,
+    "vigilar": 9
+  },
+  "trajectory_latest": {
+    "estable": 63,
+    "deteriorándose": 16,
+    "mejorando": 3
+  },
+  "n_exceptional": 18,
+  "n_structural": 4,
+  "n_blip": 1,
+  "seconds": 24.6
+}

@@ -1,0 +1,47 @@
+# Tres servicios (Capa 12): postgres (BD servida), api (capas 9-10), frontend (capa 11).
+# El pipeline offline (make all) se ejecuta antes en el host o con: docker compose run --rm api make all
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-embat}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-embat}
+      POSTGRES_DB: ${POSTGRES_DB:-embat}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-embat}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-embat}:${POSTGRES_PASSWORD:-embat}@postgres:5432/${POSTGRES_DB:-embat}
+      API_KEY: ${API_KEY:-}
+      RATE_LIMIT_PER_MIN: ${RATE_LIMIT_PER_MIN:-240}
+      RAW_DIR: /app/raw            # los CSV originales, solo para `make all` dentro del contenedor
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./reports:/app/reports
+      - ../output:/app/raw:ro
+    # vuelca las tablas servidas a Postgres (batch) y arranca el servicio con el pipeline cargado una vez
+    command: sh -c "python -m src.serve_db && python -m uvicorn src.api.main:app --host 0.0.0.0 --port 8000"
+    ports: ["8000:8000"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build: .
+    environment:
+      API_URL: http://api:8000
+      API_KEY: ${API_KEY:-}
+    command: python -m streamlit run src/frontend/app.py --server.port 8501 --server.headless true --browser.gatherUsageStats false
+    ports: ["8501:8501"]
+    depends_on: [api]
+
+volumes:
+  pgdata:

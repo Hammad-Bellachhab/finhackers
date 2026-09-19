@@ -1,0 +1,25 @@
+# Núcleo de datos y modelado
+duckdb>=1.1
+pandas>=2.2
+numpy>=1.26
+pyarrow>=15
+scikit-learn>=1.5
+lightgbm>=4.3
+catboost>=1.2
+shap>=0.45
+joblib>=1.4
+matplotlib>=3.8
+# Servicio
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.6
+sqlalchemy>=2.0
+psycopg2-binary>=2.9 ; python_version < "3.14"
+requests>=2.31
+httpx>=0.27
+# Frontend
+streamlit>=1.35
+plotly>=5.20
+# Tests / lint
+pytest>=8.0
+ruff>=0.4

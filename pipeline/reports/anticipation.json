@@ -1,0 +1,30 @@
+{
+  "definition": "evento = primer mes con >=2 meses seguidos malos (caja<0 | >=50% facturas a pagar con >30d | sin transacciones) tras >=3 buenos; alerta = salud suavizada < 75.0 o trayectoria 'deteriorándose' en los 12 meses previos; scores del modelo congelado en el holdout (fuera de muestra desde 2025-06)",
+  "out_of_sample_from": "2025-06",
+  "n_events": 243,
+  "n_anticipated": 107,
+  "share_anticipated": 0.8045112781954887,
+  "share_detected_by_event": 0.5473251028806584,
+  "lead_months_median": 4.0,
+  "lead_months_mean": 4.2406015037593985,
+  "lead_distribution": {
+    "0": 26,
+    "1": 18,
+    "2": 14,
+    "3": 4,
+    "4": 12,
+    "5": 8,
+    "6": 11,
+    "7": 11,
+    "8": 8,
+    "9": 10,
+    "10": 4,
+    "11": 3,
+    "12": 4
+  },
+  "false_alert_rate": 0.28368794326241137,
+  "n_alert_windows": 141,
+  "band_flip_rate": 0.16296296296296298,
+  "n_band_changes": 1620,
+  "health_drop_before_event_mean": -5.40000253593302
+}
