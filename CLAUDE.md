@@ -46,9 +46,8 @@ tasks/           todo.md (lista del equipo), progress-agente-ia.md, checklist-da
 .claude/launch.json        previews locales: api (8000), dashboard Streamlit (8501), pulso (npm run dev, 5173)
 ```
 
-**URL pública del front: no está apuntada en el repo.** Será `https://finhackers.<subdominio>.workers.dev` o un dominio
-propio; la cuenta de Cloudflare es del compañero (en la máquina de Diego `wrangler` no está autenticado). Cuando se
-sepa, apuntarla aquí y en el README.
+**URL pública del front: https://finhackers.hammad-bellachhab.workers.dev/** (Worker en la cuenta de Cloudflare del compañero; en la
+máquina de Diego `wrangler` no está autenticado). Está en el README y en el cierre del guión del vídeo.
 
 Despliegue: tras cambiar datos o modelo → `python -m src.pipeline all` → `python -m src.pulso` (≈ 4 min, regenera
 `frontend/public/data/`; ojo: hace `rmtree`, se lleva los `tellme.json`). Si solo cambia la proyección,
@@ -87,7 +86,7 @@ python -m src.pipeline all
 python -m src.pulso                                # export para el front
 python -m uvicorn src.api.main:app --port 8000     # API local (solo si se pide)
 python -m streamlit run src/frontend/app.py        # dashboard local (solo si se pide)
-python -m pytest -q tests                          # 12 tests, ~3 min (smoke end-to-end con datos sintéticos)
+python -m pytest -q tests                          # 49 tests, ~3 min (smoke end-to-end con datos sintéticos)
 python -m src.predict --raw <carpeta_csv> --out <salida>
 ```
 Tras cambiar modelo o reglas: `python -m src.pipeline train evaluate db test projection`, actualizar cifras de
