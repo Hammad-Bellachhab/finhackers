@@ -13,7 +13,6 @@ const KIND: Record<InsightKind, [string, string]> = {
   action: ['→', 'Acción'],
 }
 const ORDEN = { alert: 0, watch: 1, info: 2 }
-const fecha = new Intl.DateTimeFormat('es-ES', { dateStyle: 'medium', timeStyle: 'short' })
 
 function Mark() {
   return (
@@ -128,10 +127,6 @@ export function TellMeCard({ companyId, name }: { companyId?: string; name?: str
           </dl>
         </details>
       )}
-      <p className="tellme-footer">
-        Generado por TellMe · {data.model} · <time dateTime={data.generatedAt}>{fecha.format(new Date(data.generatedAt))}</time>
-        {' '}· Texto generado por IA a partir de los datos del motor; revisa las cifras.
-      </p>
       </details>
     </section>
   )

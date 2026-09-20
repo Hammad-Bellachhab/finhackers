@@ -12,7 +12,6 @@ describe('TellMeCard', () => {
     expect(screen.getByText('Vigilar')).toBeInTheDocument()
     expect(screen.getByText('72 d')).toBeInTheDocument()
     expect(screen.getByText('Qué hacer:')).toBeInTheDocument()
-    expect(screen.getByText(/Generado por TellMe · mock/)).toBeInTheDocument()
   })
 
   it('sin análisis (404 → null) no es un error', async () => {
