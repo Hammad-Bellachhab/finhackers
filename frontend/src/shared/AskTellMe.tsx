@@ -43,8 +43,15 @@ const SUGERENCIAS: Record<string, string[]> = {
 /** Chat con TellMe: notch fijo abajo en el centro. Habla de lo que hay en pantalla: cada pestaña
  *  le llega con sus datos, y puede proponer abrir una empresa o cambiar de pestaña. */
 export function AskTellMe({
-  tab = 'cartera', companyId, onAction,
-}: { tab?: string; companyId?: string; onAction?: (a: AskAction) => void }) {
+  tab = 'cartera', companyId, companyIds, onAction, onLimpiarComparar,
+}: {
+  tab?: string
+  companyId?: string
+  /** Empresas marcadas en la tabla: TellMe las compara. */
+  companyIds?: string[]
+  onAction?: (a: AskAction) => void
+  onLimpiarComparar?: () => void
+}) {
   const [open, setOpen] = useState(false)
   const [msgs, setMsgs] = useState<Msg[]>([])
   const [q, setQ] = useState('')
@@ -64,7 +71,7 @@ export function AskTellMe({
     setQ('')
     setBusy(true)
     try {
-      const data = await askTellMe(question, { tab, companyId }, history)
+      const data = await askTellMe(question, { tab, companyId, companyIds }, history)
       setMsgs((v) => [...v, { role: 'model', text: data.answer, data }])
     } catch (e) {
       setMsgs((v) => [...v, { role: 'error', text: e instanceof Error ? e.message : String(e) }])
@@ -74,7 +81,9 @@ export function AskTellMe({
   }
 
   const last = [...msgs].reverse().find((m) => m.role === 'model')
-  const sugerencias = last?.role === 'model' ? last.data.followUps : (SUGERENCIAS[tab] ?? SUGERENCIAS.cartera)
+  const sugerencias = last?.role === 'model' ? last.data.followUps
+    : companyIds ? ['Compáralas: ¿en qué se diferencian?', '¿Cuál preocupa más y por qué?', '¿Qué haría con cada una?']
+    : (SUGERENCIAS[tab] ?? SUGERENCIAS.cartera)
 
   return (
     <div className={`ask ${open ? 'ask-open' : ''} ${busy ? 'ask-thinking tellme-spin' : ''}`} onKeyDown={(e) => { if (e.key === 'Escape') setOpen(false) }}>
@@ -85,7 +94,12 @@ export function AskTellMe({
               <TellMeLogo size={20} />
             </span>
             <TellMeWordmark />
-            <span className="ask-sub">tu analista financiero</span>
+            <span className="ask-sub">
+              {companyIds ? `comparando ${companyIds.length} empresas` : 'tu analista financiero'}
+            </span>
+            {companyIds && onLimpiarComparar && (
+              <button type="button" className="ask-action ask-action-inline" onClick={onLimpiarComparar}>Quitar</button>
+            )}
             <button type="button" className="ask-close" aria-label="Cerrar el chat" onClick={() => setOpen(false)}>×</button>
           </header>
 

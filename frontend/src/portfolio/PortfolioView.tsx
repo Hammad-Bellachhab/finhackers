@@ -32,11 +32,15 @@ function Evolution({ history }: { history: PortfolioMonth[] }) {
   )
 }
 
-export function PortfolioView({ onSelect }: { onSelect: (id: string) => void }) {
-  return <><TellMeCard /><Cartera onSelect={onSelect} /></>
+export function PortfolioView({
+  onSelect, comparar, onComparar,
+}: { onSelect: (id: string) => void; comparar?: string[]; onComparar?: (id: string) => void }) {
+  return <><TellMeCard /><Cartera onSelect={onSelect} comparar={comparar} onComparar={onComparar} /></>
 }
 
-function Cartera({ onSelect }: { onSelect: (id: string) => void }) {
+function Cartera({
+  onSelect, comparar, onComparar,
+}: { onSelect: (id: string) => void; comparar?: string[]; onComparar?: (id: string) => void }) {
   const { data, error, loading } = useAsync(() => getPortfolio(), [])
 
   if (loading) return <Skeleton height="26rem" />
@@ -67,7 +71,7 @@ function Cartera({ onSelect }: { onSelect: (id: string) => void }) {
       )}
 
       <h2>Detalle</h2>
-      <PortfolioTable rows={data.rows} onSelect={onSelect} />
+      <PortfolioTable rows={data.rows} onSelect={onSelect} comparar={comparar} onComparar={onComparar} />
     </>
   )
 }

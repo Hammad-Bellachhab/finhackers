@@ -87,3 +87,5 @@
 /* Ancho de lectura cómodo dentro de una tabla que ocupa toda la pantalla. */
 .portfolio-tellme-card { max-width: 56rem; margin: 0 auto; }
 
+.th-compare { font-size: 10px; }
+.compare-box { accent-color: var(--color-accent); cursor: pointer; }

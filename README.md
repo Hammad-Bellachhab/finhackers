@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/img/embat-xray.png" alt="Embat · X-Ray" width="420"></p>
+
 # Embat X-Ray — la salud financiera de cada empresa, mes a mes
 
 Proyecto del equipo **finhackers** para el reto X-Ray de Embat en HackSpain 2026.

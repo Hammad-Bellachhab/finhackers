@@ -105,3 +105,4 @@
   transition: background-color 150ms var(--ease);
 }
 .ask-action:hover { background: rgb(139 92 246 / 38%); }
+.ask-action-inline { margin: 0 0 0 var(--space-2); padding: 3px var(--space-2); font-size: 11px; }

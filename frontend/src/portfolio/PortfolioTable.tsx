@@ -28,8 +28,14 @@ const ORDEN: Record<Orden, [string, (a: PortfolioRow, b: PortfolioRow) => number
 const LIMITE = 300
 
 export function PortfolioTable({
-  rows, onSelect,
-}: { rows: PortfolioRow[]; onSelect: (id: string) => void }) {
+  rows, onSelect, comparar = [], onComparar,
+}: {
+  rows: PortfolioRow[]
+  onSelect: (id: string) => void
+  /** Empresas marcadas para que TellMe las compare. */
+  comparar?: string[]
+  onComparar?: (id: string) => void
+}) {
   const [filtro, setFiltro] = useState<Filtro>('todas')
   const [banda, setBanda] = useState('')
   const [cohorte, setCohorte] = useState('')
@@ -94,6 +100,7 @@ export function PortfolioTable({
           <table className="portfolio">
             <thead>
               <tr>
+                {onComparar && <th><span className="th-compare">Comparar</span></th>}
                 <th>Empresa</th><th>Score</th><th>Nivel</th>
                 <th>3 meses</th>
                 {detalle && <><th>1 mes</th><th>Señal</th><th>P(deterioro 6 m)</th><th>Grupo</th><th>Tamaño</th></>}
@@ -112,6 +119,16 @@ export function PortfolioTable({
                     tabIndex={0}
                     onKeyDown={(e) => { if (e.key === 'Enter') onSelect(r.companyId) }}
                   >
+                    {onComparar && (
+                      <td onClick={(e) => e.stopPropagation()}>
+                        <input
+                          type="checkbox" className="compare-box"
+                          checked={comparar.includes(r.companyId)}
+                          aria-label={`Comparar ${r.name} con TellMe`}
+                          onChange={() => onComparar(r.companyId)}
+                        />
+                      </td>
+                    )}
                     <td>
                       <button
                         type="button"

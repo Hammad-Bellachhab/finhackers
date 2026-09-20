@@ -39,6 +39,11 @@ export default function App() {
   const [vista, setVista] = useState<Vista>('cartera')
   const [companyId, setCompanyId] = useState(DEFAULT_COMPANY)
 
+  // Empresas marcadas en la tabla para que TellMe las compare (máximo 4).
+  const [comparar, setComparar] = useState<string[]>([])
+  const alternarComparar = (id: string) =>
+    setComparar((v) => (v.includes(id) ? v.filter((x) => x !== id) : [...v, id].slice(-4)))
+
   const abrirEmpresa = (id: string) => {
     setCompanyId(id)
     setVista('empresa')
@@ -74,7 +79,7 @@ export default function App() {
 
       {/* key: cada pestaña entra con un fundido corto */}
       <main className="page view-enter" key={`vista-${vista}`}>
-        {vista === 'cartera' && <PortfolioView onSelect={abrirEmpresa} />}
+        {vista === 'cartera' && <PortfolioView onSelect={abrirEmpresa} comparar={comparar} onComparar={alternarComparar} />}
         {vista === 'alertas' && <AlertsView onSelect={abrirEmpresa} />}
         {vista === 'proveedores' && <ProvidersView onSelect={abrirEmpresa} />}
         {vista === 'modelo' && <ModelView />}
@@ -89,6 +94,8 @@ export default function App() {
         key={`chat-${vista}-${companyId}`}
         tab={vista}
         companyId={vista.startsWith('empresa') ? companyId : undefined}
+        companyIds={vista === 'cartera' && comparar.length > 1 ? comparar : undefined}
+        onLimpiarComparar={() => setComparar([])}
         onAction={(a) => {
           if (a.type === 'abrir_empresa') abrirEmpresa(a.companyId)
           if (a.type === 'ir_a_pestaña') setVista(a.tab as Vista)
