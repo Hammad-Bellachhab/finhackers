@@ -1,4 +1,4 @@
-# Embat X-Ray — la salud financiera de cada pyme, mes a mes
+# Embat X-Ray — la salud financiera de cada empresa, mes a mes
 
 Proyecto del equipo **finhackers** para el reto X-Ray de Embat en HackSpain 2026.
 
@@ -6,7 +6,7 @@ Proyecto del equipo **finhackers** para el reto X-Ray de Embat en HackSpain 2026
 
 ## El problema
 
-Todo lo que hoy se mira de una pyme es una foto: cuentas anuales que llegan tarde y ratings que se revisan una vez al
+Todo lo que hoy se mira de una empresa es una foto: cuentas anuales que llegan tarde y ratings que se revisan una vez al
 año. Dos empresas con la misma nota hoy pueden venir de sitios opuestos: una de 45 y subiendo, otra de 82 y cayendo.
 En la foto son iguales; en seis meses no lo serán. Embat ya ve la tesorería de sus clientes cada día; el reto era
 convertir ese rastro en una lectura que capte la **trayectoria**, avise **antes** y se **explique**.
