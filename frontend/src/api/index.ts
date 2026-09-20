@@ -5,7 +5,7 @@
 import { buildDataset, type MockCompany } from './mock/dataset'
 import { companyName } from './mock/names'
 import type {
-  Alert, AskResponse, ChatTurn, CompanyProfile, CompanyScore, Decision, Drag, Evidence, Forecast,
+  Alert, AskResponse, AskScope, ChatTurn, CompanyProfile, CompanyScore, Decision, Drag, Evidence, Forecast,
   MetricId, ModelReport, Plan, PlanLever, Portfolio, Providers, Simulation, TellMe,
 } from './types'
 
@@ -68,7 +68,7 @@ const withCompanyNames = <T,>(x: T): T =>
   JSON.parse(JSON.stringify(x).replace(/COMP_\d{4}/g, (id) => companyName(id)))
 
 /** Pregunta a TellMe sobre una empresa (o sobre la cartera si no hay id). La IA vive en el Worker. */
-export async function askTellMe(question: string, companyId?: string, history: ChatTurn[] = []): Promise<AskResponse> {
+export async function askTellMe(question: string, scope: AskScope = {}, history: ChatTurn[] = []): Promise<AskResponse> {
   if (USE_MOCK) {
     return {
       answer: 'Respuesta de ejemplo (mock). En modo real responde TellMe con los datos del motor.',
@@ -78,7 +78,7 @@ export async function askTellMe(question: string, companyId?: string, history: C
   const res = await fetch('/api/ask', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ question, companyId: companyId ?? null, history }),
+    body: JSON.stringify({ question, ...scope, companyId: scope.companyId ?? null, history }),
   })
   const data = await res.json().catch(() => null)
   if (!res.ok || !data || data.error) throw new Error(data?.error?.message ?? 'TellMe no está disponible ahora mismo.')

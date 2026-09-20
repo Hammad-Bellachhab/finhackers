@@ -342,9 +342,19 @@ export type TellMe = {
 
 export type ChatTurn = { role: 'user' | 'model'; text: string }
 
+/** Lo que TellMe propone hacer después de responder (la web lo ofrece como botón). */
+export type AskAction =
+  | { type: 'abrir_empresa'; companyId: string; label?: string }
+  | { type: 'ir_a_pestaña'; tab: string; label?: string }
+  | { type: 'ninguna' }
+
 export type AskResponse = {
   answer: string
   bullets: string[]
   followUps: string[]
   model: string
+  action?: AskAction
 }
+
+/** Qué está mirando el usuario: TellMe responde con los datos de esa pantalla. */
+export type AskScope = { tab?: string; companyId?: string; companyIds?: string[] }

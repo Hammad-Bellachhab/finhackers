@@ -98,3 +98,10 @@
   .ask-panel, .ask-msg, .ask-typing span { animation: none; }
   .ask-notch { transition: none; }
 }
+.ask-action {
+  margin-top: var(--space-3); font: inherit; font-size: var(--text-xs); font-weight: 600;
+  padding: 7px var(--space-3); border-radius: 999px; cursor: pointer;
+  background: rgb(139 92 246 / 22%); color: var(--ask-text); border: 1px solid rgb(139 92 246 / 55%);
+  transition: background-color 150ms var(--ease);
+}
+.ask-action:hover { background: rgb(139 92 246 / 38%); }

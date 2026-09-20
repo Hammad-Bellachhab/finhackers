@@ -360,24 +360,33 @@ def write(path: Path, data) -> None:
 
 def export() -> None:
     STATE["svc"] = InferenceService()
-    shutil.rmtree(OUT, ignore_errors=True)
+    # No se borra OUT: los análisis de TellMe (tellme.json) viven aquí y no los escribe este script.
+    # Los ficheros se sobreescriben uno a uno; el conjunto de empresas no cambia.
     pf = portfolio()
     write(OUT / "portfolio.json", pf)
     write(OUT / "providers.json", providers(pf["rows"], pf["month"]))
     write(OUT / "alerts.json", alerts())
     write(OUT / "evidence.json", evidence())
     write(OUT / "model.json", model_report())
-    shutil.copytree(C.REPORTS_DIR / "figures", OUT / "figures")
+    shutil.copytree(C.REPORTS_DIR / "figures", OUT / "figures", dirs_exist_ok=True)
     ids = db.q('SELECT DISTINCT company_id FROM risk_score ORDER BY company_id')["company_id"]
+    metricas: dict[str, dict] = {}
     for i, cid in enumerate(ids):
         d = OUT / "companies" / cid
-        write(d / "score.json", company_score(cid))
+        cs = company_score(cid)
+        metricas[cid] = {m["id"]: m["value"] for m in cs["metrics"]}
+        write(d / "score.json", cs)
         write(d / "forecast.json", forecast(cid))
         write(d / "decisions.json", decisions(cid))
         write(d / "simulate.json", sim_grid(cid))
         write(d / "profile.json", profile(cid))
         if i % 100 == 0:
             print(f"[pulso] {i}/{len(ids)}", flush=True)
+    # Las métricas de cada empresa también en la tabla de cartera: así TellMe puede buscar
+    # ("cuáles dependen de un solo cliente y van justas de caja") sin abrir 1.286 ficheros.
+    for row in pf["rows"]:
+        row["metrics"] = metricas.get(row["companyId"], {})
+    write(OUT / "portfolio.json", pf)
     print(f"[pulso] {len(ids)} empresas en {OUT}")
 
 

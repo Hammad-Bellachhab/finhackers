@@ -85,7 +85,15 @@ export default function App() {
       </main>
 
       {/* key: cambiar de empresa (o volver a la cartera) empieza otra conversación */}
-      <AskTellMe key={`chat-${vista === 'empresa' ? companyId : 'cartera'}`} companyId={vista === 'empresa' ? companyId : undefined} />
+      <AskTellMe
+        key={`chat-${vista}-${companyId}`}
+        tab={vista}
+        companyId={vista.startsWith('empresa') ? companyId : undefined}
+        onAction={(a) => {
+          if (a.type === 'abrir_empresa') abrirEmpresa(a.companyId)
+          if (a.type === 'ir_a_pestaña') setVista(a.tab as Vista)
+        }}
+      />
     </div>
   )
 }

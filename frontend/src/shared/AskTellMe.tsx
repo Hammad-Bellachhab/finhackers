@@ -1,18 +1,50 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { askTellMe } from '../api'
-import type { AskResponse, ChatTurn } from '../api/types'
+import type { AskAction, AskResponse, ChatTurn } from '../api/types'
 import { TellMeLogo, TellMeWordmark } from './TellMeLogo'
 import './ask-tellme.css'
 
 type Msg = { role: 'user'; text: string } | { role: 'model'; text: string; data: AskResponse } | { role: 'error'; text: string }
 
-const SUGERENCIAS = {
-  empresa: ['¿Cómo está esta empresa, en pocas palabras?', '¿Por qué ha cambiado su salud?', '¿Qué debería hacer primero?'],
-  cartera: ['¿Qué empresas me deberían preocupar hoy?', '¿Quién está mejorando?', '¿Cómo ha evolucionado la cartera este año?'],
+/** Cada pestaña pregunta otras cosas: TellMe responde con los datos de lo que se está viendo. */
+const SUGERENCIAS: Record<string, string[]> = {
+  cartera: [
+    '¿Qué empresas me deberían preocupar hoy?',
+    '¿Cuáles dependen demasiado de un solo cliente y van justas de caja?',
+    '¿Quién está mejorando?',
+  ],
+  alertas: [
+    '¿Cuál es la alerta más urgente y por qué?',
+    '¿Cuántas se vieron venir con antelación?',
+    'Escríbeme el aviso para la peor de ellas',
+  ],
+  proveedores: [
+    '¿Qué banco tiene la cartera más tocada?',
+    '¿Dónde está concentrada la financiación?',
+    'Compara Santander con BBVA',
+  ],
+  modelo: [
+    '¿En qué se fija el modelo?',
+    '¿Cuánto acierta con empresas que no ha visto nunca?',
+    '¿Dónde se equivoca?',
+  ],
+  empresa: [
+    '¿Cómo está esta empresa, en pocas palabras?',
+    '¿Por qué ha cambiado su salud?',
+    'Escríbeme un correo para avisarles',
+  ],
+  'empresa-proveedores': [
+    '¿Con qué bancos trabaja y cuánto debe a cada uno?',
+    '¿Está muy concentrada en un proveedor?',
+    '¿Qué le pediría a su banco principal?',
+  ],
 }
 
-/** Chat con TellMe: notch fijo abajo en el centro. El contexto es la empresa abierta o la cartera. */
-export function AskTellMe({ companyId }: { companyId?: string }) {
+/** Chat con TellMe: notch fijo abajo en el centro. Habla de lo que hay en pantalla: cada pestaña
+ *  le llega con sus datos, y puede proponer abrir una empresa o cambiar de pestaña. */
+export function AskTellMe({
+  tab = 'cartera', companyId, onAction,
+}: { tab?: string; companyId?: string; onAction?: (a: AskAction) => void }) {
   const [open, setOpen] = useState(false)
   const [msgs, setMsgs] = useState<Msg[]>([])
   const [q, setQ] = useState('')
@@ -32,7 +64,7 @@ export function AskTellMe({ companyId }: { companyId?: string }) {
     setQ('')
     setBusy(true)
     try {
-      const data = await askTellMe(question, companyId, history)
+      const data = await askTellMe(question, { tab, companyId }, history)
       setMsgs((v) => [...v, { role: 'model', text: data.answer, data }])
     } catch (e) {
       setMsgs((v) => [...v, { role: 'error', text: e instanceof Error ? e.message : String(e) }])
@@ -42,7 +74,7 @@ export function AskTellMe({ companyId }: { companyId?: string }) {
   }
 
   const last = [...msgs].reverse().find((m) => m.role === 'model')
-  const sugerencias = last?.role === 'model' ? last.data.followUps : SUGERENCIAS[companyId ? 'empresa' : 'cartera']
+  const sugerencias = last?.role === 'model' ? last.data.followUps : (SUGERENCIAS[tab] ?? SUGERENCIAS.cartera)
 
   return (
     <div className={`ask ${open ? 'ask-open' : ''} ${busy ? 'ask-thinking tellme-spin' : ''}`} onKeyDown={(e) => { if (e.key === 'Escape') setOpen(false) }}>
@@ -68,6 +100,14 @@ export function AskTellMe({ companyId }: { companyId?: string }) {
                 <p>{m.text}</p>
                 {m.role === 'model' && m.data.bullets.length > 0 && (
                   <ul>{m.data.bullets.map((b, j) => <li key={j}>{b}</li>)}</ul>
+                )}
+                {m.role === 'model' && m.data.action && m.data.action.type !== 'ninguna' && onAction && (
+                  <button
+                    type="button" className="ask-action"
+                    onClick={() => { onAction(m.data.action!); setOpen(false) }}
+                  >
+                    {m.data.action.label ?? 'Verlo en la web'} →
+                  </button>
                 )}
               </div>
             ))}
