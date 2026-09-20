@@ -233,7 +233,7 @@ function ScenarioSection({ p }: { p: CompanyProfile }) {
         ))}
       </div>
       <div className="grid-2">
-        <Panel title="Salud del mes" note="El escenario mueve las variables que un tesorero controla o sufre y vuelve a puntuar con el mismo modelo.">
+        <Panel title="Salud del mes">
           <div className="counts">
             <div className="count"><strong>{s.before}</strong><span>Ahora</span></div>
             <div className="count"><strong>{s.after}</strong><span>Con el escenario</span></div>

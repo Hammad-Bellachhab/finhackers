@@ -16,10 +16,6 @@ export function ProvidersView({ onSelect }: { onSelect: (id: string) => void }) 
   return (
     <>
       <h2>Proveedores{data.month && ` · ${data.month}`}</h2>
-      <p className="muted legend-line">
-        Los bancos y conectores por los que entran los datos de la cartera. Cada fila se despliega y enseña
-        sus empresas con su velocímetro: es la misma salud que ve la pyme, vista desde el lado de quien presta.
-      </p>
       <div className="counts">
         <div className="count"><strong>{t.providers}</strong><span>Proveedores</span></div>
         <div className="count"><strong>{t.connectors}</strong><span>Conectores</span></div>

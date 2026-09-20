@@ -13,7 +13,7 @@ import './portfolio.css'
 function Evolution({ history }: { history: PortfolioMonth[] }) {
   const bands: [keyof PortfolioMonth, string][] = [['risk', 'riesgo'], ['watch', 'vigilar'], ['healthy', 'sana'], ['solid', 'sólida']]
   return (
-    <Panel title="Evolución de la cartera" note="Empresas por banda de salud cada mes y salud media (eje derecho).">
+    <Panel title="Evolución de la cartera">
       <ResponsiveContainer width="100%" height={260}>
         <ComposedChart data={history} margin={{ top: 8, right: 0, bottom: 0, left: -12 }}>
           <CartesianGrid stroke="var(--color-border)" vertical={false} />
@@ -48,7 +48,6 @@ function Cartera({
   if (!data) return null
 
   const c = data.counts
-  const fina = (b: string) => data.rows.filter((r) => r.healthBand === b).length
   return (
     <>
       <h2>Las {data.rows.length.toLocaleString('es-ES')} empresas{data.month && ` · ${data.month}`}</h2>
@@ -61,11 +60,6 @@ function Cartera({
       </div>
       {data.history && (
         <>
-          <p className="muted legend-line">
-            Por banda fina: sólidas ≥ 90: <strong>{fina('sólida')}</strong> · sanas ≥ 75: <strong>{fina('sana')}</strong> ·
-            vigilar ≥ 50: <strong>{fina('vigilar')}</strong> · riesgo &lt; 50: <strong>{fina('riesgo')}</strong>.
-            La trayectoria importa más que el nivel: una empresa que pierde 20 puntos es más urgente que una que lleva seis meses baja.
-          </p>
           <Evolution history={data.history} />
         </>
       )}

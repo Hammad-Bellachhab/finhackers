@@ -178,23 +178,18 @@ export function XRayLanding() {
         <div className="lp-grid-3">
           <article className="lp-card reveal">
             <span className="lp-num">0 a 100</span>
-            <h3>Una salud, cada mes</h3>
-            <p>Un número por empresa que mira pagos, cobros, caja y deuda. Y su trayectoria, no solo la foto.</p>
+            <h3>Salud de cada empresa, cada mes</h3>
+            <p>Pagos, cobros, caja y deuda en un número. Y hacia dónde va.</p>
           </article>
           <article className="lp-card reveal" style={{ animationDelay: '70ms' }}>
             <span className="lp-num">{e ? pct(e.bothDirections.slippingRecall) : '…'}</span>
-            <h3>Avisa antes</h3>
-            {/* En una sola cadena: partirlo en dos deja un espacio antes del punto mientras carga. */}
-            <p>
-              {e
-                ? `de los deterioros reales se vieron venir, con ${e.anticipation.medianMonths} meses de margen de mediana.`
-                : 'de los deterioros reales se vieron venir, con meses de margen.'}
-            </p>
+            <h3>Deterioros vistos a tiempo</h3>
+            <p>{e ? `Con ${e.anticipation.medianMonths} meses de margen, de mediana.` : 'Con meses de margen.'}</p>
           </article>
           <article className="lp-card reveal" style={{ animationDelay: '140ms' }}>
             <span className="lp-num"><TellMeLogo size={34} /></span>
-            <h3>Explica cada cambio</h3>
-            <p>TellMe cuenta en lenguaje llano por qué se mueve el número y qué palanca lo corrige.</p>
+            <h3>Explicado en llano</h3>
+            <p>TellMe dice por qué se mueve y qué hacer.</p>
           </article>
         </div>
         {portfolio.data && (

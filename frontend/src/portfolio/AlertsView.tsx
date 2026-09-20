@@ -37,9 +37,6 @@ export function AlertsView({ onSelect }: { onSelect: (id: string) => void }) {
   return (
     <>
       <h2>Monitor: se han movido solas este mes</h2>
-      <p className="muted legend-line">
-        El sistema levanta la mano sin que nadie pregunte. Se recalcula con cada carga de datos. Pulsa una señal para filtrar.
-      </p>
       <div className="counts">
         {SEÑALES.map((s) => (
           <button

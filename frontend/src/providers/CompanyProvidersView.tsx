@@ -103,10 +103,6 @@ export function CompanyProvidersView({
             <div className="count"><strong>{vivo > 0 ? formatMoney(vivo, true) : '—'}</strong><span>Saldo vivo</span></div>
             {yo && <div className="count"><strong>{yo.score}</strong><span>Su salud</span></div>}
           </div>
-          <p className="muted legend-line">
-            Con quién trabaja y qué tiene con cada uno: bancos, pero también pasarelas de pago, plataformas
-            de gastos o tarjetas. La cartera de cada proveedor se mira en Global › Proveedores.
-          </p>
           {mios.map((p) => <ProviderCard key={p.name} p={p} companyId={companyId} />)}
         </>
       )}

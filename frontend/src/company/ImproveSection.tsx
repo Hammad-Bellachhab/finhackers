@@ -170,10 +170,6 @@ export function ImproveSection({
       )}
 
       <h3>Qué puede hacer</h3>
-      <p className="muted">
-        Descarte lo que su empresa no pueda o no quiera hacer: el plan se recalcula con el resto.
-      </p>
-
       <ul className="levers">
         {levers.map((l) => {
           const off = discarded.includes(l.metric.id)
