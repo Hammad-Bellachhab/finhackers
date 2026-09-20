@@ -4,7 +4,7 @@
 
 Proyecto del equipo **finhackers** para el reto X-Ray de Embat en HackSpain 2026.
 
-**Demo pública:** [https://finhackers.hammad-bellachhab.workers.dev/](https://finhackers.hammad-bellachhab.workers.dev/) · **Vídeo (3 min):** `<URL pendiente>` · Brief del reto: [`docs/reto-embat.md`](docs/reto-embat.md)
+**Demo pública:** [https://finhackers.hammad-bellachhab.workers.dev/](https://finhackers.hammad-bellachhab.workers.dev/) · **Vídeo (3 min):** `https://drive.google.com/file/d/1iwY-Vdr_lqi_6Jqcv9lrBaOGxIR4PJX_/view?usp=drivesdk` · Brief del reto: [`docs/reto-embat.md`](docs/reto-embat.md)
 
 ## El problema
 
