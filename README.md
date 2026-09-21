@@ -194,5 +194,5 @@ definido y con comprador, pero las pantallas del prestamista y del consentimient
 
 ## Equipo
 
-finhackers: Diego Rodríguez Díaz del Campo, Hammad Bellachhab, Héctor Sánchez Gómez, Felipe Fernández-Arche Pineda y El Mamoun Bellachhab.
+finhackers: Diego Rodríguez Díaz del Campo, Hammad Bellachhab, Héctor Sánchez Gómez y Felipe Fernández-Arche Pineda
 Hecho en el fin de semana de HackSpain 2026.
